@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Party Rental Gallery | Sen Party Rentals
+  </title>
+
+  <meta
+    name="description"
+    content="View bounce houses, water slides, obstacle courses, dunk tanks and party rental setups from Sen Party Rentals in Manassas, Virginia."
+  >
+
+  <meta name="theme-color" content="#0b0b0d">
+
+  <link
+    rel="canonical"
+    href="https://www.senmoonbounce.com/gallery.html"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/style.css?v=13"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+
+    /* =====================================================
+       GALLERY PAGE
+    ===================================================== */
+
+    .gallery-page {
+      overflow: hidden;
+    }
+
+    .gallery-filter-section {
+      background:
+        linear-gradient(
+          180deg,
+          #ffffff,
+          #fffaf7
+        );
+    }
+
+    .gallery-filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      margin-bottom: 34px;
+    }
+
+    .gallery-filter-button {
+      min-height: 44px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0 17px;
+
+      border:
+        1px solid var(--line);
+
+      border-radius: 999px;
+
+      color: var(--text);
+
+      font-size: 0.82rem;
+      font-weight: 900;
+
+      background: #ffffff;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 7px 18px rgba(0, 0, 0, 0.06);
+
+      transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .gallery-filter-button:hover,
+    .gallery-filter-button.active {
+      color: #ffffff;
+
+      border-color: transparent;
+
+      background:
+        var(--fire-gradient);
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 12px 24px rgba(217, 4, 41, 0.22);
+    }
+
+    .gallery-page-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 20px;
+    }
+
+    .gallery-page-item {
+      position: relative;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      border:
+        1px solid var(--line);
+
+      border-radius: 20px;
+
+      background: #ffffff;
+
+      box-shadow:
+        var(--shadow);
+
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    .gallery-page-item:hover {
+      transform:
+        translateY(-6px);
+
+      box-shadow:
+        0 22px 46px rgba(42, 20, 16, 0.16);
+    }
+
+    .gallery-page-item.hidden {
+      display: none;
+    }
+
+    .gallery-image-button {
+      position: relative;
+
+      width: 100%;
+      height: 100%;
+
+      display: block;
+
+      padding: 0;
+
+      border: 0;
+
+      background: #111111;
+
+      cursor: pointer;
+
+      text-align: left;
+    }
+
+    .gallery-image-button img {
+      width: 100%;
+      height: 270px;
+
+      object-fit: cover;
+
+      transition:
+        transform 0.4s ease,
+        filter 0.4s ease;
+    }
+
+    .gallery-page-item:hover
+    .gallery-image-button img {
+      transform: scale(1.06);
+      filter: brightness(0.82);
+    }
+
+    .gallery-image-overlay {
+      position: absolute;
+      inset: auto 0 0;
+
+      min-height: 86px;
+
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      gap: 18px;
+
+      padding: 25px 18px 17px;
+
+      color: #ffffff;
+
+      background:
+        linear-gradient(
+          transparent,
+          rgba(0, 0, 0, 0.88)
+        );
+    }
+
+    .gallery-image-overlay span {
+      font-size: 0.92rem;
+      font-weight: 900;
+    }
+
+    .gallery-image-overlay i {
+      width: 38px;
+      height: 38px;
+
+      display: grid;
+      place-items: center;
+
+      flex: 0 0 38px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.35);
+
+      border-radius: 50%;
+
+      background:
+        rgba(255, 255, 255, 0.12);
+
+      backdrop-filter: blur(7px);
+    }
+
+    /* LIGHTBOX */
+
+    .gallery-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 30px 80px;
+
+      color: #ffffff;
+
+      background:
+        rgba(0, 0, 0, 0.94);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+    }
+
+    .gallery-lightbox.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .gallery-lightbox-content {
+      width: min(1050px, 100%);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 15px;
+    }
+
+    .gallery-lightbox-content img {
+      max-width: 100%;
+      max-height: 78vh;
+
+      object-fit: contain;
+
+      border-radius: 16px;
+
+      background: #111111;
+
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    .gallery-lightbox-caption {
+      margin: 0;
+
+      color:
+        rgba(255, 255, 255, 0.85);
+
+      font-size: 0.95rem;
+      font-weight: 800;
+
+      text-align: center;
+    }
+
+    .gallery-lightbox-close {
+      position: absolute;
+
+      top: 22px;
+      right: 22px;
+
+      width: 48px;
+      height: 48px;
+
+      display: grid;
+      place-items: center;
+
+      padding: 0;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.25);
+
+      border-radius: 50%;
+
+      color: #ffffff;
+
+      font-size: 1.25rem;
+
+      background:
+        rgba(255, 255, 255, 0.1);
+
+      cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .gallery-lightbox-close:hover {
+      background: var(--red);
+      transform: rotate(90deg);
+    }
+
+    .gallery-lightbox-arrow {
+      position: absolute;
+
+      top: 50%;
+
+      width: 52px;
+      height: 52px;
+
+      display: grid;
+      place-items: center;
+
+      padding: 0;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.25);
+
+      border-radius: 50%;
+
+      color: #ffffff;
+
+      font-size: 1.1rem;
+
+      background:
+        rgba(255, 255, 255, 0.1);
+
+      cursor: pointer;
+
+      transform:
+        translateY(-50%);
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .gallery-lightbox-arrow:hover {
+      background: var(--red);
+
+      transform:
+        translateY(-50%)
+        scale(1.07);
+    }
+
+    .gallery-lightbox-previous {
+      left: 20px;
+    }
+
+    .gallery-lightbox-next {
+      right: 20px;
+    }
+
+    /* INFORMATION CARDS */
+
+    .gallery-service-icon {
+      width: 58px;
+      height: 58px;
+
+      display: grid;
+      place-items: center;
+
+      margin-bottom: 17px;
+
+      border-radius: 15px;
+
+      font-size: 1.7rem;
+
+      background: #fff1ed;
+    }
+
+    /* CTA */
+
+    .gallery-cta {
+      padding: 60px 0;
+
+      color: #ffffff;
+
+      background:
+        var(--fire-gradient);
+    }
+
+    .gallery-cta .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+    }
+
+    .gallery-cta h2 {
+      margin: 8px 0 10px;
+
+      font-size:
+        clamp(2rem, 5vw, 3.5rem);
+
+      line-height: 1.05;
+    }
+
+    .gallery-cta p {
+      margin: 0;
+
+      color:
+        rgba(255, 255, 255, 0.84);
+    }
+
+    .gallery-cta-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1050px) {
+
+      .gallery-page-grid {
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+      }
+
+    }
+
+    @media (max-width: 800px) {
+
+      .gallery-page-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .gallery-cta .container {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .gallery-filter-bar {
+        justify-content: flex-start;
+
+        flex-wrap: nowrap;
+
+        overflow-x: auto;
+
+        padding-bottom: 8px;
+
+        scrollbar-width: none;
+      }
+
+      .gallery-filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .gallery-filter-button {
+        flex: 0 0 auto;
+      }
+
+      .gallery-page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-image-button img {
+        height: 260px;
+      }
+
+      .gallery-lightbox {
+        padding: 70px 12px 25px;
+      }
+
+      .gallery-lightbox-arrow {
+        top: auto;
+        bottom: 18px;
+
+        width: 46px;
+        height: 46px;
+
+        transform: none;
+      }
+
+      .gallery-lightbox-arrow:hover {
+        transform: scale(1.07);
+      }
+
+      .gallery-lightbox-previous {
+        left: calc(50% - 58px);
+      }
+
+      .gallery-lightbox-next {
+        right: calc(50% - 58px);
+      }
+
+      .gallery-lightbox-close {
+        top: 14px;
+        right: 14px;
+      }
+
+      .gallery-lightbox-content img {
+        max-height: 68vh;
+      }
+
+      .gallery-cta-actions {
+        width: 100%;
+      }
+
+      .gallery-cta-actions .btn {
+        width: 100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- SHARED HEADER -->
+
+  <div id="header"></div>
+
+  <main class="gallery-page">
+
+    <!-- PAGE HERO -->
+
+    <section class="page-hero">
+
+      <div class="container">
+
+        <div class="breadcrumbs">
+
+          <a href="index.html">
+            Home
+          </a>
+
+          <span>/</span>
+
+          <span>
+            Gallery
+          </span>
+
+        </div>
+
+        <span class="home-kicker home-kicker-light">
+          See our rentals in action
+        </span>
+
+        <h1>
+          Party Rental Gallery
+        </h1>
+
+        <p>
+          Browse photos of our bounce houses, water slides,
+          obstacle courses, dunk tanks and event setups.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- GALLERY -->
+
+    <section class="section gallery-filter-section">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <span class="home-kicker">
+            Explore our equipment
+          </span>
+
+          <h2>
+            Find the perfect rental
+          </h2>
+
+          <p>
+            Select a category or view all of our available
+            party rental photos.
+          </p>
+
+        </div>
+
+        <div
+          class="gallery-filter-bar"
+          aria-label="Gallery filters"
+        >
+
+          <button
+            type="button"
+            class="gallery-filter-button active"
+            data-gallery-filter="all"
+          >
+            All Photos
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="event"
+          >
+            Event Setups
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="bounce"
+          >
+            Bounce Houses
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="water"
+          >
+            Water Slides
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="combo"
+          >
+            Combos
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="obstacle"
+          >
+            Obstacle Courses
+          </button>
+
+          <button
+            type="button"
+            class="gallery-filter-button"
+            data-gallery-filter="dunk"
+          >
+            Dunk Tanks
+          </button>
+
+        </div>
+
+        <div class="gallery-page-grid">
+
+          <!-- EVENT SETUP -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="event"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="49DDD245-8712-46ED-BC8D-B51A24146B12.PNG"
+              data-gallery-alt="Children enjoying a Sen Party Rentals inflatable"
+              data-gallery-caption="Children enjoying a Sen Party Rentals inflatable"
+            >
+
+              <img
+                src="9246FA0A-16CC-402B-81F0-DCEB69C06829.PNG"
+                alt="Children enjoying a Sen Party Rentals inflatable"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Event Setup
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- MODULAR MOONBOUNCE -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="bounce"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="BOUNCE1.PNG"
+              data-gallery-alt="Modular Moonbounce rental"
+              data-gallery-caption="Modular Moonbounce"
+            >
+
+              <img
+                src="castleh1.PNG"
+                alt="Modular Moonbounce rental"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Modular Moonbounce
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- SPONGEBOB -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="bounce"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="F949C961-03FF-462B-A11D-70807A05C951 Small.jpeg"
+              data-gallery-alt="SpongeBob themed moonbounce"
+              data-gallery-caption="SpongeBob Moonbounce"
+            >
+
+              <img
+                src="spongebob1.PNG"
+                alt="SpongeBob themed moonbounce"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  SpongeBob Moonbounce
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- GIANT FLIP-FLOP -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="water"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="B68A4ED3-056C-43FA-A37B-38E6EA4D7321 Small.jpeg"
+              data-gallery-alt="Giant Flip-Flop water slide"
+              data-gallery-caption="Giant Flip-Flop Water Slide"
+            >
+
+              <img
+                src="F159C0FE-AE2A-45C4-81D4-A7E7F2F0A189.PNG"
+                alt="Giant Flip-Flop water slide"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Giant Flip-Flop Slide
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- CASTLE COMBO -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="combo"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="1775BEDF-B261-4718-9759-8BCABD72C5BB 2 Small.jpeg"
+              data-gallery-alt="Castle Combo inflatable rental"
+              data-gallery-caption="Castle Combo Inflatable"
+            >
+
+              <img
+                src="BAB0FD26-8E6F-4086-AFBF-A89119699969.PNG"
+                alt="Castle Combo inflatable rental"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Castle Combo
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- WILD RAPID -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="water"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="ADD4FA0C-343A-47C6-A345-F58DE6CD8E7C Small.jpeg"
+              data-gallery-alt="Wild Rapid two-lane water slide"
+              data-gallery-caption="Wild Rapid Two-Lane Water Slide"
+            >
+
+              <img
+                src="whilerapid1.PNG"
+                alt="Wild Rapid two-lane water slide"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Wild Rapid
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- BACKYARD EXTREME -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="obstacle"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="1DCEFD9B-F5C6-480D-BB50-3AC5DE8F3553.PNG"
+              data-gallery-alt="60 foot Backyard Extreme obstacle course"
+              data-gallery-caption="60-Foot Backyard Extreme Obstacle Course"
+            >
+
+              <img
+                src="492CA607-D0D2-4921-8C05-4CB8960E6E3E.PNG"
+                alt="60 foot Backyard Extreme obstacle course"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Backyard Extreme
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+          <!-- DUNK TANK -->
+
+          <figure
+            class="gallery-page-item"
+            data-gallery-category="dunk"
+          >
+
+            <button
+              type="button"
+              class="gallery-image-button"
+              data-gallery-image="2EF4A9A4-A1B8-48FE-A5D2-6AE9D1AEF084 Small.jpeg"
+              data-gallery-alt="Dunk tank rental"
+              data-gallery-caption="Dunk Tank Rental"
+            >
+
+              <img
+                src="dunktank.PNG"
+                alt="Dunk tank rental"
+                loading="lazy"
+              >
+
+              <span class="gallery-image-overlay">
+
+                <span>
+                  Dunk Tank
+                </span>
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+              </span>
+
+            </button>
+
+          </figure>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SERVICE INFORMATION -->
+
+    <section class="section section-soft">
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <span class="home-kicker">
+            Professional event setup
+          </span>
+
+          <h2>
+            Delivered, installed and ready for fun
+          </h2>
+
+          <p>
+            Our team handles delivery, installation
+            and pickup so you can enjoy your event.
+          </p>
+
+        </div>
+
+        <div class="three-column">
+
+          <article class="service-card">
+
+            <div class="gallery-service-icon">
+              🚚
+            </div>
+
+            <h3>
+              On-Time Delivery
+            </h3>
+
+            <p>
+              We schedule delivery and setup based on
+              your event time and location.
+            </p>
+
+          </article>
+
+          <article class="service-card">
+
+            <div class="gallery-service-icon">
+              ✨
+            </div>
+
+            <h3>
+              Clean Equipment
+            </h3>
+
+            <p>
+              Every inflatable is cleaned and inspected
+              before arriving at your event.
+            </p>
+
+          </article>
+
+          <article class="service-card">
+
+            <div class="gallery-service-icon">
+              🛠️
+            </div>
+
+            <h3>
+              Professional Installation
+            </h3>
+
+            <p>
+              We properly install, secure and test
+              each rental before use.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CALL TO ACTION -->
+
+    <section class="gallery-cta">
+
+      <div class="container">
+
+        <div>
+
+          <span class="home-kicker home-kicker-light">
+            See something you like?
+          </span>
+
+          <h2>
+            Reserve your favorite rental
+          </h2>
+
+          <p>
+            Send us your event date and location
+            to check availability.
+          </p>
+
+        </div>
+
+        <div class="gallery-cta-actions">
+
+          <a
+            href="inventory.html"
+            class="btn btn-light"
+          >
+            Browse Rentals
+          </a>
+
+          <a
+            href="booking.html"
+            class="btn btn-secondary"
+          >
+            Request Booking
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- IMAGE LIGHTBOX -->
+
+  <div
+    class="gallery-lightbox"
+    id="gallery-lightbox"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Expanded gallery image"
+  >
+
+    <button
+      type="button"
+      class="gallery-lightbox-close"
+      id="gallery-lightbox-close"
+      aria-label="Close expanded image"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <button
+      type="button"
+      class="gallery-lightbox-arrow gallery-lightbox-previous"
+      id="gallery-lightbox-previous"
+      aria-label="View previous image"
+    >
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <div class="gallery-lightbox-content">
+
+      <img
+        src=""
+        alt=""
+        id="gallery-lightbox-image"
+      >
+
+      <p
+        class="gallery-lightbox-caption"
+        id="gallery-lightbox-caption"
+      ></p>
+
+    </div>
+
+    <button
+      type="button"
+      class="gallery-lightbox-arrow gallery-lightbox-next"
+      id="gallery-lightbox-next"
+      aria-label="View next image"
+    >
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+  </div>
+
+  <!-- SHARED FOOTER -->
+
+  <div id="footer"></div>
+
+  <!-- FLOATING BOOKING BUTTON -->
+
+  <a
+    href="booking.html"
+    class="floating-book"
+    aria-label="Book a party rental"
+  >
+    <i class="fa-solid fa-calendar-check"></i>
+    Book Now
+  </a>
+
+  <script src="./assets/script.js?v=13"></script>
+
+  <script>
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        const filterButtons =
+          Array.from(
+            document.querySelectorAll(
+              ".gallery-filter-button"
+            )
+          );
+
+        const galleryItems =
+          Array.from(
+            document.querySelectorAll(
+              ".gallery-page-item"
+            )
+          );
+
+        const imageButtons =
+          Array.from(
+            document.querySelectorAll(
+              ".gallery-image-button"
+            )
+          );
+
+        const lightbox =
+          document.getElementById(
+            "gallery-lightbox"
+          );
+
+        const lightboxImage =
+          document.getElementById(
+            "gallery-lightbox-image"
+          );
+
+        const lightboxCaption =
+          document.getElementById(
+            "gallery-lightbox-caption"
+          );
+
+        const closeButton =
+          document.getElementById(
+            "gallery-lightbox-close"
+          );
+
+        const previousButton =
+          document.getElementById(
+            "gallery-lightbox-previous"
+          );
+
+        const nextButton =
+          document.getElementById(
+            "gallery-lightbox-next"
+          );
+
+        let visibleImageButtons =
+          imageButtons.slice();
+
+        let currentImageIndex = 0;
+
+        function updateVisibleImages() {
+
+          visibleImageButtons =
+            imageButtons.filter(
+              function (button) {
+
+                const item =
+                  button.closest(
+                    ".gallery-page-item"
+                  );
+
+                return (
+                  item &&
+                  !item.classList.contains(
+                    "hidden"
+                  )
+                );
+
+              }
+            );
+
+        }
+
+        function filterGallery(category) {
+
+          galleryItems.forEach(
+            function (item) {
+
+              const itemCategory =
+                item.dataset.galleryCategory;
+
+              const shouldShow =
+                category === "all" ||
+                itemCategory === category;
+
+              item.classList.toggle(
+                "hidden",
+                !shouldShow
+              );
+
+            }
+          );
+
+          updateVisibleImages();
+
+        }
+
+        filterButtons.forEach(
+          function (button) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                filterButtons.forEach(
+                  function (otherButton) {
+
+                    otherButton.classList.remove(
+                      "active"
+                    );
+
+                    otherButton.setAttribute(
+                      "aria-pressed",
+                      "false"
+                    );
+
+                  }
+                );
+
+                button.classList.add(
+                  "active"
+                );
+
+                button.setAttribute(
+                  "aria-pressed",
+                  "true"
+                );
+
+                filterGallery(
+                  button.dataset.galleryFilter
+                );
+
+              }
+            );
+
+          }
+        );
+
+        function showLightboxImage(index) {
+
+          if (
+            visibleImageButtons.length === 0
+          ) {
+            return;
+          }
+
+          currentImageIndex =
+            (
+              index +
+              visibleImageButtons.length
+            ) %
+            visibleImageButtons.length;
+
+          const currentButton =
+            visibleImageButtons[
+              currentImageIndex
+            ];
+
+          lightboxImage.src =
+            currentButton.dataset.galleryImage;
+
+          lightboxImage.alt =
+            currentButton.dataset.galleryAlt ||
+            "";
+
+          lightboxCaption.textContent =
+            currentButton.dataset.galleryCaption ||
+            currentButton.dataset.galleryAlt ||
+            "";
+
+        }
+
+        function openLightbox(button) {
+
+          updateVisibleImages();
+
+          currentImageIndex =
+            visibleImageButtons.indexOf(
+              button
+            );
+
+          if (currentImageIndex < 0) {
+            currentImageIndex = 0;
+          }
+
+          showLightboxImage(
+            currentImageIndex
+          );
+
+          lightbox.classList.add("open");
+
+          lightbox.setAttribute(
+            "aria-hidden",
+            "false"
+          );
+
+          document.body.style.overflow =
+            "hidden";
+
+          closeButton.focus();
+
+        }
+
+        function closeLightbox() {
+
+          lightbox.classList.remove("open");
+
+          lightbox.setAttribute(
+            "aria-hidden",
+            "true"
+          );
+
+          document.body.style.overflow = "";
+
+          lightboxImage.src = "";
+
+        }
+
+        imageButtons.forEach(
+          function (button) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                openLightbox(button);
+
+              }
+            );
+
+          }
+        );
+
+        closeButton.addEventListener(
+          "click",
+          closeLightbox
+        );
+
+        previousButton.addEventListener(
+          "click",
+          function () {
+
+            showLightboxImage(
+              currentImageIndex - 1
+            );
+
+          }
+        );
+
+        nextButton.addEventListener(
+          "click",
+          function () {
+
+            showLightboxImage(
+              currentImageIndex + 1
+            );
+
+          }
+        );
+
+        lightbox.addEventListener(
+          "click",
+          function (event) {
+
+            if (event.target === lightbox) {
+              closeLightbox();
+            }
+
+          }
+        );
+
+        document.addEventListener(
+          "keydown",
+          function (event) {
+
+            if (
+              !lightbox.classList.contains(
+                "open"
+              )
+            ) {
+              return;
+            }
+
+            if (event.key === "Escape") {
+              closeLightbox();
+            }
+
+            if (event.key === "ArrowLeft") {
+
+              showLightboxImage(
+                currentImageIndex - 1
+              );
+
+            }
+
+            if (event.key === "ArrowRight") {
+
+              showLightboxImage(
+                currentImageIndex + 1
+              );
+
+            }
+
+          }
+        );
+
+        filterButtons.forEach(
+          function (button, index) {
+
+            button.setAttribute(
+              "aria-pressed",
+              index === 0
+                ? "true"
+                : "false"
+            );
+
+          }
+        );
+
+        updateVisibleImages();
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
