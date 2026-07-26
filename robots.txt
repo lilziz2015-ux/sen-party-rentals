@@ -1,0 +1,16 @@
+# =====================================================
+# Sen Party Rentals
+# https://www.senmoonbounce.com
+# =====================================================
+
+User-agent: *
+
+# Allow all pages to be crawled
+Allow: /
+
+# Prevent indexing of utility pages
+Disallow: /404.html
+Disallow: /thank-you.html
+
+# Sitemap location
+Sitemap: https://www.senmoonbounce.com/sitemap.xml
