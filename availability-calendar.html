@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Rental Availability Calendar | Sen Party Rentals
+  </title>
+
+  <meta
+    name="description"
+    content="Check bounce house, water slide, obstacle course and party rental availability from Sen Party Rentals in Manassas, Virginia."
+  >
+
+  <meta name="theme-color" content="#0b0b0d">
+
+  <link
+    rel="canonical"
+    href="https://www.senmoonbounce.com/availability-calendar.html"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/style.css?v=2"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+</head>
+
+<body>
+
+  <!-- REUSABLE HEADER -->
+  <div id="header"></div>
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="calendar-hero">
+
+      <div class="container">
+
+        <div class="calendar-hero-content">
+
+          <span class="section-label">
+            Check Your Date
+          </span>
+
+          <h1>
+            Rental Availability Calendar
+          </h1>
+
+          <p>
+            Select your event date to see which bounce houses,
+            water slides, obstacle courses and party rentals
+            may be available.
+          </p>
+
+          <div class="calendar-hero-actions">
+
+            <a
+              href="tel:+15717199575"
+              class="btn btn-primary"
+            >
+              <i class="fa-solid fa-phone"></i>
+              Call 571-719-9575
+            </a>
+
+            <a
+              href="sms:+15717199575"
+              class="btn btn-secondary"
+            >
+              <i class="fa-solid fa-comment-sms"></i>
+              Text Us
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- AVAILABILITY TOOL -->
+
+    <section class="availability-section">
+
+      <div class="container">
+
+        <div class="availability-panel">
+
+          <div class="availability-heading">
+
+            <div>
+
+              <span class="section-label">
+                Live Rental Search
+              </span>
+
+              <h2>
+                Choose Your Event Date
+              </h2>
+
+              <p>
+                Availability is updated from confirmed and pending
+                bookings saved in the booking system.
+              </p>
+
+            </div>
+
+            <div class="calendar-date-control">
+
+              <label for="availabilityDate">
+                Event Date
+              </label>
+
+              <input
+                type="date"
+                id="availabilityDate"
+                name="availabilityDate"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- FILTERS -->
+
+          <div
+            class="availability-filters"
+            aria-label="Rental category filters"
+          >
+
+            <button
+              type="button"
+              class="calendar-filter active"
+              data-category="all"
+            >
+              All Rentals
+            </button>
+
+            <button
+              type="button"
+              class="calendar-filter"
+              data-category="bounce-house"
+            >
+              Bounce Houses
+            </button>
+
+            <button
+              type="button"
+              class="calendar-filter"
+              data-category="combo"
+            >
+              Combos
+            </button>
+
+            <button
+              type="button"
+              class="calendar-filter"
+              data-category="water-slide"
+            >
+              Water Slides
+            </button>
+
+            <button
+              type="button"
+              class="calendar-filter"
+              data-category="obstacle-course"
+            >
+              Obstacle Courses
+            </button>
+
+            <button
+              type="button"
+              class="calendar-filter"
+              data-category="party-extra"
+            >
+              Party Extras
+            </button>
+
+          </div>
+
+
+          <!-- STATUS LEGEND -->
+
+          <div class="availability-legend">
+
+            <div>
+              <span class="status-dot available-dot"></span>
+              Available
+            </div>
+
+            <div>
+              <span class="status-dot pending-dot"></span>
+              Pending
+            </div>
+
+            <div>
+              <span class="status-dot reserved-dot"></span>
+              Reserved
+            </div>
+
+            <div>
+              <span class="status-dot unavailable-dot"></span>
+              Unavailable
+            </div>
+
+          </div>
+
+
+          <!-- SELECTED DATE -->
+
+          <div
+            id="selectedDateMessage"
+            class="selected-date-message"
+          >
+            Select an event date to check availability.
+          </div>
+
+
+          <!-- RENTAL RESULTS -->
+
+          <div
+            id="availabilityGrid"
+            class="availability-grid"
+          ></div>
+
+
+          <!-- EMPTY MESSAGE -->
+
+          <div
+            id="availabilityEmpty"
+            class="availability-empty"
+            hidden
+          >
+
+            <i class="fa-regular fa-calendar-xmark"></i>
+
+            <h3>
+              No rentals found
+            </h3>
+
+            <p>
+              Try selecting another category.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- IMPORTANT NOTICE -->
+
+    <section class="calendar-notice-section">
+
+      <div class="container">
+
+        <div class="calendar-notice">
+
+          <div class="calendar-notice-icon">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Availability Is Not Guaranteed Until Confirmed
+            </h2>
+
+            <p>
+              A rental may receive more than one request for the same
+              date. Your reservation is not confirmed until Sen Party
+              Rentals approves your booking.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTACT CTA -->
+
+    <section class="calendar-contact-section">
+
+      <div class="container">
+
+        <div class="calendar-contact-card">
+
+          <div>
+
+            <span class="section-label">
+              Need Assistance?
+            </span>
+
+            <h2>
+              We Can Help You Choose the Right Rental
+            </h2>
+
+            <p>
+              Call or text us with your event date, location and the
+              rental you are interested in.
+            </p>
+
+          </div>
+
+          <div class="calendar-contact-buttons">
+
+            <a
+              href="tel:+15717199575"
+              class="btn btn-primary"
+            >
+              <i class="fa-solid fa-phone"></i>
+              571-719-9575
+            </a>
+
+            <a
+              href="./inventory.html"
+              class="btn btn-outline"
+            >
+              View Inventory
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- REUSABLE FOOTER -->
+  <div id="footer"></div>
+
+
+  <!-- CUSTOMER SERVICE FLOATING BUTTON -->
+
+  <div class="customer-service-widget">
+
+    <button
+      type="button"
+      class="customer-service-toggle"
+      id="customerServiceToggle"
+      aria-label="Open customer service options"
+    >
+      <i class="fa-solid fa-headset"></i>
+    </button>
+
+    <div
+      class="customer-service-menu"
+      id="customerServiceMenu"
+    >
+
+      <strong>
+        Need Help?
+      </strong>
+
+      <p>
+        Call or text Sen Party Rentals.
+      </p>
+
+      <a href="tel:+15717199575">
+
+        <i class="fa-solid fa-phone"></i>
+        Call Us
+
+      </a>
+
+      <a href="sms:+15717199575">
+
+        <i class="fa-solid fa-comment-sms"></i>
+        Text Us
+
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script src="./assets/components.js?v=1"></script>
+  <script src="./assets/calendar.js?v=1"></script>
+
+</body>
+
+</html>

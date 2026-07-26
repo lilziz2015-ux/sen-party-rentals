@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    60ft Backyard Extreme Obstacle Course Rental | Sen Party Rentals
+  </title>
+
+  <meta
+    name="description"
+    content="Rent the 60ft Backyard Extreme obstacle course for birthdays, schools, churches and community events. Delivery and professional setup available throughout Northern Virginia."
+  >
+
+  <meta name="theme-color" content="#0b0b0d">
+
+  <link
+    rel="canonical"
+    href="https://www.senmoonbounce.com/60ft-backyard-extreme-obstacle-course-rental.html"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/style.css?v=1"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    .rental-page {
+      background: #f6f6f7;
+      color: #171719;
+    }
+
+    .rental-hero {
+      padding: 90px 20px 55px;
+      background:
+        linear-gradient(rgba(0, 0, 0, .68), rgba(0, 0, 0, .78)),
+        url("./assets/images/60ft-backyard-extreme.jpg") center/cover no-repeat;
+      color: #fff;
+      text-align: center;
+    }
+
+    .rental-hero .eyebrow {
+      margin: 0 0 12px;
+      color: #ff3b30;
+      font-size: .9rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .rental-hero h1 {
+      max-width: 950px;
+      margin: 0 auto 18px;
+      font-size: clamp(2.2rem, 6vw, 4.7rem);
+      line-height: 1.02;
+    }
+
+    .rental-hero p {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: #ececef;
+    }
+
+    .hero-actions,
+    .rental-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .rental-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 50px;
+      padding: 13px 22px;
+      border: 2px solid #e21d2f;
+      border-radius: 10px;
+      background: #e21d2f;
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+      transition: .2s ease;
+    }
+
+    .rental-btn:hover {
+      transform: translateY(-2px);
+      background: #bd1424;
+      border-color: #bd1424;
+    }
+
+    .rental-btn.secondary {
+      background: transparent;
+      border-color: #fff;
+    }
+
+    .rental-btn.secondary:hover {
+      background: #fff;
+      color: #111;
+    }
+
+    .rental-container {
+      width: min(1180px, calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    .rental-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .75fr);
+      gap: 30px;
+      padding: 54px 0;
+      align-items: start;
+    }
+
+    .rental-card {
+      background: #fff;
+      border: 1px solid #e5e5e8;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .06);
+      overflow: hidden;
+    }
+
+    .rental-content {
+      padding: 30px;
+    }
+
+    .rental-content h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+    }
+
+    .rental-content h3 {
+      margin: 28px 0 10px;
+      font-size: 1.25rem;
+    }
+
+    .rental-content p,
+    .rental-content li {
+      line-height: 1.75;
+      color: #44444a;
+    }
+
+    .rental-gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .rental-gallery img {
+      width: 100%;
+      height: 100%;
+      min-height: 230px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .rental-gallery .gallery-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rental-specs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .spec {
+      padding: 18px;
+      border-radius: 12px;
+      background: #f7f7f8;
+      border: 1px solid #e7e7e9;
+    }
+
+    .spec i {
+      color: #e21d2f;
+      margin-right: 8px;
+    }
+
+    .spec strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .price-box {
+      position: sticky;
+      top: 95px;
+      padding: 28px;
+    }
+
+    .price-label {
+      margin: 0;
+      color: #686870;
+      font-weight: 700;
+    }
+
+    .price {
+      margin: 4px 0 10px;
+      font-size: 2.7rem;
+      line-height: 1;
+      font-weight: 900;
+      color: #e21d2f;
+    }
+
+    .price-note {
+      margin: 0 0 22px;
+      color: #55555d;
+      line-height: 1.55;
+    }
+
+    .price-box .rental-btn {
+      width: 100%;
+      margin-bottom: 11px;
+    }
+
+    .included-list,
+    .feature-list {
+      padding-left: 20px;
+    }
+
+    .included-list li,
+    .feature-list li {
+      margin-bottom: 8px;
+    }
+
+    .notice {
+      margin-top: 24px;
+      padding: 18px;
+      border-left: 4px solid #e21d2f;
+      border-radius: 8px;
+      background: #fff4f5;
+    }
+
+    .faq-section,
+    .related-section {
+      padding: 10px 0 60px;
+    }
+
+    .section-title {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .section-title h2 {
+      margin-bottom: 8px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 13px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    details {
+      background: #fff;
+      border: 1px solid #e2e2e5;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    details p {
+      margin-bottom: 0;
+      color: #4e4e54;
+      line-height: 1.7;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .related-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #e3e3e6;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #161618;
+      transition: .2s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, .09);
+    }
+
+    .related-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .related-card div {
+      padding: 18px;
+    }
+
+    .related-card h3 {
+      margin: 0 0 6px;
+    }
+
+    .related-card p {
+      margin: 0;
+      color: #5a5a61;
+    }
+
+    .rental-cta {
+      padding: 60px 20px;
+      background: #101014;
+      color: #fff;
+      text-align: center;
+    }
+
+    .rental-cta h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+
+    .rental-cta p {
+      max-width: 680px;
+      margin: 0 auto 24px;
+      color: #d4d4d7;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+      .rental-main {
+        grid-template-columns: 1fr;
+      }
+
+      .price-box {
+        position: static;
+      }
+
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .rental-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-gallery .gallery-side {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rental-gallery img {
+        min-height: 180px;
+      }
+
+      .rental-specs {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-content,
+      .price-box {
+        padding: 22px;
+      }
+
+      .hero-actions,
+      .rental-actions {
+        flex-direction: column;
+      }
+
+      .rental-btn {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "60ft Backyard Extreme Obstacle Course Rental",
+    "image": [
+      "https://www.senmoonbounce.com/assets/images/60ft-backyard-extreme.jpg"
+    ],
+    "description": "A 60-foot inflatable obstacle course rental for birthdays, schools, churches, festivals and community events in Northern Virginia.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Sen Party Rentals"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.senmoonbounce.com/60ft-backyard-extreme-obstacle-course-rental.html",
+      "priceCurrency": "USD",
+      "price": "500",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much space is required?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The inflatable measures approximately 60 feet long, 12 feet wide and 15 feet high. Additional clearance is required around the unit for safe anchoring and operation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the rental include delivery and setup?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Professional setup and takedown are included. Delivery cost depends on the event location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it require electricity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The obstacle course needs access to suitable electrical outlets. Generator rentals are available when electricity is not available."
+        }
+      }
+    ]
+  }
+  </script>
+
+</head>
+
+<body class="rental-page">
+
+  <!-- REUSABLE HEADER -->
+  <div id="header"></div>
+
+  <main>
+
+    <section class="rental-hero">
+
+      <p class="eyebrow">
+        Northern Virginia Obstacle Course Rental
+      </p>
+
+      <h1>
+        60ft Backyard Extreme Obstacle Course
+      </h1>
+
+      <p>
+        Bring high-energy competition to your birthday party, school event,
+        church festival or community celebration with this giant 60-foot
+        inflatable obstacle course.
+      </p>
+
+      <div class="hero-actions">
+
+        <a
+          class="rental-btn"
+          href="./booking.html?item=60ft-backyard-extreme"
+        >
+          <i class="fa-solid fa-calendar-check"></i>
+          Check Availability
+        </a>
+
+        <a
+          class="rental-btn secondary"
+          href="tel:+1XXXXXXXXXX"
+        >
+          <i class="fa-solid fa-phone"></i>
+          Call for a Quote
+        </a>
+
+      </div>
+
+    </section>
+
+    <div class="rental-container">
+
+      <section class="rental-main">
+
+        <article class="rental-card">
+
+          <div class="rental-gallery">
+
+            <img
+              src="./assets/images/60ft-backyard-extreme.jpg"
+              alt="60ft Backyard Extreme inflatable obstacle course rental"
+              loading="eager"
+            >
+
+            <div class="gallery-side">
+
+              <img
+                src="./assets/images/60ft-backyard-extreme-side.jpg"
+                alt="Side view of the 60ft obstacle course"
+                loading="lazy"
+              >
+
+              <img
+                src="./assets/images/60ft-backyard-extreme-event.jpg"
+                alt="Inflatable obstacle course set up for an outdoor event"
+                loading="lazy"
+              >
+
+            </div>
+
+          </div>
+
+          <div class="rental-content">
+
+            <h2>
+              A Giant Challenge for Kids, Teens and Events
+            </h2>
+
+            <p>
+              The 60ft Backyard Extreme is built for racing, climbing,
+              crawling and sliding. Two participants can compete through a
+              long series of inflatable obstacles before reaching the finish.
+              Its large size and bold appearance make it an excellent
+              centerpiece for busy events.
+            </p>
+
+            <p>
+              This obstacle course works well for birthday parties, school
+              field days, church gatherings, summer camps, corporate family
+              days and community festivals throughout Manassas and Northern
+              Virginia.
+            </p>
+
+            <div class="rental-specs">
+
+              <div class="spec">
+                <strong>
+                  <i class="fa-solid fa-ruler-combined"></i>
+                  Dimensions
+                </strong>
+                Approximately 60′ L × 12′ W × 15′ H
+              </div>
+
+              <div class="spec">
+                <strong>
+                  <i class="fa-solid fa-droplet-slash"></i>
+                  Use
+                </strong>
+                Dry use only
+              </div>
+
+              <div class="spec">
+                <strong>
+                  <i class="fa-solid fa-plug"></i>
+                  Power
+                </strong>
+                Electrical outlets or generators required
+              </div>
+
+              <div class="spec">
+                <strong>
+                  <i class="fa-solid fa-people-group"></i>
+                  Best For
+                </strong>
+                Birthdays, schools, churches and festivals
+              </div>
+
+            </div>
+
+            <h3>
+              Features
+            </h3>
+
+            <ul class="feature-list">
+              <li>Approximately 60 feet of climbing, crawling and racing</li>
+              <li>Two-lane competitive layout</li>
+              <li>Bright design that stands out at large events</li>
+              <li>Great for maintaining a steady flow of participants</li>
+              <li>Professionally cleaned and inspected before each rental</li>
+            </ul>
+
+            <h3>
+              Setup Requirements
+            </h3>
+
+            <p>
+              The setup area must be reasonably level, clean and free of
+              branches, rocks, pet waste, underground utilities and overhead
+              obstacles. Please allow additional clearance around the full
+              inflatable for anchoring and safe operation.
+            </p>
+
+            <div class="notice">
+              <strong>Important:</strong>
+              Please tell us before booking if the setup will be on concrete,
+              asphalt or another hard surface. Different anchoring equipment
+              may be required.
+            </div>
+
+            <h3>
+              Delivery Areas
+            </h3>
+
+            <p>
+              Delivery is available in Manassas, Gainesville, Bristow,
+              Haymarket, Woodbridge, Centreville, Fairfax, Leesburg and many
+              surrounding Northern Virginia communities. Delivery charges may
+              vary based on distance and event requirements.
+            </p>
+
+          </div>
+
+        </article>
+
+        <aside class="rental-card price-box">
+
+          <p class="price-label">
+            Rental price
+          </p>
+
+          <p class="price">
+            $500
+          </p>
+
+          <p class="price-note">
+            Delivery may be additional depending on the event address.
+            Contact us for an exact total.
+          </p>
+
+          <a
+            class="rental-btn"
+            href="./booking.html?item=60ft-backyard-extreme"
+          >
+            <i class="fa-solid fa-calendar-check"></i>
+            Book This Rental
+          </a>
+
+          <a
+            class="rental-btn"
+            href="./inventory.html"
+            style="background:#151519;border-color:#151519;"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            View All Inventory
+          </a>
+
+          <h3>
+            What’s Included
+          </h3>
+
+          <ul class="included-list">
+            <li>Professional setup</li>
+            <li>Safe anchoring</li>
+            <li>Blowers and extension cords</li>
+            <li>Operating instructions</li>
+            <li>Takedown after the event</li>
+          </ul>
+
+          <h3>
+            Helpful Add-ons
+          </h3>
+
+          <ul class="included-list">
+            <li>Generator rental</li>
+            <li>Tables and chairs</li>
+            <li>Popcorn machine</li>
+            <li>Snow cone machine</li>
+          </ul>
+
+        </aside>
+
+      </section>
+
+      <section class="faq-section">
+
+        <div class="section-title">
+          <h2>Frequently Asked Questions</h2>
+          <p>Important information before reserving this obstacle course.</p>
+        </div>
+
+        <div class="faq-grid">
+
+          <details>
+            <summary>How much space is required?</summary>
+            <p>
+              The unit measures approximately 60′ L × 12′ W × 15′ H.
+              Additional space is needed around the inflatable for anchoring,
+              blowers and safe participant entry and exit.
+            </p>
+          </details>
+
+          <details>
+            <summary>Does the rental include setup and takedown?</summary>
+            <p>
+              Yes. Our team delivers, sets up, secures and later removes the
+              inflatable. Delivery cost depends on your event location.
+            </p>
+          </details>
+
+          <details>
+            <summary>Do I need electricity?</summary>
+            <p>
+              Yes. Suitable electrical outlets must be available within the
+              approved cord distance. Generator rentals are available when
+              power is unavailable.
+            </p>
+          </details>
+
+          <details>
+            <summary>Can it be set up on concrete?</summary>
+            <p>
+              Hard-surface setups may be possible, but they require advance
+              notice and different anchoring methods. Please provide the setup
+              surface when requesting your quote.
+            </p>
+          </details>
+
+          <details>
+            <summary>What happens if rain is expected?</summary>
+            <p>
+              Contact Sen Party Rentals before the event. Setup decisions may
+              depend on rain, wind and other safety conditions.
+            </p>
+          </details>
+
+        </div>
+
+      </section>
+
+      <section class="related-section">
+
+        <div class="section-title">
+          <h2>Related Rentals</h2>
+          <p>Add more excitement to your event.</p>
+        </div>
+
+        <div class="related-grid">
+
+          <a
+            class="related-card"
+            href="./dunk-tank-rental.html"
+          >
+            <img
+              src="./assets/images/dunk-tank.jpg"
+              alt="Dunk tank rental"
+              loading="lazy"
+            >
+            <div>
+              <h3>Dunk Tank</h3>
+              <p>A popular game for churches, schools and festivals.</p>
+            </div>
+          </a>
+
+          <a
+            class="related-card"
+            href="./giant-flip-flop-water-slide-rental.html"
+          >
+            <img
+              src="./assets/images/giant-flip-flop-water-slide.jpg"
+              alt="Giant Flip-Flop water slide rental"
+              loading="lazy"
+            >
+            <div>
+              <h3>Giant Flip-Flop Water Slide</h3>
+              <p>A large water attraction for hot summer events.</p>
+            </div>
+          </a>
+
+          <a
+            class="related-card"
+            href="./generator-rental.html"
+          >
+            <img
+              src="./assets/images/generator.jpg"
+              alt="Portable generator rental"
+              loading="lazy"
+            >
+            <div>
+              <h3>Generator Rental</h3>
+              <p>Reliable power when outlets are not available.</p>
+            </div>
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <section class="rental-cta">
+
+      <h2>
+        Ready to Reserve the 60ft Backyard Extreme?
+      </h2>
+
+      <p>
+        Send your event date, location and setup surface to receive
+        availability and an exact delivered price.
+      </p>
+
+      <div class="rental-actions">
+
+        <a
+          class="rental-btn"
+          href="./booking.html?item=60ft-backyard-extreme"
+        >
+          Book Online
+        </a>
+
+        <a
+          class="rental-btn secondary"
+          href="sms:+1XXXXXXXXXX"
+        >
+          Text Us
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- REUSABLE FOOTER -->
+  <div id="footer"></div>
+
+  <script src="./assets/components.js?v=1"></script>
+
+</body>
+
+</html>
