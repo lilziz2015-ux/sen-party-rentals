@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><link rel="manifest" href="/site.webmanifest">
+
+<meta name="theme-color" content="#d90429">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="apple-mobile-web-app-title" content="Sen Party Rentals">
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Modular Moon Bounce Rental in Northern Virginia | Sen Party Rentals
+  </title>
+
+  <meta
+    name="description"
+    content="Rent our colorful Modular Moon Bounce for birthday parties, school events, church events and celebrations in Manassas and Northern Virginia. Professional delivery and setup available."
+  >
+
+  <meta name="theme-color" content="#0b0b0d">
+
+  <link
+    rel="canonical"
+    href="https://www.senmoonbounce.com/modular-moon-bounce-rental.html"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/style.css?v=1"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+
+    .rental-page {
+      background: #f6f6f7;
+      color: #171719;
+    }
+
+    .rental-hero {
+      position: relative;
+      padding: 95px 20px 60px;
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, .58),
+          rgba(0, 0, 0, .78)
+        ),
+        url("./assets/images/modular-moon-bounce.jpg")
+        center/cover no-repeat;
+      color: #fff;
+      text-align: center;
+    }
+
+    .rental-hero .eyebrow {
+      margin: 0 0 12px;
+      color: #ff3b30;
+      font-size: .9rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .rental-hero h1 {
+      max-width: 950px;
+      margin: 0 auto 18px;
+      font-size: clamp(2.3rem, 6vw, 4.8rem);
+      line-height: 1.03;
+    }
+
+    .rental-hero p {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      color: #ededf0;
+      font-size: 1.08rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions,
+    .rental-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .rental-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 50px;
+      padding: 13px 22px;
+      border: 2px solid #e21d2f;
+      border-radius: 10px;
+      background: #e21d2f;
+      color: #fff;
+      font-weight: 850;
+      text-decoration: none;
+      transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+    }
+
+    .rental-btn:hover {
+      transform: translateY(-2px);
+      background: #bd1424;
+      border-color: #bd1424;
+    }
+
+    .rental-btn.secondary {
+      background: transparent;
+      border-color: #fff;
+    }
+
+    .rental-btn.secondary:hover {
+      background: #fff;
+      color: #111;
+    }
+
+    .rental-container {
+      width: min(1180px, calc(100% - 34px));
+      margin: 0 auto;
+    }
+
+    .rental-main {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.55fr)
+        minmax(280px, .75fr);
+      gap: 30px;
+      padding: 54px 0;
+      align-items: start;
+    }
+
+    .rental-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #e5e5e8;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .06);
+    }
+
+    .rental-gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .rental-gallery img {
+      width: 100%;
+      height: 100%;
+      min-height: 230px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .gallery-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rental-content {
+      padding: 30px;
+    }
+
+    .rental-content h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.7rem, 3vw, 2.35rem);
+    }
+
+    .rental-content h3 {
+      margin: 28px 0 10px;
+      font-size: 1.25rem;
+    }
+
+    .rental-content p,
+    .rental-content li {
+      color: #44444a;
+      line-height: 1.75;
+    }
+
+    .rental-specs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .spec {
+      padding: 18px;
+      background: #f7f7f8;
+      border: 1px solid #e7e7e9;
+      border-radius: 12px;
+    }
+
+    .spec strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .spec i {
+      margin-right: 8px;
+      color: #e21d2f;
+    }
+
+    .feature-list,
+    .included-list {
+      padding-left: 20px;
+    }
+
+    .feature-list li,
+    .included-list li {
+      margin-bottom: 8px;
+    }
+
+    .notice {
+      margin-top: 24px;
+      padding: 18px;
+      background: #fff4f5;
+      border-left: 4px solid #e21d2f;
+      border-radius: 8px;
+      line-height: 1.65;
+    }
+
+    .price-box {
+      position: sticky;
+      top: 95px;
+      padding: 28px;
+    }
+
+    .price-label {
+      margin: 0;
+      color: #686870;
+      font-weight: 700;
+    }
+
+    .price {
+      margin: 4px 0 10px;
+      color: #e21d2f;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .price-note {
+      margin: 0 0 22px;
+      color: #55555d;
+      line-height: 1.6;
+    }
+
+    .price-box .rental-btn {
+      width: 100%;
+      margin-bottom: 11px;
+    }
+
+    .faq-section,
+    .related-section {
+      padding: 10px 0 60px;
+    }
+
+    .section-title {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .section-title h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+    }
+
+    .section-title p {
+      margin: 0;
+      color: #5d5d64;
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 13px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    details {
+      padding: 18px 20px;
+      background: #fff;
+      border: 1px solid #e2e2e5;
+      border-radius: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 850;
+    }
+
+    details p {
+      margin-bottom: 0;
+      color: #4e4e54;
+      line-height: 1.7;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .related-card {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #e3e3e6;
+      border-radius: 14px;
+      color: #161618;
+      text-decoration: none;
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, .09);
+    }
+
+    .related-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .related-card div {
+      padding: 18px;
+    }
+
+    .related-card h3 {
+      margin: 0 0 6px;
+    }
+
+    .related-card p {
+      margin: 0;
+      color: #5a5a61;
+      line-height: 1.5;
+    }
+
+    .rental-cta {
+      padding: 65px 20px;
+      background: #101014;
+      color: #fff;
+      text-align: center;
+    }
+
+    .rental-cta h2 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+
+    .rental-cta p {
+      max-width: 680px;
+      margin: 0 auto 24px;
+      color: #d4d4d7;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+
+      .rental-main {
+        grid-template-columns: 1fr;
+      }
+
+      .price-box {
+        position: static;
+      }
+
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 620px) {
+
+      .rental-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-side {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rental-gallery img {
+        min-height: 180px;
+      }
+
+      .rental-specs {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-content,
+      .price-box {
+        padding: 22px;
+      }
+
+      .hero-actions,
+      .rental-actions {
+        flex-direction: column;
+      }
+
+      .rental-btn {
+        width: 100%;
+      }
+
+    }
+
+  </style>
+
+  <!-- PRODUCT SCHEMA -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Modular Moon Bounce Rental",
+    "image": [
+      "https://www.senmoonbounce.com/assets/images/modular-moon-bounce.jpg"
+    ],
+    "description": "A colorful 13 by 13 foot Modular Moon Bounce rental for birthdays, schools, churches and family events in Northern Virginia.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Sen Party Rentals"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.senmoonbounce.com/modular-moon-bounce-rental.html",
+      "priceCurrency": "USD",
+      "price": "200",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+
+  <!-- FAQ SCHEMA -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the dimensions of the Modular Moon Bounce?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Modular Moon Bounce measures approximately 13 feet long, 13 feet wide and 15 feet high. Additional clearance is required for safe anchoring and operation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many children can use the moon bounce at once?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The number of participants depends on their ages, sizes and combined weight. Children should be grouped by similar size and supervised by a responsible adult."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the rental include setup?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Professional setup, anchoring, blower installation and takedown are included. Delivery charges may vary by location."
+        }
+      }
+    ]
+  }
+  </script>
+
+</head>
+
+<body class="rental-page">
+
+  <!-- REUSABLE HEADER -->
+
+  <div id="header"></div>
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="rental-hero">
+
+      <p class="eyebrow">
+        Northern Virginia Bounce House Rental
+      </p>
+
+      <h1>
+        Modular Moon Bounce Rental
+      </h1>
+
+      <p>
+        Add colorful, active fun to your child’s birthday party, school
+        celebration, church event or family gathering with our spacious
+        Modular Moon Bounce.
+      </p>
+
+      <div class="hero-actions">
+
+        <a
+          class="rental-btn"
+          href="./booking.html?item=modular-moon-bounce"
+        >
+          <i class="fa-solid fa-calendar-check"></i>
+          Check Availability
+        </a>
+
+        <a
+          class="rental-btn secondary"
+          href="tel:+15715555555"
+        >
+          <i class="fa-solid fa-phone"></i>
+          Call for a Quote
+        </a>
+
+      </div>
+
+    </section>
+
+    <div class="rental-container">
+
+      <section class="rental-main">
+
+        <!-- MAIN CONTENT -->
+
+        <article class="rental-card">
+
+          <div class="rental-gallery">
+
+            <img
+              src="./castleh1.PNG"
+              alt="Modular Moon Bounce rental from Sen Party Rentals"
+              loading="eager"
+            >
+
+            <div class="gallery-side">
+
+              <img
+                src="./assets/images/modular-moon-bounce-side.jpg"
+                alt="Side view of the Modular Moon Bounce"
+                loading="lazy"
+              >
+
+              <img
+                src="./assets/images/modular-moon-bounce-inside.jpg"
+                alt="Interior jumping area of the Modular Moon Bounce"
+                loading="lazy"
+              >
+
+            </div>
+
+          </div>
+
+          <div class="rental-content">
+
+            <h2>
+              Classic Bounce House Fun for Children
+            </h2>
+
+            <p>
+              The Modular Moon Bounce gives children a large enclosed jumping
+              area where they can bounce, play and enjoy the celebration. Its
+              colorful design works well with many birthday themes and makes
+              it a great option for backyard parties and larger community
+              events.
+            </p>
+
+            <p>
+              Mesh windows provide airflow and make it easier for parents and
+              attendants to supervise participants. The entrance includes an
+              inflatable step to help children safely enter and exit.
+            </p>
+
+            <div class="rental-specs">
+
+              <div class="spec">
+
+                <strong>
+                  <i class="fa-solid fa-ruler-combined"></i>
+                  Dimensions
+                </strong>
+
+                Approximately 13′ L × 13′ W × 15′ H
+
+              </div>
+
+              <div class="spec">
+
+                <strong>
+                  <i class="fa-solid fa-droplet-slash"></i>
+                  Use
+                </strong>
+
+                Dry use only
+
+              </div>
+
+              <div class="spec">
+
+                <strong>
+                  <i class="fa-solid fa-plug"></i>
+                  Power
+                </strong>
+
+                One suitable electrical outlet required
+
+              </div>
+
+              <div class="spec">
+
+                <strong>
+                  <i class="fa-solid fa-child-reaching"></i>
+                  Best For
+                </strong>
+
+                Children’s birthdays and family events
+
+              </div>
+
+            </div>
+
+            <h3>
+              Moon Bounce Features
+            </h3>
+
+            <ul class="feature-list">
+
+              <li>
+                Spacious enclosed jumping area
+              </li>
+
+              <li>
+                Mesh windows for ventilation and supervision
+              </li>
+
+              <li>
+                Inflatable entrance step
+              </li>
+
+              <li>
+                Bright colors suitable for many party themes
+              </li>
+
+              <li>
+                Professionally cleaned and inspected before each rental
+              </li>
+
+            </ul>
+
+            <h3>
+              Participant Guidelines
+            </h3>
+
+            <p>
+              Participants should be grouped by similar age and size.
+              The total number allowed inside depends on the children’s sizes,
+              combined weight and manufacturer safety requirements. A
+              responsible adult must supervise the moon bounce while it is in
+              use.
+            </p>
+
+            <h3>
+              Setup Requirements
+            </h3>
+
+            <p>
+              The setup area should be level, clean and free of rocks,
+              branches, pet waste, irrigation equipment, underground utility
+              hazards and overhead obstacles. Additional space is required
+              around the moon bounce for stakes, blower equipment and safe
+              entry.
+            </p>
+
+            <div class="notice">
+
+              <strong>
+                Important:
+              </strong>
+
+              Please tell us whether the setup surface is grass, concrete,
+              asphalt or indoors before booking. Hard-surface and indoor
+              setups require advance approval.
+
+            </div>
+
+            <h3>
+              Delivery Areas
+            </h3>
+
+            <p>
+              Delivery is available in Manassas, Gainesville, Bristow,
+              Haymarket, Woodbridge, Centreville, Fairfax, Leesburg and many
+              surrounding Northern Virginia communities. Delivery fees may
+              vary depending on distance and event requirements.
+            </p>
+
+          </div>
+
+        </article>
+
+        <!-- PRICE BOX -->
+
+        <aside class="rental-card price-box">
+
+          <p class="price-label">
+            Rental price
+          </p>
+
+          <p class="price">
+            $200
+          </p>
+
+          <p class="price-note">
+            Delivery may be additional depending on the event address.
+            Contact us for an exact delivered price.
+          </p>
+
+          <a
+            class="rental-btn"
+            href="./booking.html?item=modular-moon-bounce"
+          >
+            <i class="fa-solid fa-calendar-check"></i>
+            Book This Rental
+          </a>
+
+          <a
+            class="rental-btn"
+            href="./inventory.html"
+            style="background:#151519;border-color:#151519;"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            View All Inventory
+          </a>
+
+          <h3>
+            What’s Included
+          </h3>
+
+          <ul class="included-list">
+
+            <li>
+              Professional setup
+            </li>
+
+            <li>
+              Safe anchoring
+            </li>
+
+            <li>
+              Blower and extension cord
+            </li>
+
+            <li>
+              Operating instructions
+            </li>
+
+            <li>
+              Takedown after the event
+            </li>
+
+          </ul>
+
+          <h3>
+            Helpful Add-ons
+          </h3>
+
+          <ul class="included-list">
+
+            <li>
+              Generator rental
+            </li>
+
+            <li>
+              Tables and chairs
+            </li>
+
+            <li>
+              Popcorn machine
+            </li>
+
+            <li>
+              Snow cone machine
+            </li>
+
+          </ul>
+
+        </aside>
+
+      </section>
+
+      <!-- FAQ -->
+
+      <section class="faq-section">
+
+        <div class="section-title">
+
+          <h2>
+            Frequently Asked Questions
+          </h2>
+
+          <p>
+            Important information before reserving the Modular Moon Bounce.
+          </p>
+
+        </div>
+
+        <div class="faq-grid">
+
+          <details>
+
+            <summary>
+              How many children can jump at one time?
+            </summary>
+
+            <p>
+              Capacity depends on the participants’ ages, sizes and combined
+              weight. Children should be grouped with others of similar size,
+              and the unit must remain under adult supervision.
+            </p>
+
+          </details>
+
+          <details>
+
+            <summary>
+              What are the dimensions?
+            </summary>
+
+            <p>
+              The moon bounce measures approximately 13 feet long, 13 feet
+              wide and 15 feet high. Additional clearance is required around
+              the unit for safe setup and anchoring.
+            </p>
+
+          </details>
+
+          <details>
+
+            <summary>
+              Does the rental include setup and takedown?
+            </summary>
+
+            <p>
+              Yes. Our team delivers, installs, anchors and later removes the
+              moon bounce. Delivery charges depend on the event location.
+            </p>
+
+          </details>
+
+          <details>
+
+            <summary>
+              Does it require electricity?
+            </summary>
+
+            <p>
+              Yes. A suitable electrical outlet is required for the blower.
+              Generator rentals are available when electricity is not
+              available near the setup area.
+            </p>
+
+          </details>
+
+          <details>
+
+            <summary>
+              Can adults use this moon bounce?
+            </summary>
+
+            <p>
+              This unit is primarily intended for children. Participant use
+              must follow the inflatable’s posted weight, height and safety
+              restrictions.
+            </p>
+
+          </details>
+
+          <details>
+
+            <summary>
+              Can it be set up on concrete?
+            </summary>
+
+            <p>
+              Concrete or asphalt setup may be possible with advance notice.
+              Different anchoring equipment and setup requirements may apply.
+            </p>
+
+          </details>
+
+        </div>
+
+      </section>
+
+      <!-- RELATED RENTALS -->
+
+      <section class="related-section">
+
+        <div class="section-title">
+
+          <h2>
+            Related Rentals
+          </h2>
+
+          <p>
+            Explore more inflatable attractions for your event.
+          </p>
+
+        </div>
+
+        <div class="related-grid">
+
+          <a
+            class="related-card"
+            href="./princess-castle-bounce-house-rental.html"
+          >
+
+            <img
+              src="./assets/images/princess-castle.jpg"
+              alt="Princess Castle Bounce House rental"
+              loading="lazy"
+            >
+
+            <div>
+
+              <h3>
+                Princess Castle
+              </h3>
+
+              <p>
+                A colorful castle bounce house for princess-themed parties.
+              </p>
+
+            </div>
+
+          </a>
+
+          <a
+            class="related-card"
+            href="./magic-castle-hoop-bounce-house-rental.html"
+          >
+
+            <img
+              src="./assets/images/magic-castle-hoop.jpg"
+              alt="Magic Castle Hoop Bounce House rental"
+              loading="lazy"
+            >
+
+            <div>
+
+              <h3>
+                Magic Castle Hoop
+              </h3>
+
+              <p>
+                A classic bounce house with an interior basketball hoop.
+              </p>
+
+            </div>
+
+          </a>
+
+          <a
+            class="related-card"
+            href="./castle-combo-bounce-house-rental.html"
+          >
+
+            <img
+              src="./assets/images/castle-combo.jpg"
+              alt="Castle Combo Bounce House rental"
+              loading="lazy"
+            >
+
+            <div>
+
+              <h3>
+                Castle Combo
+              </h3>
+
+              <p>
+                Combine bouncing and sliding in one exciting inflatable.
+              </p>
+
+            </div>
+
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- FINAL CALL TO ACTION -->
+
+    <section class="rental-cta">
+
+      <h2>
+        Ready to Reserve the Modular Moon Bounce?
+      </h2>
+
+      <p>
+        Send us your event date, location and setup surface to receive
+        availability and an exact delivered price.
+      </p>
+
+      <div class="rental-actions">
+
+        <a
+          class="rental-btn"
+          href="./booking.html?item=modular-moon-bounce"
+        >
+          Book Online
+        </a>
+
+        <a
+          class="rental-btn secondary"
+          href="sms:+15717199575"
+        >
+          Text Us
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- REUSABLE FOOTER -->
+
+  <div id="footer"></div>
+
+  <script src="./assets/components.js?v=1"></script>
+
+</body>
+
+</html>

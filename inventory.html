@@ -1,0 +1,2725 @@
+<!doctype html>
+<html lang="en">
+
+<head><link rel="manifest" href="/site.webmanifest">
+
+<meta name="theme-color" content="#d90429">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="apple-mobile-web-app-title" content="Sen Party Rentals">
+
+  <!-- Google Analytics -->
+
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-6X7TKYY8HW"
+  ></script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag("js", new Date());
+
+    gtag("config", "G-6X7TKYY8HW");
+  </script>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Party Rental Inventory | Sen Party Rentals
+  </title>
+
+  <meta
+    name="description"
+    content="Browse bounce houses, water slides, combos, obstacle courses, dunk tanks, generators, tables, chairs and concession machines from Sen Party Rentals."
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b0b0d"
+  >
+
+  <link
+    rel="canonical"
+    href="https://www.senmoonbounce.com/inventory.html"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/style.css?v=13"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+
+    :root {
+      --inventory-red: #d90429;
+      --inventory-red-dark: #970018;
+      --inventory-orange: #ff6a00;
+      --inventory-dark: #101114;
+      --inventory-text: #23252b;
+      --inventory-muted: #696d76;
+      --inventory-border: #e8e3e0;
+      --inventory-soft: #fff7f4;
+
+      --inventory-gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 55%,
+          #ff6a00
+        );
+
+      --inventory-shadow:
+        0 16px 38px rgba(32, 18, 15, 0.11);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .inventory-page {
+      padding-bottom: 80px;
+    }
+
+    .inventory-banner {
+      padding: 11px 16px;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-align: center;
+      background: var(--inventory-gradient);
+    }
+
+    /* HERO */
+
+    .inventory-hero {
+      width: min(94%, 1200px);
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(320px, 0.9fr);
+
+      gap: 34px;
+      align-items: center;
+
+      margin: 28px auto 32px;
+
+      padding:
+        clamp(34px, 6vw, 64px);
+
+      overflow: hidden;
+
+      color: white;
+
+      border-radius: 28px;
+
+      background:
+        radial-gradient(
+          circle at 90% 10%,
+          rgba(255, 106, 0, 0.35),
+          transparent 30%
+        ),
+        linear-gradient(
+          120deg,
+          #070708,
+          #17181c 60%,
+          #5a0010
+        );
+
+      box-shadow:
+        0 24px 70px rgba(20, 9, 7, 0.22);
+    }
+
+    .inventory-hero h1 {
+      margin: 0 0 14px;
+
+      font-size:
+        clamp(2.6rem, 7vw, 5rem);
+
+      line-height: 1;
+    }
+
+    .inventory-hero p {
+      max-width: 650px;
+
+      margin: 0;
+
+      color:
+        rgba(255, 255, 255, 0.78);
+
+      font-size: 1.04rem;
+    }
+
+    .inventory-hero-panel {
+      padding: 22px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+      border-radius: 20px;
+
+      background:
+        rgba(255, 255, 255, 0.07);
+
+      backdrop-filter:
+        blur(12px);
+    }
+
+    /* SEARCH */
+
+    .inventory-search-wrap {
+      position: relative;
+
+      margin-bottom: 16px;
+    }
+
+    .inventory-search-wrap i {
+      position: absolute;
+
+      top: 50%;
+      left: 16px;
+
+      color: #8a8d95;
+
+      transform:
+        translateY(-50%);
+    }
+
+    #inventorySearch {
+      width: 100%;
+      min-height: 52px;
+
+      padding:
+        0 16px 0 46px;
+
+      border: 0;
+
+      border-radius: 13px;
+
+      color:
+        var(--inventory-text);
+
+      background: white;
+    }
+
+    /* FILTERS */
+
+    .inventory-filters {
+      display: flex;
+
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .inventory-filter {
+      min-height: 40px;
+
+      padding:
+        0 14px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.18);
+
+      border-radius: 999px;
+
+      color: white;
+
+      font-size: 0.8rem;
+      font-weight: 800;
+
+      background:
+        rgba(255, 255, 255, 0.08);
+
+      cursor: pointer;
+
+      transition:
+        0.2s ease;
+    }
+
+    .inventory-filter:hover,
+    .inventory-filter.active {
+      border-color: transparent;
+
+      background:
+        var(--inventory-gradient);
+
+      transform:
+        translateY(-2px);
+    }
+
+    /* CONTROLS */
+
+    .inventory-controls {
+      width: min(94%, 1200px);
+
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 18px;
+      flex-wrap: wrap;
+
+      margin:
+        0 auto 24px;
+    }
+
+    .inventory-count {
+      color:
+        var(--inventory-muted);
+
+      font-weight: 700;
+    }
+
+    #inventorySort {
+      min-height: 44px;
+
+      padding:
+        0 38px 0 14px;
+
+      border:
+        1px solid var(--inventory-border);
+
+      border-radius: 11px;
+
+      color:
+        var(--inventory-text);
+
+      background: white;
+    }
+
+    /* GRID */
+
+    .inventory-grid {
+      width: min(94%, 1200px);
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+      gap: 24px;
+
+      margin-inline: auto;
+    }
+
+    /* RENTAL CARD */
+
+    .rental-card {
+      position: relative;
+
+      display: flex;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      flex-direction: column;
+
+      border:
+        1px solid var(--inventory-border);
+
+      border-radius: 20px;
+
+      background: white;
+
+      box-shadow:
+        var(--inventory-shadow);
+
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .rental-card:hover {
+      transform:
+        translateY(-7px);
+
+      box-shadow:
+        0 26px 55px rgba(71, 27, 18, 0.16);
+    }
+
+    .rental-card-media {
+      position: relative;
+
+      height: 250px;
+
+      overflow: hidden;
+
+      padding: 0;
+
+      border: 0;
+
+      background: #f1f1f2;
+
+      cursor: pointer;
+    }
+
+    .rental-card-media img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+
+      transition:
+        transform 0.35s ease;
+    }
+
+    .rental-card:hover
+    .rental-card-media img {
+      transform:
+        scale(1.035);
+    }
+
+    .rental-category,
+    .rental-photo-count {
+      position: absolute;
+
+      top: 14px;
+
+      display: inline-flex;
+
+      min-height: 31px;
+
+      align-items: center;
+
+      gap: 6px;
+
+      padding:
+        0 11px;
+
+      border-radius: 999px;
+
+      color: white;
+
+      font-size: 0.72rem;
+      font-weight: 900;
+
+      backdrop-filter:
+        blur(8px);
+    }
+
+    .rental-category {
+      left: 14px;
+
+      background:
+        var(--inventory-gradient);
+    }
+
+    .rental-photo-count {
+      right: 14px;
+
+      background:
+        rgba(0, 0, 0, 0.68);
+    }
+
+    .rental-card-body {
+      display: flex;
+
+      flex: 1;
+
+      flex-direction: column;
+
+      padding: 22px;
+    }
+
+    .rental-card h2 {
+      margin:
+        0 0 9px;
+
+      color:
+        var(--inventory-text);
+
+      font-size: 1.3rem;
+      line-height: 1.15;
+    }
+
+    .rental-card-description {
+      margin:
+        0 0 16px;
+
+      color:
+        var(--inventory-muted);
+
+      font-size: 0.92rem;
+    }
+
+    .rental-quick-specs {
+      display: flex;
+
+      gap: 8px;
+      flex-wrap: wrap;
+
+      margin-bottom: 18px;
+    }
+
+    .rental-quick-specs span {
+      padding:
+        7px 9px;
+
+      border-radius: 8px;
+
+      color: #4e5158;
+
+      font-size: 0.73rem;
+      font-weight: 800;
+
+      background:
+        var(--inventory-soft);
+    }
+
+    .rental-card-footer {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 14px;
+
+      margin-top: auto;
+    }
+
+    .rental-price {
+      color:
+        var(--inventory-red);
+
+      font-size: 1.4rem;
+      font-weight: 900;
+
+      white-space: nowrap;
+    }
+
+    .rental-price small {
+      color:
+        var(--inventory-muted);
+
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .rental-card-actions {
+      display: flex;
+
+      gap: 8px;
+    }
+
+    .rental-button {
+      min-height: 43px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      padding:
+        0 14px;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      font-size: 0.79rem;
+      font-weight: 900;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease;
+    }
+
+    .rental-button:hover {
+      transform:
+        translateY(-2px);
+    }
+
+    .rental-button-details {
+      color:
+        var(--inventory-red);
+
+      border:
+        1px solid rgba(217, 4, 41, 0.25);
+
+      background: white;
+    }
+
+    .rental-button-book {
+      color: white;
+
+      background:
+        var(--inventory-gradient);
+
+      box-shadow:
+        0 10px 22px rgba(217, 4, 41, 0.22);
+    }
+
+    /* EMPTY MESSAGE */
+
+    .inventory-empty {
+      width: min(94%, 1200px);
+
+      display: none;
+
+      margin:
+        20px auto;
+
+      padding:
+        44px 20px;
+
+      border:
+        1px dashed var(--inventory-border);
+
+      border-radius: 18px;
+
+      color:
+        var(--inventory-muted);
+
+      text-align: center;
+
+      background: white;
+    }
+
+    .inventory-empty.show {
+      display: block;
+    }
+
+    /* DETAILS MODAL */
+
+    .rental-modal {
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      display: none;
+
+      padding: 24px;
+
+      overflow-y: auto;
+
+      background:
+        rgba(5, 5, 7, 0.86);
+
+      backdrop-filter:
+        blur(8px);
+    }
+
+    .rental-modal.open {
+      display: block;
+    }
+
+    .rental-modal-dialog {
+      width: min(100%, 1080px);
+
+      margin:
+        20px auto;
+
+      overflow: hidden;
+
+      border-radius: 24px;
+
+      background: white;
+
+      box-shadow:
+        0 35px 100px rgba(0, 0, 0, 0.38);
+    }
+
+    .rental-modal-close {
+      position: fixed;
+
+      top: 22px;
+      right: 24px;
+
+      z-index: 5002;
+
+      width: 46px;
+      height: 46px;
+
+      display: grid;
+
+      place-items: center;
+
+      border: 0;
+
+      border-radius: 50%;
+
+      color: white;
+
+      font-size: 1.25rem;
+
+      background:
+        rgba(0, 0, 0, 0.72);
+
+      cursor: pointer;
+    }
+
+    .rental-modal-grid {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(360px, 0.9fr);
+    }
+
+    /* GALLERY */
+
+    .rental-gallery {
+      padding: 24px;
+
+      background: #f5f5f6;
+    }
+
+    .rental-main-image-wrap {
+      position: relative;
+
+      height: 500px;
+
+      display: grid;
+
+      place-items: center;
+
+      overflow: hidden;
+
+      border-radius: 18px;
+
+      background: white;
+    }
+
+    #rentalMainImage {
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+    }
+
+    .gallery-arrow {
+      position: absolute;
+
+      top: 50%;
+
+      width: 45px;
+      height: 45px;
+
+      display: grid;
+
+      place-items: center;
+
+      border: 0;
+
+      border-radius: 50%;
+
+      color: white;
+
+      background:
+        rgba(0, 0, 0, 0.65);
+
+      transform:
+        translateY(-50%);
+
+      cursor: pointer;
+    }
+
+    .gallery-arrow.prev {
+      left: 14px;
+    }
+
+    .gallery-arrow.next {
+      right: 14px;
+    }
+
+    .rental-thumbnails {
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+      gap: 9px;
+
+      margin-top: 12px;
+    }
+
+    .rental-thumbnail {
+      height: 72px;
+
+      overflow: hidden;
+
+      padding: 0;
+
+      border:
+        2px solid transparent;
+
+      border-radius: 10px;
+
+      background: white;
+
+      cursor: pointer;
+    }
+
+    .rental-thumbnail.active {
+      border-color:
+        var(--inventory-red);
+    }
+
+    .rental-thumbnail img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+    }
+
+    /* MODAL CONTENT */
+
+    .rental-modal-content {
+      padding: 34px;
+    }
+
+    .rental-modal-category {
+      display: inline-flex;
+
+      min-height: 31px;
+
+      align-items: center;
+
+      padding:
+        0 11px;
+
+      border-radius: 999px;
+
+      color: white;
+
+      font-size: 0.75rem;
+      font-weight: 900;
+
+      background:
+        var(--inventory-gradient);
+    }
+
+    .rental-modal-content h2 {
+      margin:
+        15px 0 8px;
+
+      color:
+        var(--inventory-text);
+
+      font-size:
+        clamp(2rem, 4vw, 3rem);
+
+      line-height: 1.05;
+    }
+
+    .rental-modal-price {
+      margin-bottom: 18px;
+
+      color:
+        var(--inventory-red);
+
+      font-size: 1.8rem;
+      font-weight: 900;
+    }
+
+    .rental-modal-description {
+      margin-bottom: 24px;
+
+      color:
+        var(--inventory-muted);
+    }
+
+    .rental-specs {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 11px;
+
+      margin:
+        20px 0 26px;
+    }
+
+    .rental-spec {
+      padding: 13px;
+
+      border:
+        1px solid var(--inventory-border);
+
+      border-radius: 11px;
+
+      background: #fffafa;
+    }
+
+    .rental-spec span {
+      display: block;
+
+      color:
+        var(--inventory-muted);
+
+      font-size: 0.72rem;
+      font-weight: 800;
+
+      text-transform: uppercase;
+    }
+
+    .rental-spec strong {
+      display: block;
+
+      margin-top: 3px;
+
+      color:
+        var(--inventory-text);
+
+      font-size: 0.94rem;
+    }
+
+    .included-title {
+      margin:
+        0 0 11px;
+
+      font-size: 1rem;
+    }
+
+    .included-list {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 9px;
+
+      margin:
+        0 0 25px;
+
+      padding: 0;
+
+      list-style: none;
+    }
+
+    .included-list li {
+      color: #4c5057;
+
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .included-list i {
+      margin-right: 7px;
+
+      color:
+        var(--inventory-red);
+    }
+
+    .modal-book-button {
+      width: 100%;
+      min-height: 54px;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 10px;
+
+      border-radius: 13px;
+
+      color: white;
+
+      font-weight: 900;
+
+      background:
+        var(--inventory-gradient);
+
+      box-shadow:
+        0 16px 35px rgba(217, 4, 41, 0.26);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 1000px) {
+
+      .inventory-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .rental-modal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-main-image-wrap {
+        height: 430px;
+      }
+
+    }
+
+    @media (max-width: 760px) {
+
+      .inventory-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-card-media {
+        height: 280px;
+      }
+
+      .rental-modal {
+        padding: 10px;
+      }
+
+      .rental-modal-dialog {
+        margin:
+          42px auto 10px;
+
+        border-radius: 18px;
+      }
+
+      .rental-gallery,
+      .rental-modal-content {
+        padding: 18px;
+      }
+
+      .rental-main-image-wrap {
+        height: 340px;
+      }
+
+      .rental-thumbnails {
+        grid-template-columns:
+          repeat(4, minmax(0, 1fr));
+      }
+
+    }
+
+    @media (max-width: 480px) {
+
+      .inventory-hero {
+        width: 95%;
+
+        padding:
+          34px 20px;
+
+        border-radius: 21px;
+      }
+
+      .inventory-grid,
+      .inventory-controls {
+        width: 95%;
+      }
+
+      .rental-card-footer {
+        align-items: stretch;
+
+        flex-direction: column;
+      }
+
+      .rental-card-actions {
+        display: grid;
+
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+      .rental-specs,
+      .included-list {
+        grid-template-columns: 1fr;
+      }
+
+      .rental-main-image-wrap {
+        height: 275px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="header"></div>
+
+  <div class="inventory-banner">
+    ☀️ Summer Special: Get 10% off qualifying summer bookings.
+  </div>
+
+  <main class="inventory-page">
+
+    <section class="inventory-hero">
+
+      <div>
+
+        <span class="eyebrow eyebrow-light">
+          Sen Party Rentals
+        </span>
+
+        <h1>
+          Choose Your Party Rental
+        </h1>
+
+        <p>
+          Browse our bounce houses, water slides, combos,
+          obstacle courses, dunk tanks, generators, tables,
+          chairs and concession machines. Select
+          <strong>View Details</strong> to see more photos
+          and specifications.
+        </p>
+
+      </div>
+
+      <div class="inventory-hero-panel">
+
+        <div class="inventory-search-wrap">
+
+          <i
+            class="fa-solid fa-magnifying-glass"
+            aria-hidden="true"
+          ></i>
+
+          <input
+            id="inventorySearch"
+            type="search"
+            placeholder="Search rentals..."
+            aria-label="Search rental inventory"
+          >
+
+        </div>
+
+        <div
+          class="inventory-filters"
+          aria-label="Inventory categories"
+        >
+
+          <button
+            class="inventory-filter active"
+            type="button"
+            data-category="all"
+          >
+            All
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="moon"
+          >
+            Bounce Houses
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="water"
+          >
+            Water Slides
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="combo"
+          >
+            Combos
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="obstacle"
+          >
+            Obstacles
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="addons"
+          >
+            Add-Ons
+          </button>
+
+          <button
+            class="inventory-filter"
+            type="button"
+            data-category="concessions"
+          >
+            Concessions
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="inventory-controls">
+
+      <p class="inventory-count">
+        <span id="inventoryCount">0</span>
+        rentals available
+      </p>
+
+      <select
+        id="inventorySort"
+        aria-label="Sort inventory"
+      >
+
+        <option value="featured">
+          Sort: Featured
+        </option>
+
+        <option value="price-low">
+          Price: Low to High
+        </option>
+
+        <option value="price-high">
+          Price: High to Low
+        </option>
+
+        <option value="name">
+          Name: A to Z
+        </option>
+
+      </select>
+
+    </section>
+
+    <section
+      id="inventoryGrid"
+      class="inventory-grid"
+      aria-live="polite"
+    ></section>
+
+    <div
+      id="inventoryEmpty"
+      class="inventory-empty"
+    >
+
+      <i class="fa-solid fa-magnifying-glass"></i>
+
+      <h2>
+        No rentals found
+      </h2>
+
+      <p>
+        Try a different search or category.
+      </p>
+
+    </div>
+
+  </main>
+
+  <!-- ITEM DETAILS MODAL -->
+
+  <div
+    id="rentalModal"
+    class="rental-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="rentalModalTitle"
+  >
+
+    <button
+      id="rentalModalClose"
+      class="rental-modal-close"
+      type="button"
+      aria-label="Close details"
+    >
+
+      <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+    <div class="rental-modal-dialog">
+
+      <div class="rental-modal-grid">
+
+        <div class="rental-gallery">
+
+          <div class="rental-main-image-wrap">
+
+            <img
+              id="rentalMainImage"
+              src=""
+              alt=""
+            >
+
+            <button
+              id="galleryPrevious"
+              class="gallery-arrow prev"
+              type="button"
+              aria-label="Previous image"
+            >
+
+              <i class="fa-solid fa-chevron-left"></i>
+
+            </button>
+
+            <button
+              id="galleryNext"
+              class="gallery-arrow next"
+              type="button"
+              aria-label="Next image"
+            >
+
+              <i class="fa-solid fa-chevron-right"></i>
+
+            </button>
+
+          </div>
+
+          <div
+            id="rentalThumbnails"
+            class="rental-thumbnails"
+          ></div>
+
+        </div>
+
+        <div class="rental-modal-content">
+
+          <span
+            id="rentalModalCategory"
+            class="rental-modal-category"
+          ></span>
+
+          <h2 id="rentalModalTitle"></h2>
+
+          <div
+            id="rentalModalPrice"
+            class="rental-modal-price"
+          ></div>
+
+          <p
+            id="rentalModalDescription"
+            class="rental-modal-description"
+          ></p>
+
+          <div
+            id="rentalSpecs"
+            class="rental-specs"
+          ></div>
+
+          <h3 class="included-title">
+            Included with your rental
+          </h3>
+
+          <ul class="included-list">
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Professional setup
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Safety inspection
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Pickup after event
+            </li>
+
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              Clean rental unit
+            </li>
+
+          </ul>
+
+          <a
+            id="rentalModalBook"
+            class="modal-book-button"
+            href="booking.html"
+          >
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            Book This Rental
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="footer"></div>
+
+  <script src="./assets/script.js?v=11"></script>
+
+  <script>
+
+    /* ===============================
+       INVENTORY DATA
+    =============================== */
+
+    const rentals = [
+
+      {
+        id: "modular-moonbounce",
+        name: "Modular Moonbounce",
+        category: "moon",
+        categoryLabel: "Bounce House",
+        price: 250,
+
+        description:
+          "A classic modular bounce house that is great for toddlers, birthdays and family celebrations.",
+
+        images: [
+          "castleh1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "13 × 13 × 15 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Setup: "Grass or approved hard surface",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "13 × 13 ft",
+          "Dry",
+          "1 outlet"
+        ]
+      },
+
+      {
+        id: "sponge-bop-moonbounce",
+        name: "Sponge Bop Moonbounce",
+        category: "moon",
+        categoryLabel: "Bounce House",
+        price: 250,
+
+        description:
+          "A colorful cartoon-themed moonbounce that children love for birthday parties and family events.",
+
+        images: [
+          "spongebob1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "15 × 15 × 15 ft",
+          Capacity: "Up to 8 children",
+          Ages: "3+",
+          Setup: "Grass preferred",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "15 × 15 ft",
+          "Dry",
+          "Kids favorite"
+        ]
+      },
+
+      {
+        id: "castle-fun-house",
+        name: "Castle Fun House",
+        category: "moon",
+        categoryLabel: "Bounce House",
+        price: 250,
+
+        description:
+          "A spacious castle-style bounce house designed for medium-size birthday parties and community events.",
+
+        images: [
+          "CastleFunHouse.PNG"
+        ],
+
+        specs: {
+          Dimensions: "15 × 15 × 16 ft",
+          Capacity: "Up to 8 children",
+          Ages: "3+",
+          Setup: "Grass preferred",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "15 × 15 ft",
+          "Castle theme",
+          "1 outlet"
+        ]
+      },
+
+      {
+        id: "magic-castle-hoop",
+        name: "Magic Castle with Basketball Hoop",
+        category: "moon",
+        categoryLabel: "Bounce House",
+        price: 250,
+
+        description:
+          "A castle bounce house with a built-in basketball hoop for extra active fun.",
+
+        images: [
+          "castleh1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "13 × 13 × 15 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Feature: "Basketball hoop",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "13 × 13 ft",
+          "Basketball hoop",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "princess-castle",
+        name: "Princess Castle Moonbounce",
+        category: "moon",
+        categoryLabel: "Bounce House",
+        price: 250,
+
+        description:
+          "A princess-themed castle moonbounce that is perfect for birthdays, school events and themed celebrations.",
+
+        images: [
+          "IMG_0565.PNG"
+        ],
+
+        specs: {
+          Dimensions: "13 × 13 × 16 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Theme: "Princess castle",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "13 × 13 ft",
+          "Princess theme",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "giant-flipflop",
+        name: "The Giant Flip-Flop Splash Slide",
+        category: "water",
+        categoryLabel: "Water Slide",
+        price: 450,
+
+        description:
+          "A large summer water slide with a fast lane and splash landing that is ideal for backyard parties.",
+
+        images: [
+          "Giant Flip-Flop Slide.PNG"
+        ],
+
+        specs: {
+          Dimensions: "28 × 12 × 18 ft",
+          Capacity: "One rider at a time",
+          Ages: "5+",
+          Water: "Garden hose required",
+          Power: "1 standard outlet",
+          Use: "Wet"
+        },
+
+        quick: [
+          "18 ft tall",
+          "Wet",
+          "1 outlet"
+        ]
+      },
+
+      {
+        id: "castle-splash-combo",
+        name: "Castle Splash Combo",
+        category: "water",
+        categoryLabel: "Water Slide Combo",
+        price: 350,
+
+        description:
+          "A castle-themed inflatable with a bounce area and slide. Wet or dry setup is available.",
+
+        images: [
+          "7BD6EB13-C585-4DA8-9EA4-68F2B8FF0669.PNG"
+        ],
+
+        specs: {
+          Dimensions: "30 × 13 × 15 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Water: "Garden hose for wet setup",
+          Power: "1 standard outlet",
+          Use: "Wet or dry"
+        },
+
+        quick: [
+          "Bounce + slide",
+          "Wet or dry",
+          "30 ft long"
+        ]
+      },
+
+      {
+        id: "dino-splash",
+        name: "Dino Splash Adventure",
+        category: "water",
+        categoryLabel: "Water Slide",
+        price: 350,
+
+        description:
+          "A dinosaur-themed water slide and splash zone made for exciting summer fun.",
+
+        images: [
+          "dino1.jpeg"
+        ],
+
+        specs: {
+          Dimensions: "25 × 10 × 16 ft",
+          Capacity: "One rider at a time",
+          Ages: "4+",
+          Water: "Garden hose required",
+          Power: "1 standard outlet",
+          Use: "Wet"
+        },
+
+        quick: [
+          "16 ft tall",
+          "Dinosaur theme",
+          "Wet"
+        ]
+      },
+
+      {
+        id: "wild-rapid",
+        name: "Wild Rapid",
+        category: "water",
+        categoryLabel: "Dual-Lane Water Slide",
+        price: 500,
+
+        description:
+          "A two-lane racing water slide designed for backyard competitions, larger parties and special events.",
+
+        images: [
+          "whilerapid1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "32 × 16 × 18 ft",
+          Capacity: "Two riders",
+          Ages: "5+",
+          Feature: "Dual racing lanes",
+          Power: "2 standard outlets",
+          Use: "Wet"
+        },
+
+        quick: [
+          "Two lanes",
+          "18 ft tall",
+          "Wet"
+        ]
+      },
+
+      {
+        id: "big-wave",
+        name: "Big Wave Water Slide",
+        category: "water",
+        categoryLabel: "Water Slide",
+        price: 450,
+
+        description:
+          "A tall water slide with a dramatic wave design and splash landing.",
+
+        images: [
+          "big wave1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "30 × 12 × 18 ft",
+          Capacity: "One rider at a time",
+          Ages: "5+",
+          Water: "Garden hose required",
+          Power: "1 standard outlet",
+          Use: "Wet"
+        },
+
+        quick: [
+          "18 ft tall",
+          "Wave theme",
+          "Wet"
+        ]
+      },
+
+      {
+        id: "tropical-thunder",
+        name: "Tropical Thunder",
+        category: "water",
+        categoryLabel: "Wet or Dry Slide",
+        price: 480,
+
+        description:
+          "A tropical-themed inflatable slide that can be used wet during summer or dry during cooler weather.",
+
+        images: [
+          "tropica1.jpeg"
+        ],
+
+        specs: {
+          Dimensions: "28 × 13 × 16 ft",
+          Capacity: "One rider at a time",
+          Ages: "4+",
+          Water: "Optional",
+          Power: "1 standard outlet",
+          Use: "Wet or dry"
+        },
+
+        quick: [
+          "Wet or dry",
+          "16 ft tall",
+          "Tropical theme"
+        ]
+      },
+
+      {
+        id: "dunk-tank",
+        name: "Dunk Tank",
+        category: "water",
+        categoryLabel: "Dunk Tank",
+        price: 400,
+
+        description:
+          "A classic dunk tank for school fundraisers, church events, company picnics and community celebrations.",
+
+        images: [
+          "dunktank.PNG"
+        ],
+
+        specs: {
+          Dimensions: "Approximately 8 × 8 × 8 ft",
+          Capacity: "One seated participant",
+          Ages: "Adult supervision required",
+          Water: "Customer water source required",
+          Power: "No outlet required",
+          Use: "Outdoor"
+        },
+
+        quick: [
+          "Fundraisers",
+          "No electricity",
+          "Outdoor"
+        ]
+      },
+
+      {
+        id: "castle-combo",
+        name: "Castle Combo",
+        category: "combo",
+        categoryLabel: "Bounce and Slide Combo",
+        price: 350,
+
+        description:
+          "A compact castle unit combining a bounce area and slide. Available as a wet setup.",
+
+        images: [
+          "BAB0FD26-8E6F-4086-AFBF-A89119699969.PNG"
+        ],
+
+        specs: {
+          Dimensions: "30 × 13 × 15 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Feature: "Bounce area and slide",
+          Power: "1 standard outlet",
+          Use: "Wet"
+        },
+
+        quick: [
+          "Bounce + slide",
+          "Wet",
+          "30 ft long"
+        ]
+      },
+
+      {
+        id: "high-sky-combo",
+        name: "High Sky Combo",
+        category: "combo",
+        categoryLabel: "Bounce and Slide Combo",
+        price: 350,
+
+        description:
+          "A tall slide and roomy bounce area designed for birthdays and larger family gatherings.",
+
+        images: [
+          "41C07D7F-A725-4D33-95BC-63564DF13899.PNG"
+        ],
+
+        specs: {
+          Dimensions: "32 × 13 × 16 ft",
+          Capacity: "Up to 6 children",
+          Ages: "4+",
+          Feature: "Tall slide and bounce area",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "32 ft long",
+          "Bounce + slide",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "jerrassic-combo",
+        name: "Jerrassic Combo",
+        category: "combo",
+        categoryLabel: "Bounce and Slide Combo",
+        price: 300,
+
+        description:
+          "A dinosaur-themed combo with a bounce section, play area and slide.",
+
+        images: [
+          "jerrasic1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "28 × 13 × 16 ft",
+          Capacity: "Up to 6 children",
+          Ages: "3+",
+          Theme: "Dinosaur",
+          Power: "1 standard outlet",
+          Use: "Dry"
+        },
+
+        quick: [
+          "Dinosaur theme",
+          "Bounce + slide",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "toxic-revenge",
+        name: "Toxic Revenge Obstacle Course",
+        category: "obstacle",
+        categoryLabel: "Obstacle Course",
+        price: 600,
+
+        description:
+          "An extreme obstacle challenge with tunnels, climbing sections and slides. Great for teens, adults and large events.",
+
+        images: [
+          "Toxic Revenge Obstacle Course1.PNG",
+          "obstaclecours1.PNG",
+          "IMG_6489 Small.jpeg",
+          "IMG_6490 Small.jpeg",
+          "IMG_6491 Small.jpeg"
+        ],
+
+        specs: {
+          Dimensions: "Confirm setup dimensions",
+          Capacity: "Multiple participants",
+          Ages: "Older children, teens and adults",
+          Feature: "Tunnels, climbs and slides",
+          Power: "Confirm outlet requirements",
+          Use: "Dry"
+        },
+
+        quick: [
+          "5 photos",
+          "Teens and adults",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "black-opps",
+        name: "Black Opps",
+        category: "obstacle",
+        categoryLabel: "Obstacle Course",
+        price: 750,
+
+        description:
+          "A 60-foot military-style obstacle course challenge for teens, adults, festivals and large events.",
+
+        images: [
+          "blkops1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "60 × 30 × 16 ft",
+          Capacity: "Multiple participants",
+          Ages: "Older children, teens and adults",
+          Feature: "Military obstacle theme",
+          Power: "2 standard outlets",
+          Use: "Dry"
+        },
+
+        quick: [
+          "60 ft long",
+          "Military theme",
+          "Large events"
+        ]
+      },
+
+      {
+        id: "backyard-extreme",
+        name: "60ft Backyard Extreme",
+        category: "obstacle",
+        categoryLabel: "Obstacle Course",
+        price: 500,
+
+        description:
+          "A large 60-foot backyard obstacle course for races, festivals, school events and big celebrations.",
+
+        images: [
+          "obstaclecou1.PNG"
+        ],
+
+        specs: {
+          Dimensions: "60 × 12 × 15 ft",
+          Capacity: "Multiple participants",
+          Ages: "5+",
+          Feature: "Long racing course",
+          Power: "2 standard outlets",
+          Use: "Dry"
+        },
+
+        quick: [
+          " 50ft long",
+          "Racing course",
+          "Dry"
+        ]
+      },
+
+      {
+        id: "generator",
+        name: "Generator",
+        category: "addons",
+        categoryLabel: "Add-On",
+        price: 100,
+
+        description:
+          "A portable generator for locations without a suitable electrical outlet near the rental setup area.",
+
+        images: [
+          "generator.PNG"
+        ],
+
+        specs: {
+          Type: "Portable generator",
+          Fuel: "Confirm fuel inclusion",
+          Capacity: "Depends on rental units",
+          Placement: "Outdoor use only",
+          Power: "Generator output",
+          Use: "Add-on"
+        },
+
+        quick: [
+          "Portable",
+          "Outdoor",
+          "Power add-on"
+        ]
+      },
+
+      {
+        id: "table",
+        name: "6ft Banquet Table",
+        category: "addons",
+        categoryLabel: "Table",
+        price: 12,
+
+        description:
+          "A sturdy six-foot banquet table for food service, gifts, registration and guest seating.",
+
+        images: [
+          "table.PNG"
+        ],
+
+        specs: {
+          Length: "6 ft",
+          Type: "Folding banquet table",
+          Capacity: "Approximately 6–8 guests",
+          Setup: "Indoor or outdoor",
+          Power: "Not required",
+          Use: "Add-on"
+        },
+
+        quick: [
+          "6 ft",
+          "Folding",
+          "6–8 guests"
+        ]
+      },
+
+      {
+        id: "chair",
+        name: "Banquet Chair",
+        category: "addons",
+        categoryLabel: "Chair",
+        price: 2,
+
+        description:
+          "A durable folding chair for birthdays, family events, ceremonies and community gatherings.",
+
+        images: [
+          "chair1.PNG"
+        ],
+
+        specs: {
+          Type: "Folding chair",
+          Capacity: "One guest",
+          Setup: "Indoor or outdoor",
+          Quantity: "Select during booking",
+          Power: "Not required",
+          Use: "Add-on"
+        },
+
+        quick: [
+          "Folding",
+          "Indoor or outdoor",
+          "$2 each"
+        ]
+      },
+
+      {
+        id: "popcorn",
+        name: "Popcorn Machine",
+        category: "concessions",
+        categoryLabel: "Concession",
+        price: 75,
+
+        description:
+          "A countertop popcorn machine for serving fresh popcorn at parties and special events.",
+
+        images: [
+          "popcorn.PNG"
+        ],
+
+        specs: {
+          Type: "Countertop concession machine",
+          Supplies: "Confirm supplies separately",
+          Operator: "Adult operation recommended",
+          Setup: "Covered area preferred",
+          Power: "1 standard outlet",
+          Use: "Concession"
+        },
+
+        quick: [
+          "1 outlet",
+          "Countertop",
+          "Party favorite"
+        ]
+      },
+
+      {
+        id: "snow-cone",
+        name: "Snow Cone Machine",
+        category: "concessions",
+        categoryLabel: "Concession",
+        price: 75,
+
+        description:
+          "A snow cone machine for refreshing frozen treats during warm-weather parties and events.",
+
+        images: [
+          "snowcon.PNG"
+        ],
+
+        specs: {
+          Type: "Countertop concession machine",
+          Supplies: "Ice and syrup required",
+          Operator: "Adult operation recommended",
+          Setup: "Covered area preferred",
+          Power: "1 standard outlet",
+          Use: "Concession"
+        },
+
+        quick: [
+          "1 outlet",
+          "Ice required",
+          "Summer events"
+        ]
+      }
+
+    ];
+
+    /* ===============================
+       PAGE ELEMENTS
+    =============================== */
+
+    const grid =
+      document.getElementById("inventoryGrid");
+
+    const count =
+      document.getElementById("inventoryCount");
+
+    const empty =
+      document.getElementById("inventoryEmpty");
+
+    const search =
+      document.getElementById("inventorySearch");
+
+    const sort =
+      document.getElementById("inventorySort");
+
+    const filters =
+      document.querySelectorAll(".inventory-filter");
+
+    const modal =
+      document.getElementById("rentalModal");
+
+    const modalClose =
+      document.getElementById("rentalModalClose");
+
+    const modalCategory =
+      document.getElementById("rentalModalCategory");
+
+    const modalTitle =
+      document.getElementById("rentalModalTitle");
+
+    const modalPrice =
+      document.getElementById("rentalModalPrice");
+
+    const modalDescription =
+      document.getElementById("rentalModalDescription");
+
+    const modalSpecs =
+      document.getElementById("rentalSpecs");
+
+    const modalBook =
+      document.getElementById("rentalModalBook");
+
+    const mainImage =
+      document.getElementById("rentalMainImage");
+
+    const thumbnails =
+      document.getElementById("rentalThumbnails");
+
+    const previousButton =
+      document.getElementById("galleryPrevious");
+
+    const nextButton =
+      document.getElementById("galleryNext");
+
+    let activeCategory = "all";
+    let activeRental = null;
+    let activeImageIndex = 0;
+
+    /* ===============================
+       PRICE FORMATTER
+    =============================== */
+
+    function formatPrice(price) {
+
+      return new Intl.NumberFormat(
+        "en-US",
+        {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0
+        }
+      ).format(price);
+
+    }
+
+    /* ===============================
+       FILTER AND SORT
+    =============================== */
+
+    function getFilteredRentals() {
+
+      const keyword =
+        search.value
+          .trim()
+          .toLowerCase();
+
+      let filtered =
+        rentals.filter(rental => {
+
+          const categoryMatch =
+            activeCategory === "all" ||
+            rental.category === activeCategory;
+
+          const keywordMatch =
+            !keyword ||
+
+            rental.name
+              .toLowerCase()
+              .includes(keyword) ||
+
+            rental.description
+              .toLowerCase()
+              .includes(keyword) ||
+
+            rental.categoryLabel
+              .toLowerCase()
+              .includes(keyword);
+
+          return (
+            categoryMatch &&
+            keywordMatch
+          );
+
+        });
+
+      switch (sort.value) {
+
+        case "price-low":
+
+          filtered.sort(
+            (a, b) =>
+              a.price - b.price
+          );
+
+          break;
+
+        case "price-high":
+
+          filtered.sort(
+            (a, b) =>
+              b.price - a.price
+          );
+
+          break;
+
+        case "name":
+
+          filtered.sort(
+            (a, b) =>
+              a.name.localeCompare(b.name)
+          );
+
+          break;
+
+      }
+
+      return filtered;
+
+    }
+
+    /* ===============================
+       CREATE RENTAL CARD
+    =============================== */
+
+    function createRentalCard(rental) {
+
+      const card =
+        document.createElement("article");
+
+      card.className =
+        "rental-card";
+
+      card.dataset.id =
+        rental.id;
+
+      const quickSpecs =
+        rental.quick
+          .map(spec => {
+
+            return `
+              <span>
+                ${spec}
+              </span>
+            `;
+
+          })
+          .join("");
+
+      card.innerHTML = `
+
+        <button
+          class="rental-card-media"
+          type="button"
+          data-details="${rental.id}"
+          aria-label="View details for ${rental.name}"
+        >
+
+          <img
+            src="${rental.images[0]}"
+            alt="${rental.name}"
+            loading="lazy"
+          >
+
+          <span class="rental-category">
+            ${rental.categoryLabel}
+          </span>
+
+          <span class="rental-photo-count">
+
+            <i class="fa-regular fa-images"></i>
+
+            ${rental.images.length}
+
+          </span>
+
+        </button>
+
+        <div class="rental-card-body">
+
+          <h2>
+            ${rental.name}
+          </h2>
+
+          <p class="rental-card-description">
+            ${rental.description}
+          </p>
+
+          <div class="rental-quick-specs">
+            ${quickSpecs}
+          </div>
+
+          <div class="rental-card-footer">
+
+            <div class="rental-price">
+
+              ${formatPrice(rental.price)}
+
+              <small>
+                /day
+              </small>
+
+            </div>
+
+            <div class="rental-card-actions">
+
+              <button
+                class="rental-button rental-button-details"
+                type="button"
+                data-details="${rental.id}"
+              >
+                Details
+              </button>
+
+              <a
+                class="rental-button rental-button-book"
+                href="booking.html?add=${encodeURIComponent(rental.id)}"
+              >
+                Book
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+      return card;
+
+    }
+
+    /* ===============================
+       RENDER INVENTORY
+    =============================== */
+
+    function renderInventory() {
+
+      const filtered =
+        getFilteredRentals();
+
+      grid.innerHTML = "";
+
+      filtered.forEach(rental => {
+
+        grid.appendChild(
+          createRentalCard(rental)
+        );
+
+      });
+
+      count.textContent =
+        filtered.length;
+
+      empty.classList.toggle(
+        "show",
+        filtered.length === 0
+      );
+
+    }
+
+    /* ===============================
+       IMAGE GALLERY
+    =============================== */
+
+    function updateMainImage() {
+
+      if (!activeRental) {
+        return;
+      }
+
+      const imageSource =
+        activeRental.images[
+          activeImageIndex
+        ];
+
+      mainImage.src =
+        imageSource;
+
+      mainImage.alt =
+        `${activeRental.name} photo ${activeImageIndex + 1}`;
+
+      thumbnails
+        .querySelectorAll(
+          ".rental-thumbnail"
+        )
+        .forEach(
+          (button, index) => {
+
+            button.classList.toggle(
+              "active",
+              index === activeImageIndex
+            );
+
+          }
+        );
+
+      const multipleImages =
+        activeRental.images.length > 1;
+
+      previousButton.hidden =
+        !multipleImages;
+
+      nextButton.hidden =
+        !multipleImages;
+
+    }
+
+    function moveGallery(direction) {
+
+      if (
+        !activeRental ||
+        activeRental.images.length < 2
+      ) {
+        return;
+      }
+
+      activeImageIndex =
+        (
+          activeImageIndex +
+          direction +
+          activeRental.images.length
+        ) %
+        activeRental.images.length;
+
+      updateMainImage();
+
+    }
+
+    /* ===============================
+       OPEN DETAILS
+    =============================== */
+
+    function openRentalDetails(id) {
+
+      activeRental =
+        rentals.find(
+          rental =>
+            rental.id === id
+        );
+
+      if (!activeRental) {
+        return;
+      }
+
+      activeImageIndex = 0;
+
+      modalCategory.textContent =
+        activeRental.categoryLabel;
+
+      modalTitle.textContent =
+        activeRental.name;
+
+      modalPrice.textContent =
+        `${formatPrice(activeRental.price)}/day`;
+
+      modalDescription.textContent =
+        activeRental.description;
+
+      modalBook.href =
+        `booking.html?add=${encodeURIComponent(activeRental.id)}`;
+
+      modalSpecs.innerHTML =
+        Object.entries(
+          activeRental.specs
+        )
+        .map(
+          ([label, value]) => {
+
+            return `
+
+              <div class="rental-spec">
+
+                <span>
+                  ${label}
+                </span>
+
+                <strong>
+                  ${value}
+                </strong>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join("");
+
+      thumbnails.innerHTML =
+        activeRental.images
+          .map(
+            (image, index) => {
+
+              return `
+
+                <button
+                  class="rental-thumbnail ${index === 0 ? "active" : ""}"
+                  type="button"
+                  data-image-index="${index}"
+                  aria-label="Show image ${index + 1}"
+                >
+
+                  <img
+                    src="${image}"
+                    alt="${activeRental.name} thumbnail ${index + 1}"
+                  >
+
+                </button>
+
+              `;
+
+            }
+          )
+          .join("");
+
+      updateMainImage();
+
+      modal.classList.add("open");
+
+      document.body.classList.add(
+        "modal-open"
+      );
+
+      modalClose.focus();
+
+    }
+
+    /* ===============================
+       CLOSE DETAILS
+    =============================== */
+
+    function closeRentalDetails() {
+
+      modal.classList.remove("open");
+
+      document.body.classList.remove(
+        "modal-open"
+      );
+
+      activeRental = null;
+
+    }
+
+    /* ===============================
+       CATEGORY BUTTONS
+    =============================== */
+
+    filters.forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          filters.forEach(filter => {
+
+            filter.classList.remove(
+              "active"
+            );
+
+          });
+
+          button.classList.add(
+            "active"
+          );
+
+          activeCategory =
+            button.dataset.category;
+
+          renderInventory();
+
+        }
+      );
+
+    });
+
+    /* ===============================
+       SEARCH AND SORT
+    =============================== */
+
+    search.addEventListener(
+      "input",
+      renderInventory
+    );
+
+    sort.addEventListener(
+      "change",
+      renderInventory
+    );
+
+    /* ===============================
+       CARD CLICK
+    =============================== */
+
+    grid.addEventListener(
+      "click",
+      event => {
+
+        const detailsButton =
+          event.target.closest(
+            "[data-details]"
+          );
+
+        if (detailsButton) {
+
+          openRentalDetails(
+            detailsButton.dataset.details
+          );
+
+        }
+
+      }
+    );
+
+    /* ===============================
+       THUMBNAIL CLICK
+    =============================== */
+
+    thumbnails.addEventListener(
+      "click",
+      event => {
+
+        const thumbnail =
+          event.target.closest(
+            "[data-image-index]"
+          );
+
+        if (!thumbnail) {
+          return;
+        }
+
+        activeImageIndex =
+          Number(
+            thumbnail.dataset.imageIndex
+          );
+
+        updateMainImage();
+
+      }
+    );
+
+    /* ===============================
+       MODAL CONTROLS
+    =============================== */
+
+    modalClose.addEventListener(
+      "click",
+      closeRentalDetails
+    );
+
+    previousButton.addEventListener(
+      "click",
+      () => moveGallery(-1)
+    );
+
+    nextButton.addEventListener(
+      "click",
+      () => moveGallery(1)
+    );
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if (event.target === modal) {
+          closeRentalDetails();
+        }
+
+      }
+    );
+
+    /* ===============================
+       KEYBOARD CONTROLS
+    =============================== */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          !modal.classList.contains(
+            "open"
+          )
+        ) {
+          return;
+        }
+
+        if (event.key === "Escape") {
+          closeRentalDetails();
+        }
+
+        if (event.key === "ArrowLeft") {
+          moveGallery(-1);
+        }
+
+        if (event.key === "ArrowRight") {
+          moveGallery(1);
+        }
+
+      }
+    );
+
+    /* START PAGE */
+
+    renderInventory();
+
+  </script>
+
+</body>
+
+</html>
