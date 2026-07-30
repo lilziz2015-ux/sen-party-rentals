@@ -1,37 +1,67 @@
 <!-- =========================================================
      SEN PARTY RENTALS — SHARED HEADER
+     File: header.html
+
+     IMPORTANT:
+     This is an HTML fragment loaded inside:
+     <div id="header"></div>
+
+     Do not add:
+     <!DOCTYPE html>
+     <html>
+     <head>
+     <body>
+     <link>
+     <script>
 ========================================================= -->
 
 <header class="site-header" id="site-header">
 
-  <!-- TOP BAR -->
+  <!-- TOP INFORMATION BAR -->
 
   <div class="header-topbar">
 
     <div class="container header-topbar-inner">
 
-      <a href="tel:+15717199575">
-        <i class="fa-solid fa-phone"></i>
+      <a
+        href="tel:+15717199575"
+        class="header-topbar-link"
+        aria-label="Call Sen Party Rentals at 571-719-9575"
+      >
+        <i
+          class="fa-solid fa-phone"
+          aria-hidden="true"
+        ></i>
+
         <span>(571) 719-9575</span>
       </a>
 
-      <span>
-        <i class="fa-solid fa-location-dot"></i>
-        Manassas, VA
+      <span class="header-topbar-item">
+
+        <i
+          class="fa-solid fa-location-dot"
+          aria-hidden="true"
+        ></i>
+
+        <span>Manassas, Virginia</span>
+
       </span>
 
-      <span>
-        <i class="fa-solid fa-truck-fast"></i>
-        Serving Northern Virginia
+      <span class="header-topbar-item">
+
+        <i
+          class="fa-solid fa-truck-fast"
+          aria-hidden="true"
+        ></i>
+
+        <span>Serving Northern Virginia and the DMV</span>
+
       </span>
 
     </div>
 
   </div>
- <link
-    rel="stylesheet"
-    href="./assets/style.css?v=1"
-  >
+
   <!-- MAIN HEADER -->
 
   <div class="header-main">
@@ -41,26 +71,29 @@
       <!-- BRAND -->
 
       <a
-        href="index.html"
+        href="./index.html"
         class="header-brand"
-        aria-label="Sen Party Rentals homepage"
+        aria-label="Go to the Sen Party Rentals homepage"
       >
 
         <span class="header-logo-wrap">
 
           <img
-            src="logo.jpeg"
+            src="./logo.jpeg"
             alt="Sen Party Rentals logo"
             class="header-logo"
             width="58"
             height="58"
+            loading="eager"
           >
 
         </span>
 
         <span class="header-brand-text">
 
-          <strong>Sen Party Rentals</strong>
+          <strong>
+            Sen Party Rentals
+          </strong>
 
           <small>
             Bounce Houses • Water Slides • Event Rentals
@@ -79,7 +112,10 @@
           class="header-mobile-call"
           aria-label="Call Sen Party Rentals"
         >
-          <i class="fa-solid fa-phone"></i>
+          <i
+            class="fa-solid fa-phone"
+            aria-hidden="true"
+          ></i>
         </a>
 
         <button
@@ -90,14 +126,14 @@
           aria-controls="main-nav"
           aria-expanded="false"
         >
-          <span></span>
-          <span></span>
-          <span></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
         </button>
 
       </div>
 
-      <!-- NAVIGATION -->
+      <!-- MAIN NAVIGATION -->
 
       <nav
         class="header-nav"
@@ -105,7 +141,11 @@
         aria-label="Main navigation"
       >
 
-        <a href="index.html" class="header-nav-link">
+        <a
+          href="./index.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Home
         </a>
 
@@ -117,70 +157,107 @@
             type="button"
             class="header-dropdown-toggle"
             aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="rentals-dropdown-menu"
           >
-            Rentals
-            <i class="fa-solid fa-chevron-down"></i>
+            <span>Rentals</span>
+
+            <i
+              class="fa-solid fa-chevron-down"
+              aria-hidden="true"
+            ></i>
           </button>
 
-          <div class="header-dropdown-menu">
+          <div
+            class="header-dropdown-menu"
+            id="rentals-dropdown-menu"
+          >
 
-            <a href="inventory.html">
+            <a href="./inventory.html">
               All Rentals
             </a>
 
-            <a href="bounce-houses.html">
+            <a href="./bounce-houses.html">
               Bounce Houses
             </a>
 
-            <a href="water-slides.html">
+            <a href="./water-slides.html">
               Water Slides
             </a>
 
-            <a href="obstacle-courses.html">
+            <a href="./obstacle-courses.html">
               Obstacle Courses
             </a>
 
-            <a href="dunk-tanks.html">
+            <a href="./dunk-tanks.html">
               Dunk Tanks
             </a>
 
-            <a href="tables-chairs.html">
+            <a href="./tables-chairs.html">
               Tables and Chairs
             </a>
 
-            <a href="concessions.html">
-              Concessions
+            <a href="./concessions.html">
+              Concession Machines
             </a>
 
-            <a href="generators.html">
+            <a href="./generators.html">
               Generators
+            </a>
+
+            <a href="./sand-bags-rental.html">
+              Sand Bags
             </a>
 
           </div>
 
         </div>
 
-        <a href="event-packages.html" class="header-nav-link">
+        <a
+          href="./event-packages.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Packages
         </a>
 
-        <a href="gallery.html" class="header-nav-link">
+        <a
+          href="./gallery.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Gallery
         </a>
 
-        <a href="reviews.html" class="header-nav-link">
+        <a
+          href="./reviews.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Reviews
         </a>
 
-        <a href="service-areas.html" class="header-nav-link">
+        <a
+          href="./service-areas.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Service Areas
         </a>
 
-        <a href="about.html" class="header-nav-link">
+        <a
+          href="./about.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           About
         </a>
 
-        <a href="contact.html" class="header-nav-link">
+        <a
+          href="./contact.html"
+          class="header-nav-link"
+          data-nav-link
+        >
           Contact
         </a>
 
@@ -192,16 +269,24 @@
             href="tel:+15717199575"
             class="header-call-button"
           >
-            <i class="fa-solid fa-phone"></i>
-            Call Now
+            <i
+              class="fa-solid fa-phone"
+              aria-hidden="true"
+            ></i>
+
+            <span>Call Now</span>
           </a>
 
           <a
-            href="booking.html"
+            href="./booking.html"
             class="header-book-button"
           >
-            <i class="fa-solid fa-calendar-check"></i>
-            Book Now
+            <i
+              class="fa-solid fa-calendar-check"
+              aria-hidden="true"
+            ></i>
+
+            <span>Book Now</span>
           </a>
 
         </div>
