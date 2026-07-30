@@ -4616,3 +4616,17 @@ footer a {
   }
 
 }
+.rental-page-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 17px;
+  color: var(--inventory-red);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.rental-page-link:hover {
+  text-decoration: underline;
+}
