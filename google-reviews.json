@@ -1,0 +1,34 @@
+{
+  "rating": 5,
+  "reviewCount": 10,
+  "reviews": [
+    {
+      "author_name": "Ngoneh Bah",
+      "rating": 5,
+      "text": "Had the best experience with Sen Moon Bounce. The slides were so fun and the dunk tank was the perfect touch to our event. 10/10 would highly recommend!!!",
+      "relative_time_description": "6 weeks ago",
+      "profile_photo_url": ""
+    },
+    {
+      "author_name": "Sophie Nguyen",
+      "rating": 5,
+      "text": "This is the 2nd year in a row that we’ve used Sen Moon Bounce! They’re very quick to setup moon bounce and have great service. Will definitely continue to use them for family events and parties.",
+      "relative_time_description": "37 weeks ago",
+      "profile_photo_url": ""
+    },
+    {
+      "author_name": "Himaa Mounir",
+      "rating": 5,
+      "text": "You can tell they really know their stuff, professional and smooth from start to finish.",
+      "relative_time_description": "40 weeks ago",
+      "profile_photo_url": ""
+    },
+    {
+      "author_name": "Samiullah Sadiqi",
+      "rating": 5,
+      "text": "",
+      "relative_time_description": "April 5, 2025",
+      "profile_photo_url": ""
+    }
+  ]
+}
