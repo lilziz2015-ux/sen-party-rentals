@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Settings | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --black: #0b0b0d;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow:
+        0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left,
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .save-button,
+    .reset-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-radius: 12px;
+      font-weight: 900;
+    }
+
+    .save-button {
+      border: 0;
+      color: #ffffff;
+      background: var(--gradient);
+      box-shadow:
+        0 12px 24px rgba(217, 4, 41, 0.2);
+    }
+
+    .reset-button {
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--white);
+    }
+
+    .save-button:disabled,
+    .reset-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .page-content {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .settings-navigation {
+      position: sticky;
+      top: 100px;
+      display: grid;
+      gap: 7px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .settings-navigation button {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 11px;
+      color: var(--muted);
+      background: transparent;
+      text-align: left;
+      font-weight: 900;
+    }
+
+    .settings-navigation button:hover,
+    .settings-navigation button.active {
+      color: var(--red);
+      background: #fff1f3;
+    }
+
+    .settings-navigation i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .settings-content {
+      display: grid;
+      gap: 22px;
+    }
+
+    .settings-section {
+      display: none;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .settings-section.active {
+      display: block;
+    }
+
+    .section-head {
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .section-body {
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d8dde5;
+      border-radius: 12px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .field input,
+    .field select {
+      min-height: 49px;
+      padding: 0 13px;
+    }
+
+    .field textarea {
+      min-height: 115px;
+      padding: 13px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow:
+        0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .field input[readonly] {
+      color: var(--muted);
+      background: #f7f7f8;
+    }
+
+    .field-help {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 0.73rem;
+      line-height: 1.5;
+    }
+
+    .checkbox-list {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .checkbox-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .checkbox-card input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--red);
+    }
+
+    .account-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fafafa;
+    }
+
+    .account-avatar {
+      display: grid;
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--gradient);
+      font-size: 1.15rem;
+      font-weight: 900;
+    }
+
+    .account-card strong,
+    .account-card span {
+      display: block;
+    }
+
+    .account-card span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .settings-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+      padding: 18px 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .loading {
+      padding: 70px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: var(--white);
+      text-align: center;
+    }
+
+    .loading i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    @media (max-width: 850px) {
+      .settings-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-navigation {
+        position: static;
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+      }
+
+      .settings-navigation button {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+      }
+
+      .save-button,
+      .reset-button {
+        flex: 1;
+      }
+
+      .page-content {
+        width: min(100% - 22px, 1100px);
+      }
+
+      .settings-navigation {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .form-grid,
+      .checkbox-list {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <a
+        href="./admin.html"
+        class="back-button"
+        aria-label="Return to dashboard"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <div>
+        <h1>Settings</h1>
+
+        <p>
+          Manage business information and admin preferences.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="topbar-actions">
+
+      <button
+        type="button"
+        class="reset-button"
+        id="reset-settings"
+      >
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+        Reset
+      </button>
+
+      <button
+        type="button"
+        class="save-button"
+        id="save-settings"
+      >
+        <span id="save-text">
+          Save Settings
+        </span>
+
+        <i
+          id="save-icon"
+          class="fa-solid fa-floppy-disk"
+        ></i>
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page-content">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+      aria-live="assertive"
+    ></div>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading settings...
+    </div>
+
+    <div
+      id="settings-wrapper"
+      hidden
+    >
+
+      <div class="settings-layout">
+
+        <nav class="settings-navigation">
+
+          <button
+            type="button"
+            class="active"
+            data-settings-tab="business"
+          >
+            <i class="fa-solid fa-building"></i>
+            Business
+          </button>
+
+          <button
+            type="button"
+            data-settings-tab="booking"
+          >
+            <i class="fa-solid fa-calendar-check"></i>
+            Booking
+          </button>
+
+          <button
+            type="button"
+            data-settings-tab="payment"
+          >
+            <i class="fa-solid fa-credit-card"></i>
+            Payments
+          </button>
+
+          <button
+            type="button"
+            data-settings-tab="notifications"
+          >
+            <i class="fa-solid fa-bell"></i>
+            Notifications
+          </button>
+
+          <button
+            type="button"
+            data-settings-tab="social"
+          >
+            <i class="fa-solid fa-share-nodes"></i>
+            Website
+          </button>
+
+          <button
+            type="button"
+            data-settings-tab="account"
+          >
+            <i class="fa-solid fa-user-shield"></i>
+            Account
+          </button>
+
+        </nav>
+
+        <div class="settings-content">
+
+          <section
+            class="settings-section active"
+            data-settings-section="business"
+          >
+
+            <div class="section-head">
+              <h2>Business Information</h2>
+
+              <p>
+                Contact details used on invoices, receipts and customer
+                communications.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="form-grid">
+
+                <div class="field">
+                  <label for="business-name">
+                    Business Name
+                  </label>
+
+                  <input
+                    id="business-name"
+                    type="text"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="business-phone">
+                    Business Phone
+                  </label>
+
+                  <input
+                    id="business-phone"
+                    type="tel"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="business-email">
+                    Business Email
+                  </label>
+
+                  <input
+                    id="business-email"
+                    type="email"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="business-website">
+                    Website
+                  </label>
+
+                  <input
+                    id="business-website"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field full">
+                  <label for="starting-address">
+                    Default Delivery Starting Address
+                  </label>
+
+                  <input
+                    id="starting-address"
+                    type="text"
+                  >
+
+                  <p class="field-help">
+                    This address is used as the starting point for route
+                    sheets and Google Maps delivery routes.
+                  </p>
+                </div>
+
+                <div class="field full">
+                  <label for="service-area">
+                    Service Area
+                  </label>
+
+                  <textarea id="service-area"></textarea>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section
+            class="settings-section"
+            data-settings-section="booking"
+          >
+
+            <div class="section-head">
+              <h2>Booking Preferences</h2>
+
+              <p>
+                Default pricing and customer booking messages.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="form-grid">
+
+                <div class="field">
+                  <label for="default-deposit">
+                    Default Deposit
+                  </label>
+
+                  <input
+                    id="default-deposit"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="default-status">
+                    New Booking Status
+                  </label>
+
+                  <select id="default-status">
+                    <option value="PENDING">
+                      Pending
+                    </option>
+
+                    <option value="QUOTED">
+                      Quoted
+                    </option>
+
+                    <option value="CONFIRMED">
+                      Confirmed
+                    </option>
+                  </select>
+                </div>
+
+                <div class="field full">
+                  <label for="booking-message">
+                    Booking Confirmation Message
+                  </label>
+
+                  <textarea id="booking-message"></textarea>
+                </div>
+
+                <div class="field full">
+                  <label for="invoice-note">
+                    Invoice and Receipt Note
+                  </label>
+
+                  <textarea id="invoice-note"></textarea>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section
+            class="settings-section"
+            data-settings-section="payment"
+          >
+
+            <div class="section-head">
+              <h2>Payment Methods</h2>
+
+              <p>
+                Choose which payment methods your business accepts.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="checkbox-list">
+
+                <label class="checkbox-card">
+                  <input
+                    id="payment-cash"
+                    type="checkbox"
+                  >
+                  Cash
+                </label>
+
+                <label class="checkbox-card">
+                  <input
+                    id="payment-zelle"
+                    type="checkbox"
+                  >
+                  Zelle
+                </label>
+
+                <label class="checkbox-card">
+                  <input
+                    id="payment-check"
+                    type="checkbox"
+                  >
+                  Check
+                </label>
+
+                <label class="checkbox-card">
+                  <input
+                    id="payment-card"
+                    type="checkbox"
+                  >
+                  Credit or Debit Card
+                </label>
+
+              </div>
+
+              <div
+                class="form-grid"
+                style="margin-top:20px"
+              >
+
+                <div class="field full">
+                  <label for="zelle-details">
+                    Zelle Instructions
+                  </label>
+
+                  <textarea id="zelle-details"></textarea>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section
+            class="settings-section"
+            data-settings-section="notifications"
+          >
+
+            <div class="section-head">
+              <h2>Notification Settings</h2>
+
+              <p>
+                Email addresses used for booking notifications.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="form-grid">
+
+                <div class="field">
+                  <label for="owner-email">
+                    Owner Notification Email
+                  </label>
+
+                  <input
+                    id="owner-email"
+                    type="email"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="from-email">
+                    Email Sender
+                  </label>
+
+                  <input
+                    id="from-email"
+                    type="text"
+                    readonly
+                  >
+
+                  <p class="field-help">
+                    This is currently controlled by your Supabase Edge
+                    Function secret named FROM_EMAIL.
+                  </p>
+                </div>
+
+                <div class="field full">
+                  <label class="checkbox-card">
+                    <input
+                      id="customer-confirmation-email"
+                      type="checkbox"
+                    >
+
+                    Send customers an automatic booking confirmation
+                    email.
+                  </label>
+                </div>
+
+                <div class="field full">
+                  <label class="checkbox-card">
+                    <input
+                      id="owner-booking-email"
+                      type="checkbox"
+                    >
+
+                    Send the owner an email for every new booking.
+                  </label>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section
+            class="settings-section"
+            data-settings-section="social"
+          >
+
+            <div class="section-head">
+              <h2>Website and Social Links</h2>
+
+              <p>
+                Save your website, review and social media links.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="form-grid">
+
+                <div class="field full">
+                  <label for="booking-page">
+                    Public Booking Page
+                  </label>
+
+                  <input
+                    id="booking-page"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field full">
+                  <label for="google-review-link">
+                    Google Review Link
+                  </label>
+
+                  <input
+                    id="google-review-link"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="facebook-link">
+                    Facebook
+                  </label>
+
+                  <input
+                    id="facebook-link"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="instagram-link">
+                    Instagram
+                  </label>
+
+                  <input
+                    id="instagram-link"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="tiktok-link">
+                    TikTok
+                  </label>
+
+                  <input
+                    id="tiktok-link"
+                    type="url"
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="youtube-link">
+                    YouTube
+                  </label>
+
+                  <input
+                    id="youtube-link"
+                    type="url"
+                  >
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section
+            class="settings-section"
+            data-settings-section="account"
+          >
+
+            <div class="section-head">
+              <h2>Admin Account</h2>
+
+              <p>
+                Information for the currently signed-in administrator.
+              </p>
+            </div>
+
+            <div class="section-body">
+
+              <div class="account-card">
+
+                <div
+                  class="account-avatar"
+                  id="account-avatar"
+                >
+                  S
+                </div>
+
+                <div>
+                  <strong id="account-name">
+                    Admin
+                  </strong>
+
+                  <span id="account-email">
+                    Loading...
+                  </span>
+
+                  <span id="account-role">
+                    Owner
+                  </span>
+                </div>
+
+              </div>
+
+              <div
+                class="form-grid"
+                style="margin-top:20px"
+              >
+
+                <div class="field">
+                  <label for="admin-name">
+                    Admin Name
+                  </label>
+
+                  <input
+                    id="admin-name"
+                    type="text"
+                    readonly
+                  >
+                </div>
+
+                <div class="field">
+                  <label for="admin-role">
+                    Role
+                  </label>
+
+                  <input
+                    id="admin-role"
+                    type="text"
+                    readonly
+                  >
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <div class="settings-footer">
+
+        <button
+          type="button"
+          class="reset-button"
+          id="reset-settings-bottom"
+        >
+          Reset Defaults
+        </button>
+
+        <button
+          type="button"
+          class="save-button"
+          id="save-settings-bottom"
+        >
+          Save All Settings
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      const STORAGE_KEY =
+        "sen-party-rentals-business-settings";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const senSupabase =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const defaultSettings = {
+        businessName:
+          "Sen Party Rentals",
+
+        businessPhone:
+          "571-719-9575",
+
+        businessEmail:
+          "senmoonbounce@gmail.com",
+
+        businessWebsite:
+          "https://www.senmoonbounce.com",
+
+        startingAddress:
+          "1 Bradley Forest, Manassas, VA 20112",
+
+        serviceArea:
+          "Manassas, Woodbridge, Fairfax, Centreville, Leesburg, Sterling, Alexandria, Arlington, Washington DC, Montgomery County and Prince George’s County.",
+
+        defaultDeposit:
+          0,
+
+        defaultStatus:
+          "PENDING",
+
+        bookingMessage:
+          "Thank you for choosing Sen Party Rentals. We received your booking request and will contact you to confirm availability and final pricing.",
+
+        invoiceNote:
+          "Delivery, setup and final pricing may require confirmation. The booking is not confirmed until approved by Sen Party Rentals.",
+
+        paymentCash:
+          true,
+
+        paymentZelle:
+          true,
+
+        paymentCheck:
+          true,
+
+        paymentCard:
+          false,
+
+        zelleDetails:
+          "Send payment using the business phone number or the payment instructions provided by Sen Party Rentals.",
+
+        ownerEmail:
+          "senmoonbounce@gmail.com",
+
+        fromEmail:
+          "Sen Party Rentals <onboarding@resend.dev>",
+
+        customerConfirmationEmail:
+          true,
+
+        ownerBookingEmail:
+          true,
+
+        bookingPage:
+          "https://www.senmoonbounce.com/booking.html",
+
+        googleReviewLink:
+          "https://g.page/r/CZxtj7ch0rZ8EBE/review",
+
+        facebookLink: "",
+        instagramLink: "",
+        tiktokLink: "",
+        youtubeLink: ""
+      };
+
+      const state = {
+        admin: null,
+        session: null,
+        saving: false
+      };
+
+      const elements = {
+        alert:
+          document.getElementById(
+            "page-alert"
+          ),
+
+        loading:
+          document.getElementById(
+            "loading"
+          ),
+
+        wrapper:
+          document.getElementById(
+            "settings-wrapper"
+          ),
+
+        saveTop:
+          document.getElementById(
+            "save-settings"
+          ),
+
+        saveBottom:
+          document.getElementById(
+            "save-settings-bottom"
+          ),
+
+        resetTop:
+          document.getElementById(
+            "reset-settings"
+          ),
+
+        resetBottom:
+          document.getElementById(
+            "reset-settings-bottom"
+          ),
+
+        saveText:
+          document.getElementById(
+            "save-text"
+          ),
+
+        saveIcon:
+          document.getElementById(
+            "save-icon"
+          )
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(
+        message,
+        type = "error"
+      ) {
+        elements.alert.className =
+          `alert visible ${type}`;
+
+        elements.alert.innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>
+            ${escapeHtml(message)}
+          </div>
+        `;
+      }
+
+      function hideAlert() {
+        elements.alert.className =
+          "alert";
+
+        elements.alert.textContent =
+          "";
+      }
+
+      function getSettings() {
+        try {
+          const saved =
+            localStorage.getItem(
+              STORAGE_KEY
+            );
+
+          if (!saved) {
+            return {
+              ...defaultSettings
+            };
+          }
+
+          return {
+            ...defaultSettings,
+            ...JSON.parse(saved)
+          };
+
+        } catch {
+          return {
+            ...defaultSettings
+          };
+        }
+      }
+
+      function setField(
+        id,
+        value
+      ) {
+        const field =
+          document.getElementById(id);
+
+        if (!field) {
+          return;
+        }
+
+        if (
+          field.type ===
+          "checkbox"
+        ) {
+          field.checked =
+            Boolean(value);
+        } else {
+          field.value =
+            value ?? "";
+        }
+      }
+
+      function getField(id) {
+        const field =
+          document.getElementById(id);
+
+        if (!field) {
+          return null;
+        }
+
+        if (
+          field.type ===
+          "checkbox"
+        ) {
+          return field.checked;
+        }
+
+        return field.value;
+      }
+
+      function populateSettings(
+        settings
+      ) {
+        setField(
+          "business-name",
+          settings.businessName
+        );
+
+        setField(
+          "business-phone",
+          settings.businessPhone
+        );
+
+        setField(
+          "business-email",
+          settings.businessEmail
+        );
+
+        setField(
+          "business-website",
+          settings.businessWebsite
+        );
+
+        setField(
+          "starting-address",
+          settings.startingAddress
+        );
+
+        setField(
+          "service-area",
+          settings.serviceArea
+        );
+
+        setField(
+          "default-deposit",
+          settings.defaultDeposit
+        );
+
+        setField(
+          "default-status",
+          settings.defaultStatus
+        );
+
+        setField(
+          "booking-message",
+          settings.bookingMessage
+        );
+
+        setField(
+          "invoice-note",
+          settings.invoiceNote
+        );
+
+        setField(
+          "payment-cash",
+          settings.paymentCash
+        );
+
+        setField(
+          "payment-zelle",
+          settings.paymentZelle
+        );
+
+        setField(
+          "payment-check",
+          settings.paymentCheck
+        );
+
+        setField(
+          "payment-card",
+          settings.paymentCard
+        );
+
+        setField(
+          "zelle-details",
+          settings.zelleDetails
+        );
+
+        setField(
+          "owner-email",
+          settings.ownerEmail
+        );
+
+        setField(
+          "from-email",
+          settings.fromEmail
+        );
+
+        setField(
+          "customer-confirmation-email",
+          settings.customerConfirmationEmail
+        );
+
+        setField(
+          "owner-booking-email",
+          settings.ownerBookingEmail
+        );
+
+        setField(
+          "booking-page",
+          settings.bookingPage
+        );
+
+        setField(
+          "google-review-link",
+          settings.googleReviewLink
+        );
+
+        setField(
+          "facebook-link",
+          settings.facebookLink
+        );
+
+        setField(
+          "instagram-link",
+          settings.instagramLink
+        );
+
+        setField(
+          "tiktok-link",
+          settings.tiktokLink
+        );
+
+        setField(
+          "youtube-link",
+          settings.youtubeLink
+        );
+      }
+
+      function collectSettings() {
+        return {
+          businessName:
+            getField(
+              "business-name"
+            ).trim(),
+
+          businessPhone:
+            getField(
+              "business-phone"
+            ).trim(),
+
+          businessEmail:
+            getField(
+              "business-email"
+            ).trim(),
+
+          businessWebsite:
+            getField(
+              "business-website"
+            ).trim(),
+
+          startingAddress:
+            getField(
+              "starting-address"
+            ).trim(),
+
+          serviceArea:
+            getField(
+              "service-area"
+            ).trim(),
+
+          defaultDeposit:
+            Number(
+              getField(
+                "default-deposit"
+              ) || 0
+            ),
+
+          defaultStatus:
+            getField(
+              "default-status"
+            ),
+
+          bookingMessage:
+            getField(
+              "booking-message"
+            ).trim(),
+
+          invoiceNote:
+            getField(
+              "invoice-note"
+            ).trim(),
+
+          paymentCash:
+            getField(
+              "payment-cash"
+            ),
+
+          paymentZelle:
+            getField(
+              "payment-zelle"
+            ),
+
+          paymentCheck:
+            getField(
+              "payment-check"
+            ),
+
+          paymentCard:
+            getField(
+              "payment-card"
+            ),
+
+          zelleDetails:
+            getField(
+              "zelle-details"
+            ).trim(),
+
+          ownerEmail:
+            getField(
+              "owner-email"
+            ).trim(),
+
+          fromEmail:
+            getField(
+              "from-email"
+            ).trim(),
+
+          customerConfirmationEmail:
+            getField(
+              "customer-confirmation-email"
+            ),
+
+          ownerBookingEmail:
+            getField(
+              "owner-booking-email"
+            ),
+
+          bookingPage:
+            getField(
+              "booking-page"
+            ).trim(),
+
+          googleReviewLink:
+            getField(
+              "google-review-link"
+            ).trim(),
+
+          facebookLink:
+            getField(
+              "facebook-link"
+            ).trim(),
+
+          instagramLink:
+            getField(
+              "instagram-link"
+            ).trim(),
+
+          tiktokLink:
+            getField(
+              "tiktok-link"
+            ).trim(),
+
+          youtubeLink:
+            getField(
+              "youtube-link"
+            ).trim(),
+
+          updatedAt:
+            new Date()
+              .toISOString()
+        };
+      }
+
+      function setSaving(value) {
+        state.saving =
+          value;
+
+        elements.saveTop.disabled =
+          value;
+
+        elements.saveBottom.disabled =
+          value;
+
+        elements.resetTop.disabled =
+          value;
+
+        elements.resetBottom.disabled =
+          value;
+
+        elements.saveText.textContent =
+          value
+            ? "Saving..."
+            : "Save Settings";
+
+        elements.saveIcon.className =
+          value
+            ? "fa-solid fa-spinner fa-spin"
+            : "fa-solid fa-floppy-disk";
+      }
+
+      async function saveSettings() {
+        if (state.saving) {
+          return;
+        }
+
+        hideAlert();
+        setSaving(true);
+
+        try {
+          const settings =
+            collectSettings();
+
+          if (
+            !settings.businessName ||
+            !settings.businessPhone ||
+            !settings.businessEmail
+          ) {
+            throw new Error(
+              "Business name, phone and email are required."
+            );
+          }
+
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(
+              settings
+            )
+          );
+
+          window.SEN_BUSINESS_SETTINGS =
+            settings;
+
+          showAlert(
+            "Settings saved successfully on this browser.",
+            "success"
+          );
+
+        } catch (error) {
+          showAlert(
+            errorMessage(error)
+          );
+
+        } finally {
+          setSaving(false);
+        }
+      }
+
+      function resetSettings() {
+        const confirmed =
+          window.confirm(
+            "Reset all business settings to the default Sen Party Rentals values?"
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        localStorage.removeItem(
+          STORAGE_KEY
+        );
+
+        populateSettings(
+          defaultSettings
+        );
+
+        showAlert(
+          "Settings were reset to the default values.",
+          "success"
+        );
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        const {
+          data: admin,
+          error: adminError
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("*")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq(
+              "active",
+              true
+            )
+            .maybeSingle();
+
+        if (
+          adminError ||
+          !admin
+        ) {
+          await senSupabase
+            .auth
+            .signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        state.session =
+          session;
+
+        state.admin =
+          admin;
+
+        return true;
+      }
+
+      function populateAdmin() {
+        const email =
+          state.session?.user?.email ||
+          "Admin";
+
+        const name =
+          state.admin?.full_name ||
+          "Saliou";
+
+        const role =
+          state.admin?.role ||
+          "OWNER";
+
+        document.getElementById(
+          "account-name"
+        ).textContent =
+          name;
+
+        document.getElementById(
+          "account-email"
+        ).textContent =
+          email;
+
+        document.getElementById(
+          "account-role"
+        ).textContent =
+          role;
+
+        document.getElementById(
+          "account-avatar"
+        ).textContent =
+          name
+            .charAt(0)
+            .toUpperCase();
+
+        document.getElementById(
+          "admin-name"
+        ).value =
+          name;
+
+        document.getElementById(
+          "admin-role"
+        ).value =
+          role;
+      }
+
+      function setTab(tabName) {
+        document
+          .querySelectorAll(
+            "[data-settings-tab]"
+          )
+          .forEach(button => {
+            button.classList.toggle(
+              "active",
+              button.dataset
+                .settingsTab ===
+                tabName
+            );
+          });
+
+        document
+          .querySelectorAll(
+            "[data-settings-section]"
+          )
+          .forEach(section => {
+            section.classList.toggle(
+              "active",
+              section.dataset
+                .settingsSection ===
+                tabName
+            );
+          });
+      }
+
+      document.addEventListener(
+        "click",
+        event => {
+          const tab =
+            event.target.closest(
+              "[data-settings-tab]"
+            );
+
+          if (!tab) {
+            return;
+          }
+
+          setTab(
+            tab.dataset
+              .settingsTab
+          );
+        }
+      );
+
+      elements.saveTop.addEventListener(
+        "click",
+        saveSettings
+      );
+
+      elements.saveBottom.addEventListener(
+        "click",
+        saveSettings
+      );
+
+      elements.resetTop.addEventListener(
+        "click",
+        resetSettings
+      );
+
+      elements.resetBottom.addEventListener(
+        "click",
+        resetSettings
+      );
+
+      async function initialize() {
+        try {
+          const authorized =
+            await requireAdmin();
+
+          if (!authorized) {
+            return;
+          }
+
+          populateSettings(
+            getSettings()
+          );
+
+          populateAdmin();
+
+          elements.loading.hidden =
+            true;
+
+          elements.wrapper.hidden =
+            false;
+
+        } catch (error) {
+          elements.loading.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${escapeHtml(
+              errorMessage(error)
+            )}
+          `;
+
+          showAlert(
+            errorMessage(error)
+          );
+        }
+      }
+
+      initialize();
+    })();
+  </script>
+
+</body>
+
+</html>

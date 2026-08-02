@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin Dashboard | Sen Party Rentals</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#d90429">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--red:#d90429;--red2:#970018;--orange:#ff6a00;--text:#202329;--muted:#6b7280;--line:#e5e7eb;--bg:#f5f6f8;--white:#fff;--radius:18px;--shadow:0 18px 45px rgba(17,24,39,.1);--grad:linear-gradient(135deg,#970018,#d90429 58%,#ff6a00)}
+*{box-sizing:border-box}body{margin:0;color:var(--text);background:var(--bg);font-family:Arial,Helvetica,sans-serif}body.menu-open{overflow:hidden}button,input{font:inherit}button{cursor:pointer}[hidden]{display:none!important}
+.shell{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr)}
+.sidebar{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:22px 18px;color:#fff;overflow-y:auto;background:radial-gradient(circle at 80% 10%,rgba(217,4,41,.22),transparent 30%),linear-gradient(180deg,#08080a,#17181c 62%,#2e0007)}
+.brand{display:flex;align-items:center;gap:12px;padding:0 6px 22px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-mark{display:grid;width:46px;height:46px;place-items:center;border-radius:14px;background:var(--grad);box-shadow:0 12px 26px rgba(217,4,41,.28)}
+.brand strong{display:block}.brand small{display:block;margin-top:3px;color:rgba(255,255,255,.62);font-size:.72rem}
+.nav{display:grid;gap:7px;margin-top:22px}
+.nav button,.nav a{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:12px;color:rgba(255,255,255,.74);background:transparent;text-align:left;text-decoration:none;font-weight:800}
+.nav button:hover,.nav button.active,.nav a:hover{color:#fff;background:rgba(255,255,255,.1)}.nav i{width:20px;text-align:center}
+.side-footer{margin-top:auto;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.user{display:flex;align-items:center;gap:11px;margin-bottom:12px}.avatar{display:grid;width:40px;height:40px;place-items:center;border-radius:50%;background:var(--grad);font-weight:900}.user strong,.user small{display:block}.user small{max-width:160px;overflow:hidden;color:rgba(255,255,255,.6);font-size:.7rem;text-overflow:ellipsis;white-space:nowrap}
+.signout{width:100%;min-height:44px;border:1px solid rgba(255,255,255,.16);border-radius:11px;color:#fff;background:rgba(255,255,255,.06);font-weight:900}
+.main{min-width:0}.topbar{position:sticky;z-index:100;top:0;min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 28px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+.top-title{display:flex;align-items:center;gap:12px}.topbar h1{margin:0;font-size:1.35rem}.topbar p{margin:4px 0 0;color:var(--muted);font-size:.78rem}.top-actions{display:flex;align-items:center;gap:10px}
+.search{position:relative;width:min(320px,42vw)}.search i{position:absolute;top:50%;left:14px;color:var(--muted);transform:translateY(-50%)}.search input{width:100%;min-height:44px;padding:0 14px 0 42px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none}.search input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(217,4,41,.08)}
+.refresh,.menu-toggle{width:44px;height:44px;place-items:center;border:1px solid var(--line);border-radius:12px;color:var(--red);background:#fff}.refresh{display:grid}.menu-toggle{display:none}.refresh.loading i{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.content{padding:28px}.alert{display:none;align-items:flex-start;gap:11px;margin-bottom:20px;padding:15px;border-radius:13px;line-height:1.5}.alert.visible{display:flex}.alert.error{border:1px solid #fecaca;color:#991b1b;background:#fff1f2}.alert.success{border:1px solid #bbf7d0;color:#166534;background:#f0fdf4}
+.view{display:none}.view.active{display:block}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:24px}.stat{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}.stat-head{display:flex;align-items:center;justify-content:space-between}.stat-icon{display:grid;width:46px;height:46px;place-items:center;border-radius:13px;color:#fff;background:var(--grad)}.stat span{color:var(--muted);font-size:.78rem;font-weight:800}.stat strong{display:block;margin-top:12px;font-size:1.9rem}
+.panel{overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;border-bottom:1px solid var(--line)}.panel-head h2{margin:0;font-size:1.12rem}.panel-head p{margin:5px 0 0;color:var(--muted);font-size:.78rem}
+.filters{display:flex;flex-wrap:wrap;gap:8px}.filter{min-height:38px;padding:0 13px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.76rem;font-weight:900}.filter.active{border-color:transparent;color:#fff;background:var(--grad)}
+.table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{color:var(--muted);background:#fafafa;font-size:.72rem;text-transform:uppercase}.table td{font-size:.83rem}.table tbody tr:hover{background:#fffafb}
+.booking-number{color:var(--red);font-weight:900}.customer strong,.customer small{display:block}.customer small{margin-top:3px;color:var(--muted)}
+.status{display:inline-flex;min-height:28px;align-items:center;padding:0 10px;border-radius:999px;font-size:.68rem;font-weight:900;text-transform:uppercase}.status.pending{color:#8a5b00;background:#fff4d6}.status.quoted{color:#1d4ed8;background:#dbeafe}.status.confirmed,.status.paid{color:#166534;background:#dcfce7}.status.cancelled,.status.unpaid{color:#991b1b;background:#fee2e2}.status.partial{color:#8a5b00;background:#fff4d6}
+.row-btn{min-height:34px;padding:0 12px;border:1px solid var(--line);border-radius:9px;color:var(--red);background:#fff;font-size:.75rem;font-weight:900}.loading,.empty{padding:56px 20px;color:var(--muted);text-align:center}.loading i,.empty i{display:block;margin-bottom:12px;color:var(--red);font-size:2rem}
+.overlay{position:fixed;z-index:450;inset:0;display:none;background:rgba(0,0,0,.48)}.overlay.visible{display:block}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{position:fixed;z-index:500;inset:0 auto 0 0;width:min(84vw,290px);visibility:hidden;transform:translateX(-105%);transition:.25s}.sidebar.open{visibility:visible;transform:translateX(0)}.menu-toggle{display:grid}.topbar{padding:0 16px}.content{padding:18px 14px 40px}.search{width:min(240px,42vw)}}
+@media(max-width:640px){.stats{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column;padding-block:14px}.top-actions{width:100%}.search{flex:1;width:auto}.panel-head{align-items:flex-start;flex-direction:column}.filters{width:100%}.filter{flex:1}}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay"></div>
+<div class="shell">
+<aside class="sidebar" id="sidebar">
+<div class="brand"><div class="brand-mark"><i class="fa-solid fa-tent"></i></div><div><strong>Sen Party Rentals</strong><small>Admin Dashboard</small></div></div>
+<nav class="nav">
+<button type="button" class="active" data-view-button="dashboard"><i class="fa-solid fa-chart-line"></i>Dashboard</button>
+<button type="button" data-view-button="bookings"><i class="fa-solid fa-calendar-check"></i>Bookings</button>
+<a href="./admin-calendar.html"><i class="fa-solid fa-calendar-days"></i>Calendar</a>
+<a href="./admin-customers.html"><i class="fa-solid fa-users"></i>Customers</a>
+<a href="./admin-payments.html"><i class="fa-solid fa-credit-card"></i>Payments</a>
+<a href="./admin-deliveries.html"><i class="fa-solid fa-truck"></i>Deliveries</a>
+<a href="./admin-inventory.html"><i class="fa-solid fa-boxes-stacked"></i>Inventory</a>
+<a href="./admin-invoices.html"><i class="fa-solid fa-file-invoice-dollar"></i>Invoices</a>
+<a href="./admin-reports.html"><i class="fa-solid fa-chart-column"></i>Reports</a>
+<a href="./admin-settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+</nav>
+<div class="side-footer"><div class="user"><div class="avatar" id="user-avatar">S</div><div><strong id="user-name">Sen Party Rentals</strong><small id="user-email">Admin</small></div></div><button class="signout" id="signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button></div>
+</aside>
+<main class="main">
+<header class="topbar">
+<div class="top-title"><button class="menu-toggle" id="menu-toggle" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button><div><h1 id="page-title">Dashboard</h1><p id="page-subtitle">Manage bookings, customers and payments.</p></div></div>
+<div class="top-actions"><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="search" type="search" placeholder="Search bookings..." autocomplete="off"></div><button class="refresh" id="refresh" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button></div>
+</header>
+<div class="content">
+<div class="alert" id="alert" role="alert"></div>
+<section class="view active" data-view="dashboard">
+<div class="stats">
+<article class="stat"><div class="stat-head"><span>Total Bookings</span><div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div></div><strong id="stat-total">0</strong></article>
+<article class="stat"><div class="stat-head"><span>Pending</span><div class="stat-icon"><i class="fa-solid fa-clock"></i></div></div><strong id="stat-pending">0</strong></article>
+<article class="stat"><div class="stat-head"><span>Confirmed</span><div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div></div><strong id="stat-confirmed">0</strong></article>
+<article class="stat"><div class="stat-head"><span>Paid Revenue</span><div class="stat-icon"><i class="fa-solid fa-dollar-sign"></i></div></div><strong id="stat-revenue">$0.00</strong></article>
+</div>
+<div class="panel"><div class="panel-head"><div><h2>Recent Bookings</h2><p>Latest booking requests from your website.</p></div></div><div class="loading" id="recent-loading"><i class="fa-solid fa-spinner fa-spin"></i>Loading bookings...</div><div class="table-wrap" id="recent-wrap" hidden><table class="table"><thead><tr><th>Booking</th><th>Customer</th><th>Event Date</th><th>Status</th><th>Total</th><th>Action</th></tr></thead><tbody id="recent-body"></tbody></table></div><div class="empty" id="recent-empty" hidden><i class="fa-solid fa-calendar-xmark"></i>No bookings found.</div></div>
+</section>
+<section class="view" data-view="bookings">
+<div class="panel"><div class="panel-head"><div><h2>All Bookings</h2><p>Search, filter and manage every booking.</p></div><div class="filters"><button class="filter active" data-status="ALL">All</button><button class="filter" data-status="PENDING">Pending</button><button class="filter" data-status="QUOTED">Quoted</button><button class="filter" data-status="CONFIRMED">Confirmed</button><button class="filter" data-status="PAID">Paid</button><button class="filter" data-status="CANCELLED">Cancelled</button></div></div><div class="loading" id="all-loading"><i class="fa-solid fa-spinner fa-spin"></i>Loading bookings...</div><div class="table-wrap" id="all-wrap" hidden><table class="table"><thead><tr><th>Booking</th><th>Customer</th><th>Phone</th><th>Date</th><th>Status</th><th>Payment</th><th>Total</th><th>Action</th></tr></thead><tbody id="all-body"></tbody></table></div><div class="empty" id="all-empty" hidden><i class="fa-solid fa-calendar-xmark"></i>No matching bookings found.</div></div>
+</section>
+</div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://tuttkwpnicgfcyeptrkv.supabase.co";
+const SUPABASE_KEY="sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+if(!window.supabase)throw new Error("Supabase JavaScript library did not load.");
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:"sen-party-rentals-auth"}});
+</script>
+<script>
+(()=>{
+"use strict";
+const money=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"});
+const state={bookings:[],filter:"ALL",search:"",loading:false};
+const el={
+sidebar:document.getElementById("sidebar"),overlay:document.getElementById("overlay"),menu:document.getElementById("menu-toggle"),
+search:document.getElementById("search"),refresh:document.getElementById("refresh"),signout:document.getElementById("signout"),
+alert:document.getElementById("alert"),recentLoading:document.getElementById("recent-loading"),recentWrap:document.getElementById("recent-wrap"),
+recentEmpty:document.getElementById("recent-empty"),recentBody:document.getElementById("recent-body"),allLoading:document.getElementById("all-loading"),
+allWrap:document.getElementById("all-wrap"),allEmpty:document.getElementById("all-empty"),allBody:document.getElementById("all-body")
+};
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+const err=e=>e instanceof Error?e.message:(e?.message||e?.details||"Unknown error");
+function alertMsg(message,type="error"){el.alert.className=`alert visible ${type}`;el.alert.innerHTML=`<i class="fa-solid ${type==="success"?"fa-circle-check":"fa-triangle-exclamation"}"></i><div>${esc(message)}</div>`}
+function hideAlert(){el.alert.className="alert";el.alert.textContent=""}
+function setLoading(v){state.loading=v;el.refresh.disabled=v;el.refresh.classList.toggle("loading",v);if(v){el.recentLoading.hidden=false;el.recentWrap.hidden=true;el.recentEmpty.hidden=true;el.allLoading.hidden=false;el.allWrap.hidden=true;el.allEmpty.hidden=true}}
+function dateFmt(v){if(!v)return"Not set";const d=new Date(`${v}T12:00:00`);return Number.isNaN(d.getTime())?String(v):new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric"}).format(d)}
+function nameOf(b){return[b.customer?.first_name,b.customer?.last_name].filter(Boolean).join(" ").trim()||"Unknown Customer"}
+const cls=v=>String(v||"PENDING").trim().toLowerCase();
+function filtered(){const t=state.search.trim().toLowerCase();return state.bookings.filter(b=>{const s=String(b.status||"PENDING").toUpperCase();const text=[b.booking_number,nameOf(b),b.customer?.phone,b.customer?.email,b.event_city,b.event_state,b.event_address].filter(Boolean).join(" ").toLowerCase();return(state.filter==="ALL"||s===state.filter)&&(!t||text.includes(t))})}
+function row(b,detailed=false){const total=Number(b.final_total??b.subtotal??0),pay=String(b.payment_status||"UNPAID");return`<tr><td><span class="booking-number">${esc(b.booking_number||b.id)}</span></td><td class="customer"><strong>${esc(nameOf(b))}</strong><small>${esc(b.customer?.email||"No email")}</small></td>${detailed?`<td>${esc(b.customer?.phone||"Not provided")}</td>`:""}<td>${esc(dateFmt(b.event_date))}</td><td><span class="status ${cls(b.status)}">${esc(b.status||"PENDING")}</span></td>${detailed?`<td><span class="status ${cls(pay)}">${esc(pay)}</span></td>`:""}<td>${money.format(total)}</td><td><button class="row-btn" data-booking="${esc(b.id)}">View</button></td></tr>`}
+function render(){
+const recent=state.bookings.slice(0,8),all=filtered();
+el.recentLoading.hidden=true;el.recentWrap.hidden=!recent.length;el.recentEmpty.hidden=!!recent.length;el.recentBody.innerHTML=recent.map(b=>row(b)).join("");
+el.allLoading.hidden=true;el.allWrap.hidden=!all.length;el.allEmpty.hidden=!!all.length;el.allBody.innerHTML=all.map(b=>row(b,true)).join("");
+document.getElementById("stat-total").textContent=state.bookings.length;
+document.getElementById("stat-pending").textContent=state.bookings.filter(b=>String(b.status||"").toUpperCase()==="PENDING").length;
+document.getElementById("stat-confirmed").textContent=state.bookings.filter(b=>["CONFIRMED","PAID"].includes(String(b.status||"").toUpperCase())).length;
+const rev=state.bookings.reduce((sum,b)=>String(b.payment_status||"").toUpperCase()==="PAID"?sum+Number(b.final_total??b.subtotal??0):sum,0);
+document.getElementById("stat-revenue").textContent=money.format(rev)
+}
+async function requireAdmin(){
+const{data:s,error:se}=await db.auth.getSession();if(se)throw se;if(!s.session){location.replace("./admin-login.html");return null}
+const{data:a,error:ae}=await db.from("admin_users").select("*").eq("user_id",s.session.user.id).eq("active",true).maybeSingle();if(ae)throw ae;if(!a){await db.auth.signOut();location.replace("./admin-login.html");return null}
+const email=s.session.user.email||"Admin",name=a.full_name||"Sen Party Rentals";document.getElementById("user-name").textContent=name;document.getElementById("user-email").textContent=email;document.getElementById("user-avatar").textContent=name.charAt(0).toUpperCase();return true
+}
+async function load(){
+if(state.loading)return;hideAlert();setLoading(true);
+try{
+const{data:bookings,error:be}=await db.from("bookings").select("id,booking_number,customer_id,status,payment_status,event_date,event_address,event_city,event_state,event_zip,subtotal,final_total,created_at").order("created_at",{ascending:false});if(be)throw be;
+const rows=bookings||[],ids=[...new Set(rows.map(b=>b.customer_id).filter(Boolean))];let map=new Map();
+if(ids.length){const{data:customers,error:ce}=await db.from("customers").select("id,first_name,last_name,phone,email").in("id",ids);if(ce)throw ce;map=new Map((customers||[]).map(c=>[c.id,c]))}
+state.bookings=rows.map(b=>({...b,customer:map.get(b.customer_id)||null}));render()
+}catch(e){const m=err(e);console.error(e);alertMsg(m);el.recentLoading.hidden=true;el.recentEmpty.hidden=false;el.recentEmpty.innerHTML=`<i class="fa-solid fa-triangle-exclamation"></i>${esc(m)}`;el.allLoading.hidden=true;el.allEmpty.hidden=false;el.allEmpty.innerHTML=`<i class="fa-solid fa-triangle-exclamation"></i>${esc(m)}`}
+finally{state.loading=false;el.refresh.disabled=false;el.refresh.classList.remove("loading")}
+}
+function setView(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.dataset.view===v));document.querySelectorAll("[data-view-button]").forEach(x=>x.classList.toggle("active",x.dataset.viewButton===v));document.getElementById("page-title").textContent=v==="bookings"?"Bookings":"Dashboard";document.getElementById("page-subtitle").textContent=v==="bookings"?"Review and manage every booking request.":"Manage bookings, customers and payments.";closeMenu()}
+function openMenu(){el.sidebar.classList.add("open");el.overlay.classList.add("visible");document.body.classList.add("menu-open")}
+function closeMenu(){el.sidebar.classList.remove("open");el.overlay.classList.remove("visible");document.body.classList.remove("menu-open")}
+document.addEventListener("click",e=>{const vb=e.target.closest("[data-view-button]"),sf=e.target.closest("[data-status]"),bb=e.target.closest("[data-booking]");if(vb){setView(vb.dataset.viewButton);return}if(sf){state.filter=sf.dataset.status;document.querySelectorAll("[data-status]").forEach(x=>x.classList.toggle("active",x===sf));render();return}if(bb)location.href=`./admin-booking.html?id=${encodeURIComponent(bb.dataset.booking)}`});
+el.menu.addEventListener("click",()=>el.sidebar.classList.contains("open")?closeMenu():openMenu());el.overlay.addEventListener("click",closeMenu);el.search.addEventListener("input",e=>{state.search=e.target.value;render()});el.refresh.addEventListener("click",load);el.signout.addEventListener("click",async()=>{try{await db.auth.signOut()}finally{location.replace("./admin-login.html")}});
+(async()=>{try{if(await requireAdmin())await load()}catch(e){alertMsg(err(e));el.recentLoading.hidden=true;el.allLoading.hidden=true}})();
+})();
+</script>
+</body>
+</html>

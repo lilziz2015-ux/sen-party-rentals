@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Reports | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --black: #0b0b0d;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --blue: #2563eb;
+      --yellow: #9a6700;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow:
+        0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left,
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button,
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .icon-button.loading i {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .primary-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 12px;
+      color: #ffffff;
+      background: var(--gradient);
+      box-shadow:
+        0 12px 24px rgba(217, 4, 41, 0.2);
+      font-weight: 900;
+    }
+
+    .page-content {
+      width: min(1380px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .filter-panel {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .filter-fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .filter-field label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .filter-field input,
+    .filter-field select {
+      min-height: 44px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .filter-field input:focus,
+    .filter-field select:focus {
+      border-color: var(--red);
+      box-shadow:
+        0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .filter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .secondary-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--text);
+      background: #ffffff;
+      font-weight: 900;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 900;
+    }
+
+    .stat-icon {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 12px;
+      color: #ffffff;
+      background: var(--gradient);
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 13px;
+      font-size: 1.65rem;
+      line-height: 1;
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .panel.full {
+      grid-column: 1 / -1;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.77rem;
+    }
+
+    .panel-body {
+      padding: 20px 22px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns:
+        minmax(110px, 170px)
+        minmax(0, 1fr)
+        auto;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .bar-label {
+      overflow: hidden;
+      font-size: 0.8rem;
+      font-weight: 900;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edf0f3;
+    }
+
+    .bar-fill {
+      height: 100%;
+      min-width: 3px;
+      border-radius: inherit;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+
+    .bar-value {
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .report-table th,
+    .report-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .report-table th {
+      color: var(--muted);
+      background: #fafafa;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .report-table td {
+      font-size: 0.82rem;
+    }
+
+    .report-table tbody tr:hover {
+      background: #fffafb;
+    }
+
+    .booking-number {
+      color: var(--red);
+      font-weight: 900;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .status-badge.pending {
+      color: #8a5b00;
+      background: #fff4d6;
+    }
+
+    .status-badge.quoted {
+      color: #1d4ed8;
+      background: #dbeafe;
+    }
+
+    .status-badge.confirmed,
+    .status-badge.paid,
+    .status-badge.completed {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .status-badge.cancelled,
+    .status-badge.unpaid,
+    .status-badge.failed {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .status-badge.partial {
+      color: #8a5b00;
+      background: #fff4d6;
+    }
+
+    .view-button {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--red);
+      background: #ffffff;
+      font-size: 0.73rem;
+      font-weight: 900;
+    }
+
+    .loading,
+    .empty {
+      padding: 60px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .filter-panel {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .reports-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+      }
+
+      .primary-button {
+        flex: 1;
+      }
+
+      .page-content {
+        width: min(100% - 22px, 1380px);
+      }
+
+      .stats-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .filter-fields {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .filter-field input,
+      .filter-field select {
+        width: 100%;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .topbar,
+      .filter-panel,
+      .alert,
+      .view-button {
+        display: none !important;
+      }
+
+      .page-content {
+        width: 100%;
+        padding: 0;
+      }
+
+      .stat-card,
+      .panel {
+        box-shadow: none;
+      }
+
+      .reports-grid {
+        display: block;
+      }
+
+      .panel {
+        margin-top: 18px;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <a
+        href="./admin.html"
+        class="back-button"
+        aria-label="Return to dashboard"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <div>
+        <h1>Reports</h1>
+
+        <p>
+          Review bookings, revenue, balances and rental performance.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="topbar-actions">
+
+      <button
+        type="button"
+        class="icon-button"
+        id="refresh-button"
+        aria-label="Refresh reports"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <button
+        type="button"
+        class="primary-button"
+        id="export-button"
+      >
+        <i class="fa-solid fa-file-csv"></i>
+        Export CSV
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page-content">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+    ></div>
+
+    <section class="filter-panel">
+
+      <div class="filter-fields">
+
+        <div class="filter-field">
+          <label for="start-date">
+            Start Date
+          </label>
+
+          <input
+            id="start-date"
+            type="date"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="end-date">
+            End Date
+          </label>
+
+          <input
+            id="end-date"
+            type="date"
+          >
+        </div>
+
+        <div class="filter-field">
+          <label for="status-filter">
+            Booking Status
+          </label>
+
+          <select id="status-filter">
+            <option value="ALL">All Statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="QUOTED">Quoted</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="PAID">Paid</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+
+        <div class="filter-field">
+          <label for="date-type">
+            Filter By
+          </label>
+
+          <select id="date-type">
+            <option value="event_date">Event Date</option>
+            <option value="created_at">Booking Created Date</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="filter-actions">
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="this-month-button"
+        >
+          This Month
+        </button>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="this-year-button"
+        >
+          This Year
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          id="apply-filter-button"
+        >
+          <i class="fa-solid fa-filter"></i>
+          Apply
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Total Bookings</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+        </div>
+
+        <strong id="stat-total-bookings">0</strong>
+
+      </article>
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Confirmed</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+
+        <strong id="stat-confirmed">0</strong>
+
+      </article>
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Cancelled</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+        </div>
+
+        <strong id="stat-cancelled">0</strong>
+
+      </article>
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Booked Value</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+          </div>
+        </div>
+
+        <strong id="stat-booked-value">$0.00</strong>
+
+      </article>
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Collected</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-dollar-sign"></i>
+          </div>
+        </div>
+
+        <strong id="stat-collected">$0.00</strong>
+
+      </article>
+
+      <article class="stat-card">
+
+        <div class="stat-head">
+          <span>Balance Due</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+
+        <strong id="stat-balance">$0.00</strong>
+
+      </article>
+
+    </section>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading reports...
+    </div>
+
+    <div
+      class="reports-grid"
+      id="reports-grid"
+      hidden
+    >
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>Bookings by Month</h2>
+
+            <p>
+              Number of events scheduled each month.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div
+            class="bar-list"
+            id="monthly-bookings-bars"
+          ></div>
+
+          <div
+            class="empty"
+            id="monthly-bookings-empty"
+            hidden
+          >
+            No booking data found.
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>Revenue by Month</h2>
+
+            <p>
+              Completed payments grouped by month.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div
+            class="bar-list"
+            id="monthly-revenue-bars"
+          ></div>
+
+          <div
+            class="empty"
+            id="monthly-revenue-empty"
+            hidden
+          >
+            No revenue data found.
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>Most-Rented Items</h2>
+
+            <p>
+              Rental quantities from bookings in the selected range.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div
+            class="bar-list"
+            id="rental-items-bars"
+          ></div>
+
+          <div
+            class="empty"
+            id="rental-items-empty"
+            hidden
+          >
+            No rental item data found.
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>Revenue by Method</h2>
+
+            <p>
+              Completed payments by Cash, Zelle, Check, Card or Other.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div
+            class="bar-list"
+            id="payment-method-bars"
+          ></div>
+
+          <div
+            class="empty"
+            id="payment-method-empty"
+            hidden
+          >
+            No payment method data found.
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel full">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>Booking Report</h2>
+
+            <p id="report-count">
+              0 bookings in the selected range.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="table-wrap">
+
+          <table class="report-table">
+
+            <thead>
+              <tr>
+                <th>Booking</th>
+                <th>Customer</th>
+                <th>Event Date</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Final Total</th>
+                <th>Collected</th>
+                <th>Balance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="report-bookings-body"></tbody>
+
+          </table>
+
+        </div>
+
+        <div
+          class="empty"
+          id="report-empty"
+          hidden
+        >
+          <i class="fa-solid fa-chart-column"></i>
+          No bookings match the selected filters.
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const senSupabase =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const money =
+        new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+            currency: "USD"
+          }
+        );
+
+      const state = {
+        bookings: [],
+        customers: new Map(),
+        bookingItems: [],
+        payments: [],
+        filteredBookings: [],
+        startDate: "",
+        endDate: "",
+        status: "ALL",
+        dateType: "event_date",
+        loading: false
+      };
+
+      const elements = {
+        alert:
+          document.getElementById(
+            "page-alert"
+          ),
+
+        loading:
+          document.getElementById(
+            "loading"
+          ),
+
+        reports:
+          document.getElementById(
+            "reports-grid"
+          ),
+
+        startDate:
+          document.getElementById(
+            "start-date"
+          ),
+
+        endDate:
+          document.getElementById(
+            "end-date"
+          ),
+
+        status:
+          document.getElementById(
+            "status-filter"
+          ),
+
+        dateType:
+          document.getElementById(
+            "date-type"
+          ),
+
+        apply:
+          document.getElementById(
+            "apply-filter-button"
+          ),
+
+        thisMonth:
+          document.getElementById(
+            "this-month-button"
+          ),
+
+        thisYear:
+          document.getElementById(
+            "this-year-button"
+          ),
+
+        refresh:
+          document.getElementById(
+            "refresh-button"
+          ),
+
+        export:
+          document.getElementById(
+            "export-button"
+          ),
+
+        monthlyBookings:
+          document.getElementById(
+            "monthly-bookings-bars"
+          ),
+
+        monthlyBookingsEmpty:
+          document.getElementById(
+            "monthly-bookings-empty"
+          ),
+
+        monthlyRevenue:
+          document.getElementById(
+            "monthly-revenue-bars"
+          ),
+
+        monthlyRevenueEmpty:
+          document.getElementById(
+            "monthly-revenue-empty"
+          ),
+
+        rentalItems:
+          document.getElementById(
+            "rental-items-bars"
+          ),
+
+        rentalItemsEmpty:
+          document.getElementById(
+            "rental-items-empty"
+          ),
+
+        paymentMethods:
+          document.getElementById(
+            "payment-method-bars"
+          ),
+
+        paymentMethodsEmpty:
+          document.getElementById(
+            "payment-method-empty"
+          ),
+
+        reportBody:
+          document.getElementById(
+            "report-bookings-body"
+          ),
+
+        reportEmpty:
+          document.getElementById(
+            "report-empty"
+          ),
+
+        reportCount:
+          document.getElementById(
+            "report-count"
+          )
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(
+        message,
+        type = "error"
+      ) {
+        elements.alert.className =
+          `alert visible ${type}`;
+
+        elements.alert.innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>
+            ${escapeHtml(message)}
+          </div>
+        `;
+      }
+
+      function hideAlert() {
+        elements.alert.className =
+          "alert";
+
+        elements.alert.textContent =
+          "";
+      }
+
+      function localDateValue(date) {
+        const offset =
+          date.getTimezoneOffset();
+
+        return new Date(
+          date.getTime() -
+          offset * 60 * 1000
+        )
+          .toISOString()
+          .slice(0, 10);
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "Not provided";
+        }
+
+        const date =
+          new Date(
+            `${String(value).slice(0, 10)}T12:00:00`
+          );
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+          }
+        ).format(date);
+      }
+
+      function monthLabel(value) {
+        const date =
+          new Date(
+            `${value}-01T12:00:00`
+          );
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            month: "short",
+            year: "numeric"
+          }
+        ).format(date);
+      }
+
+      function statusClass(value) {
+        return String(
+          value || ""
+        )
+          .trim()
+          .toLowerCase();
+      }
+
+      function customerForBooking(
+        booking
+      ) {
+        return (
+          state.customers.get(
+            booking.customer_id
+          ) || null
+        );
+      }
+
+      function customerName(
+        customer
+      ) {
+        return [
+          customer?.first_name,
+          customer?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Unknown Customer";
+      }
+
+      function completedPaymentStatuses() {
+        return [
+          "COMPLETED",
+          "PAID",
+          "SUCCESS",
+          "SUCCEEDED"
+        ];
+      }
+
+      function paymentsForBooking(
+        bookingId
+      ) {
+        return state.payments.filter(
+          payment =>
+            payment.booking_id ===
+            bookingId
+        );
+      }
+
+      function amountCollected(
+        bookingId
+      ) {
+        return paymentsForBooking(
+          bookingId
+        ).reduce(
+          (total, payment) => {
+            const status =
+              String(
+                payment.status || ""
+              ).toUpperCase();
+
+            if (
+              !completedPaymentStatuses()
+                .includes(status)
+            ) {
+              return total;
+            }
+
+            return (
+              total +
+              Number(
+                payment.amount || 0
+              )
+            );
+          },
+          0
+        );
+      }
+
+      function bookingTotal(
+        booking
+      ) {
+        return Number(
+          booking.final_total ??
+          booking.subtotal ??
+          0
+        );
+      }
+
+      function bookingBalance(
+        booking
+      ) {
+        if (
+          booking.balance_due !== null &&
+          booking.balance_due !== undefined
+        ) {
+          return Math.max(
+            0,
+            Number(
+              booking.balance_due || 0
+            )
+          );
+        }
+
+        return Math.max(
+          0,
+          bookingTotal(booking) -
+          amountCollected(booking.id)
+        );
+      }
+
+      function filteredPaymentRows() {
+        const bookingIds =
+          new Set(
+            state.filteredBookings
+              .map(
+                booking =>
+                  booking.id
+              )
+          );
+
+        return state.payments.filter(
+          payment => {
+            if (
+              !bookingIds.has(
+                payment.booking_id
+              )
+            ) {
+              return false;
+            }
+
+            const paidDate =
+              String(
+                payment.paid_at ||
+                payment.created_at ||
+                ""
+              ).slice(0, 10);
+
+            if (
+              state.startDate &&
+              paidDate <
+                state.startDate
+            ) {
+              return false;
+            }
+
+            if (
+              state.endDate &&
+              paidDate >
+                state.endDate
+            ) {
+              return false;
+            }
+
+            return true;
+          }
+        );
+      }
+
+      function applyFilters() {
+        state.startDate =
+          elements.startDate.value;
+
+        state.endDate =
+          elements.endDate.value;
+
+        state.status =
+          elements.status.value;
+
+        state.dateType =
+          elements.dateType.value;
+
+        state.filteredBookings =
+          state.bookings.filter(
+            booking => {
+              const dateValue =
+                String(
+                  booking[
+                    state.dateType
+                  ] || ""
+                ).slice(0, 10);
+
+              if (
+                state.startDate &&
+                dateValue <
+                  state.startDate
+              ) {
+                return false;
+              }
+
+              if (
+                state.endDate &&
+                dateValue >
+                  state.endDate
+              ) {
+                return false;
+              }
+
+              if (
+                state.status !==
+                  "ALL" &&
+                String(
+                  booking.status || ""
+                ).toUpperCase() !==
+                  state.status
+              ) {
+                return false;
+              }
+
+              return true;
+            }
+          );
+
+        renderReports();
+      }
+
+      function groupBookingsByMonth() {
+        const values =
+          new Map();
+
+        state.filteredBookings
+          .forEach(booking => {
+            if (!booking.event_date) {
+              return;
+            }
+
+            const month =
+              String(
+                booking.event_date
+              ).slice(0, 7);
+
+            values.set(
+              month,
+              (
+                values.get(month) ||
+                0
+              ) + 1
+            );
+          });
+
+        return [...values.entries()]
+          .sort(
+            (a, b) =>
+              a[0].localeCompare(
+                b[0]
+              )
+          );
+      }
+
+      function groupRevenueByMonth() {
+        const values =
+          new Map();
+
+        filteredPaymentRows()
+          .forEach(payment => {
+            const status =
+              String(
+                payment.status || ""
+              ).toUpperCase();
+
+            if (
+              !completedPaymentStatuses()
+                .includes(status)
+            ) {
+              return;
+            }
+
+            const dateValue =
+              String(
+                payment.paid_at ||
+                payment.created_at ||
+                ""
+              );
+
+            if (!dateValue) {
+              return;
+            }
+
+            const month =
+              dateValue.slice(0, 7);
+
+            values.set(
+              month,
+              (
+                values.get(month) ||
+                0
+              ) +
+              Number(
+                payment.amount || 0
+              )
+            );
+          });
+
+        return [...values.entries()]
+          .sort(
+            (a, b) =>
+              a[0].localeCompare(
+                b[0]
+              )
+          );
+      }
+
+      function groupRentalItems() {
+        const bookingIds =
+          new Set(
+            state.filteredBookings
+              .map(
+                booking =>
+                  booking.id
+              )
+          );
+
+        const values =
+          new Map();
+
+        state.bookingItems
+          .filter(
+            item =>
+              bookingIds.has(
+                item.booking_id
+              )
+          )
+          .forEach(item => {
+            const name =
+              item.item_name ||
+              "Rental item";
+
+            values.set(
+              name,
+              (
+                values.get(name) ||
+                0
+              ) +
+              Number(
+                item.quantity || 1
+              )
+            );
+          });
+
+        return [...values.entries()]
+          .sort(
+            (a, b) =>
+              b[1] - a[1]
+          )
+          .slice(0, 12);
+      }
+
+      function groupPaymentMethods() {
+        const values =
+          new Map();
+
+        filteredPaymentRows()
+          .forEach(payment => {
+            const status =
+              String(
+                payment.status || ""
+              ).toUpperCase();
+
+            if (
+              !completedPaymentStatuses()
+                .includes(status)
+            ) {
+              return;
+            }
+
+            const method =
+              String(
+                payment.method ||
+                "OTHER"
+              ).toUpperCase();
+
+            values.set(
+              method,
+              (
+                values.get(method) ||
+                0
+              ) +
+              Number(
+                payment.amount || 0
+              )
+            );
+          });
+
+        return [...values.entries()]
+          .sort(
+            (a, b) =>
+              b[1] - a[1]
+          );
+      }
+
+      function renderBars(
+        container,
+        emptyElement,
+        rows,
+        formatter
+      ) {
+        container.innerHTML = "";
+
+        container.hidden =
+          rows.length === 0;
+
+        emptyElement.hidden =
+          rows.length > 0;
+
+        if (!rows.length) {
+          return;
+        }
+
+        const maximum =
+          Math.max(
+            ...rows.map(
+              row =>
+                Number(row[1]) || 0
+            ),
+            1
+          );
+
+        container.innerHTML =
+          rows
+            .map(([label, value]) => {
+              const percentage =
+                Math.max(
+                  2,
+                  (
+                    Number(value) /
+                    maximum
+                  ) * 100
+                );
+
+              return `
+                <div class="bar-row">
+
+                  <div
+                    class="bar-label"
+                    title="${escapeHtml(
+                      label
+                    )}"
+                  >
+                    ${escapeHtml(label)}
+                  </div>
+
+                  <div class="bar-track">
+
+                    <div
+                      class="bar-fill"
+                      style="width:${percentage}%"
+                    ></div>
+
+                  </div>
+
+                  <div class="bar-value">
+                    ${escapeHtml(
+                      formatter(value)
+                    )}
+                  </div>
+
+                </div>
+              `;
+            })
+            .join("");
+      }
+
+      function renderStats() {
+        const bookings =
+          state.filteredBookings;
+
+        const confirmed =
+          bookings.filter(
+            booking =>
+              [
+                "CONFIRMED",
+                "PAID"
+              ].includes(
+                String(
+                  booking.status || ""
+                ).toUpperCase()
+              )
+          ).length;
+
+        const cancelled =
+          bookings.filter(
+            booking =>
+              String(
+                booking.status || ""
+              ).toUpperCase() ===
+              "CANCELLED"
+          ).length;
+
+        const bookedValue =
+          bookings.reduce(
+            (total, booking) =>
+              total +
+              bookingTotal(booking),
+            0
+          );
+
+        const collected =
+          bookings.reduce(
+            (total, booking) =>
+              total +
+              amountCollected(
+                booking.id
+              ),
+            0
+          );
+
+        const balance =
+          bookings.reduce(
+            (total, booking) =>
+              total +
+              bookingBalance(
+                booking
+              ),
+            0
+          );
+
+        document.getElementById(
+          "stat-total-bookings"
+        ).textContent =
+          String(bookings.length);
+
+        document.getElementById(
+          "stat-confirmed"
+        ).textContent =
+          String(confirmed);
+
+        document.getElementById(
+          "stat-cancelled"
+        ).textContent =
+          String(cancelled);
+
+        document.getElementById(
+          "stat-booked-value"
+        ).textContent =
+          money.format(bookedValue);
+
+        document.getElementById(
+          "stat-collected"
+        ).textContent =
+          money.format(collected);
+
+        document.getElementById(
+          "stat-balance"
+        ).textContent =
+          money.format(balance);
+      }
+
+      function bookingRow(booking) {
+        const customer =
+          customerForBooking(
+            booking
+          );
+
+        const collected =
+          amountCollected(
+            booking.id
+          );
+
+        const balance =
+          bookingBalance(
+            booking
+          );
+
+        return `
+          <tr>
+
+            <td>
+              <span class="booking-number">
+                ${escapeHtml(
+                  booking.booking_number ||
+                  booking.id
+                )}
+              </span>
+            </td>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  customerName(customer)
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                formatDate(
+                  booking.event_date
+                )
+              )}
+            </td>
+
+            <td>
+              <span
+                class="status-badge ${statusClass(
+                  booking.status
+                )}"
+              >
+                ${escapeHtml(
+                  booking.status ||
+                  "PENDING"
+                )}
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="status-badge ${statusClass(
+                  booking.payment_status
+                )}"
+              >
+                ${escapeHtml(
+                  booking.payment_status ||
+                  "UNPAID"
+                )}
+              </span>
+            </td>
+
+            <td>
+              ${money.format(
+                bookingTotal(booking)
+              )}
+            </td>
+
+            <td>
+              ${money.format(
+                collected
+              )}
+            </td>
+
+            <td>
+              <strong>
+                ${money.format(
+                  balance
+                )}
+              </strong>
+            </td>
+
+            <td>
+              <button
+                type="button"
+                class="view-button"
+                data-booking-id="${escapeHtml(
+                  booking.id
+                )}"
+              >
+                View
+              </button>
+            </td>
+
+          </tr>
+        `;
+      }
+
+      function renderBookingTable() {
+        const bookings =
+          [...state.filteredBookings]
+            .sort(
+              (a, b) =>
+                String(
+                  b.event_date || ""
+                ).localeCompare(
+                  String(
+                    a.event_date || ""
+                  )
+                )
+            );
+
+        elements.reportBody.innerHTML =
+          bookings
+            .map(bookingRow)
+            .join("");
+
+        elements.reportEmpty.hidden =
+          bookings.length > 0;
+
+        elements.reportCount.textContent =
+          `${bookings.length} ${
+            bookings.length === 1
+              ? "booking"
+              : "bookings"
+          } in the selected range.`;
+      }
+
+      function renderReports() {
+        renderStats();
+
+        renderBars(
+          elements.monthlyBookings,
+          elements.monthlyBookingsEmpty,
+          groupBookingsByMonth()
+            .map(
+              ([month, value]) => [
+                monthLabel(month),
+                value
+              ]
+            ),
+          value =>
+            `${Number(value)}`
+        );
+
+        renderBars(
+          elements.monthlyRevenue,
+          elements.monthlyRevenueEmpty,
+          groupRevenueByMonth()
+            .map(
+              ([month, value]) => [
+                monthLabel(month),
+                value
+              ]
+            ),
+          value =>
+            money.format(
+              Number(value)
+            )
+        );
+
+        renderBars(
+          elements.rentalItems,
+          elements.rentalItemsEmpty,
+          groupRentalItems(),
+          value =>
+            `${Number(value)} rented`
+        );
+
+        renderBars(
+          elements.paymentMethods,
+          elements.paymentMethodsEmpty,
+          groupPaymentMethods(),
+          value =>
+            money.format(
+              Number(value)
+            )
+        );
+
+        renderBookingTable();
+
+        elements.loading.hidden =
+          true;
+
+        elements.reports.hidden =
+          false;
+      }
+
+      function csvEscape(value) {
+        const text =
+          String(value ?? "");
+
+        if (
+          text.includes(",") ||
+          text.includes('"') ||
+          text.includes("\n")
+        ) {
+          return `"${text.replaceAll(
+            '"',
+            '""'
+          )}"`;
+        }
+
+        return text;
+      }
+
+      function exportCsv() {
+        if (
+          !state.filteredBookings.length
+        ) {
+          showAlert(
+            "There are no bookings to export."
+          );
+
+          return;
+        }
+
+        const rows = [
+          [
+            "Booking Number",
+            "Customer",
+            "Phone",
+            "Email",
+            "Event Date",
+            "Start Time",
+            "Status",
+            "Payment Status",
+            "Final Total",
+            "Amount Collected",
+            "Balance Due",
+            "Event Address"
+          ]
+        ];
+
+        state.filteredBookings
+          .forEach(booking => {
+            const customer =
+              customerForBooking(
+                booking
+              );
+
+            const address =
+              [
+                booking.event_address,
+                booking.event_city,
+                booking.event_state,
+                booking.event_zip
+              ]
+                .filter(Boolean)
+                .join(", ");
+
+            rows.push([
+              booking.booking_number ||
+                booking.id,
+
+              customerName(customer),
+
+              customer?.phone || "",
+
+              customer?.email || "",
+
+              booking.event_date || "",
+
+              booking.start_time || "",
+
+              booking.status ||
+                "PENDING",
+
+              booking.payment_status ||
+                "UNPAID",
+
+              bookingTotal(booking)
+                .toFixed(2),
+
+              amountCollected(
+                booking.id
+              ).toFixed(2),
+
+              bookingBalance(
+                booking
+              ).toFixed(2),
+
+              address
+            ]);
+          });
+
+        const csv =
+          rows
+            .map(
+              row =>
+                row
+                  .map(csvEscape)
+                  .join(",")
+            )
+            .join("\n");
+
+        const blob =
+          new Blob(
+            [csv],
+            {
+              type:
+                "text/csv;charset=utf-8"
+            }
+          );
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+        const anchor =
+          document.createElement(
+            "a"
+          );
+
+        anchor.href =
+          url;
+
+        anchor.download =
+          `sen-party-rentals-report-${
+            state.startDate ||
+            "all"
+          }-to-${
+            state.endDate ||
+            "all"
+          }.csv`;
+
+        document.body.appendChild(
+          anchor
+        );
+
+        anchor.click();
+        anchor.remove();
+
+        URL.revokeObjectURL(
+          url
+        );
+
+        showAlert(
+          "CSV report exported successfully.",
+          "success"
+        );
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        const {
+          data: admin,
+          error: adminError
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("id")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq(
+              "active",
+              true
+            )
+            .maybeSingle();
+
+        if (
+          adminError ||
+          !admin
+        ) {
+          await senSupabase
+            .auth
+            .signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        return true;
+      }
+
+      async function loadReports() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading =
+          true;
+
+        hideAlert();
+
+        elements.refresh.disabled =
+          true;
+
+        elements.refresh.classList.add(
+          "loading"
+        );
+
+        elements.loading.hidden =
+          false;
+
+        elements.reports.hidden =
+          true;
+
+        try {
+          const [
+            bookingsResult,
+            customersResult,
+            bookingItemsResult,
+            paymentsResult
+          ] =
+            await Promise.all([
+              senSupabase
+                .from("bookings")
+                .select(`
+                  id,
+                  booking_number,
+                  customer_id,
+                  status,
+                  payment_status,
+                  event_date,
+                  start_time,
+                  end_time,
+                  event_address,
+                  event_city,
+                  event_state,
+                  event_zip,
+                  subtotal,
+                  final_total,
+                  balance_due,
+                  created_at
+                `)
+                .order(
+                  "event_date",
+                  {
+                    ascending: false
+                  }
+                ),
+
+              senSupabase
+                .from("customers")
+                .select(`
+                  id,
+                  first_name,
+                  last_name,
+                  phone,
+                  email
+                `),
+
+              senSupabase
+                .from("booking_items")
+                .select(`
+                  id,
+                  booking_id,
+                  item_name,
+                  quantity,
+                  unit_price,
+                  line_total
+                `),
+
+              senSupabase
+                .from("payments")
+                .select(`
+                  id,
+                  booking_id,
+                  amount,
+                  method,
+                  status,
+                  paid_at,
+                  created_at
+                `)
+            ]);
+
+          if (
+            bookingsResult.error
+          ) {
+            throw bookingsResult.error;
+          }
+
+          if (
+            customersResult.error
+          ) {
+            throw customersResult.error;
+          }
+
+          if (
+            bookingItemsResult.error
+          ) {
+            throw bookingItemsResult.error;
+          }
+
+          if (
+            paymentsResult.error
+          ) {
+            throw paymentsResult.error;
+          }
+
+          state.bookings =
+            bookingsResult.data ||
+            [];
+
+          state.customers =
+            new Map(
+              (
+                customersResult.data ||
+                []
+              ).map(
+                customer => [
+                  customer.id,
+                  customer
+                ]
+              )
+            );
+
+          state.bookingItems =
+            bookingItemsResult.data ||
+            [];
+
+          state.payments =
+            paymentsResult.data ||
+            [];
+
+          applyFilters();
+
+        } catch (error) {
+          console.error(
+            "Reports loading error:",
+            error
+          );
+
+          showAlert(
+            `Reports could not be loaded: ${errorMessage(
+              error
+            )}`
+          );
+
+          elements.loading.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${escapeHtml(
+              errorMessage(error)
+            )}
+          `;
+
+        } finally {
+          state.loading =
+            false;
+
+          elements.refresh.disabled =
+            false;
+
+          elements.refresh.classList.remove(
+            "loading"
+          );
+        }
+      }
+
+      function setThisMonth() {
+        const now =
+          new Date();
+
+        const first =
+          new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+          );
+
+        const last =
+          new Date(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            0
+          );
+
+        elements.startDate.value =
+          localDateValue(first);
+
+        elements.endDate.value =
+          localDateValue(last);
+
+        applyFilters();
+      }
+
+      function setThisYear() {
+        const year =
+          new Date()
+            .getFullYear();
+
+        elements.startDate.value =
+          `${year}-01-01`;
+
+        elements.endDate.value =
+          `${year}-12-31`;
+
+        applyFilters();
+      }
+
+      elements.apply.addEventListener(
+        "click",
+        applyFilters
+      );
+
+      elements.thisMonth.addEventListener(
+        "click",
+        setThisMonth
+      );
+
+      elements.thisYear.addEventListener(
+        "click",
+        setThisYear
+      );
+
+      elements.refresh.addEventListener(
+        "click",
+        loadReports
+      );
+
+      elements.export.addEventListener(
+        "click",
+        exportCsv
+      );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const bookingButton =
+            event.target.closest(
+              "[data-booking-id]"
+            );
+
+          if (!bookingButton) {
+            return;
+          }
+
+          window.location.href =
+            `./admin-booking.html?id=${encodeURIComponent(
+              bookingButton.dataset
+                .bookingId
+            )}`;
+        }
+      );
+
+      async function initializeReports() {
+        try {
+          const authorized =
+            await requireAdmin();
+
+          if (!authorized) {
+            return;
+          }
+
+          setThisYear();
+
+          await loadReports();
+
+        } catch (error) {
+          elements.loading.hidden =
+            true;
+
+          showAlert(
+            errorMessage(error)
+          );
+        }
+      }
+
+      initializeReports();
+    })();
+  </script>
+
+</body>
+
+</html>

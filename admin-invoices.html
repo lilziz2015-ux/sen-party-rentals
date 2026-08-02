@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Invoices & Receipts | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --black: #0b0b0d;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left,
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button,
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .booking-select {
+      min-width: 300px;
+      min-height: 44px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .booking-select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .action-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: var(--white);
+      font-weight: 900;
+    }
+
+    .action-button.primary {
+      border-color: transparent;
+      color: #ffffff;
+      background: var(--gradient);
+      box-shadow: 0 12px 24px rgba(217, 4, 41, 0.2);
+    }
+
+    .page-content {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .loading,
+    .empty {
+      padding: 80px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    .invoice {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 34px;
+      color: #ffffff;
+      background:
+        radial-gradient(
+          circle at 86% 12%,
+          rgba(255, 106, 0, 0.35),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #09090b,
+          #251116 60%,
+          #760015
+        );
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border-radius: 17px;
+      background: var(--gradient);
+      font-size: 1.35rem;
+    }
+
+    .brand h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .invoice-title {
+      text-align: right;
+    }
+
+    .invoice-title small {
+      display: block;
+      color: #ffbac5;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .invoice-title h1 {
+      margin: 7px 0 8px;
+      font-size: 2.1rem;
+    }
+
+    .invoice-title p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.6;
+    }
+
+    .invoice-body {
+      padding: 34px;
+    }
+
+    .invoice-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .meta-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fafafa;
+    }
+
+    .meta-card h3 {
+      margin: 0 0 14px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .meta-card p {
+      margin: 5px 0;
+      line-height: 1.55;
+    }
+
+    .meta-card strong {
+      color: var(--black);
+    }
+
+    .invoice-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .invoice-table th {
+      color: #ffffff;
+      background: var(--black);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .invoice-table td {
+      font-size: 0.86rem;
+    }
+
+    .invoice-table th:nth-child(n+2),
+    .invoice-table td:nth-child(n+2) {
+      text-align: right;
+    }
+
+    .invoice-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .totals {
+      width: min(420px, 100%);
+      margin: 26px 0 0 auto;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 0;
+      color: var(--muted);
+    }
+
+    .total-row strong {
+      color: var(--text);
+    }
+
+    .total-row.balance {
+      margin-top: 6px;
+      padding-top: 17px;
+      border-top: 2px solid var(--line);
+      color: var(--text);
+      font-size: 1.12rem;
+      font-weight: 900;
+    }
+
+    .total-row.balance strong {
+      color: var(--red);
+      font-size: 1.35rem;
+    }
+
+    .payment-section {
+      margin-top: 32px;
+      padding: 22px;
+      border-radius: 15px;
+      background: #f7f7f8;
+    }
+
+    .payment-section h3 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+
+    .payment-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .payment-row {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        auto
+        auto;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+
+    .payment-row:last-child {
+      border-bottom: 0;
+    }
+
+    .payment-row small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      min-height: 29px;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .status-badge.paid,
+    .status-badge.completed,
+    .status-badge.success,
+    .status-badge.succeeded {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .status-badge.pending,
+    .status-badge.partial {
+      color: #8a5b00;
+      background: #fff4d6;
+    }
+
+    .status-badge.unpaid,
+    .status-badge.failed,
+    .status-badge.cancelled {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .invoice-footer {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .booking-select {
+        flex: 1;
+        min-width: 220px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .invoice-header {
+        flex-direction: column;
+        padding: 25px;
+      }
+
+      .invoice-title {
+        text-align: left;
+      }
+
+      .invoice-body {
+        padding: 22px;
+      }
+
+      .invoice-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .payment-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      @page {
+        size: Letter;
+        margin: 0.35in;
+      }
+
+      body {
+        background: #ffffff;
+      }
+
+      .topbar,
+      .alert,
+      .loading,
+      .empty {
+        display: none !important;
+      }
+
+      .page-content {
+        width: 100%;
+        padding: 0;
+      }
+
+      .invoice {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .invoice-header {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .invoice-table th,
+      .status-badge,
+      .brand-mark {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <a
+        href="./admin.html"
+        class="back-button"
+        aria-label="Return to dashboard"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <div>
+        <h1>Invoices & Receipts</h1>
+        <p>Generate printable customer documents.</p>
+      </div>
+
+    </div>
+
+    <div class="topbar-actions">
+
+      <select
+        id="booking-select"
+        class="booking-select"
+      >
+        <option value="">
+          Select a booking
+        </option>
+      </select>
+
+      <button
+        type="button"
+        class="icon-button"
+        id="refresh-button"
+        aria-label="Refresh bookings"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <button
+        type="button"
+        class="action-button"
+        id="receipt-button"
+      >
+        <i class="fa-solid fa-receipt"></i>
+        Receipt
+      </button>
+
+      <button
+        type="button"
+        class="action-button primary"
+        id="print-button"
+      >
+        <i class="fa-solid fa-print"></i>
+        Print / PDF
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page-content">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+    ></div>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading bookings...
+    </div>
+
+    <div
+      class="empty"
+      id="empty"
+      hidden
+    >
+      <i class="fa-solid fa-file-invoice"></i>
+      Select a booking to generate an invoice.
+    </div>
+
+    <article
+      class="invoice"
+      id="invoice"
+      hidden
+    >
+
+      <header class="invoice-header">
+
+        <div class="brand">
+
+          <div class="brand-mark">
+            <i class="fa-solid fa-tent"></i>
+          </div>
+
+          <div>
+            <h2>Sen Party Rentals</h2>
+
+            <p>
+              Manassas, Virginia<br>
+              (571) 719-9575<br>
+              senmoonbounce@gmail.com
+            </p>
+          </div>
+
+        </div>
+
+        <div class="invoice-title">
+
+          <small id="document-label">
+            Invoice
+          </small>
+
+          <h1 id="document-number">
+            SPR-000000
+          </h1>
+
+          <p>
+            Issued:
+            <span id="issued-date"></span>
+          </p>
+
+        </div>
+
+      </header>
+
+      <div class="invoice-body">
+
+        <section class="invoice-meta">
+
+          <div class="meta-card">
+
+            <h3>Bill To</h3>
+
+            <p>
+              <strong id="customer-name">
+                Customer
+              </strong>
+            </p>
+
+            <p id="customer-phone"></p>
+            <p id="customer-email"></p>
+
+          </div>
+
+          <div class="meta-card">
+
+            <h3>Event Information</h3>
+
+            <p>
+              <strong>Date:</strong>
+              <span id="event-date"></span>
+            </p>
+
+            <p>
+              <strong>Time:</strong>
+              <span id="event-time"></span>
+            </p>
+
+            <p>
+              <strong>Address:</strong><br>
+              <span id="event-address"></span>
+            </p>
+
+          </div>
+
+        </section>
+
+        <div class="invoice-table-wrap">
+
+          <table class="invoice-table">
+
+            <thead>
+              <tr>
+                <th>Rental Item</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+
+            <tbody id="invoice-items-body"></tbody>
+
+          </table>
+
+        </div>
+
+        <section class="totals">
+
+          <div class="total-row">
+            <span>Rental Subtotal</span>
+            <strong id="subtotal">$0.00</strong>
+          </div>
+
+          <div class="total-row">
+            <span>Final Total</span>
+            <strong id="final-total">$0.00</strong>
+          </div>
+
+          <div class="total-row">
+            <span>Amount Paid</span>
+            <strong id="amount-paid">$0.00</strong>
+          </div>
+
+          <div class="total-row balance">
+            <span>Balance Due</span>
+            <strong id="balance-due">$0.00</strong>
+          </div>
+
+        </section>
+
+        <section class="payment-section">
+
+          <h3>Payment History</h3>
+
+          <div
+            class="payment-list"
+            id="payment-list"
+          ></div>
+
+          <p
+            id="no-payments"
+            style="margin:0;color:var(--muted)"
+            hidden
+          >
+            No payments have been recorded.
+          </p>
+
+        </section>
+
+        <footer class="invoice-footer">
+
+          Delivery, setup, taxes, fees, and final pricing are subject
+          to confirmation by Sen Party Rentals. A booking is not fully
+          confirmed until approved by Sen Party Rentals.
+
+          <br><br>
+
+          Thank you for choosing Sen Party Rentals.
+
+        </footer>
+
+      </div>
+
+    </article>
+
+  </main>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      const senSupabase =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey: "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const money =
+        new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+            currency: "USD"
+          }
+        );
+
+      const state = {
+        bookings: [],
+        customers: new Map(),
+        items: [],
+        payments: [],
+        selectedBookingId: "",
+        documentType: "INVOICE",
+        loading: false
+      };
+
+      const elements = {
+        alert:
+          document.getElementById(
+            "page-alert"
+          ),
+
+        loading:
+          document.getElementById(
+            "loading"
+          ),
+
+        empty:
+          document.getElementById(
+            "empty"
+          ),
+
+        invoice:
+          document.getElementById(
+            "invoice"
+          ),
+
+        bookingSelect:
+          document.getElementById(
+            "booking-select"
+          ),
+
+        refresh:
+          document.getElementById(
+            "refresh-button"
+          ),
+
+        receiptButton:
+          document.getElementById(
+            "receipt-button"
+          ),
+
+        printButton:
+          document.getElementById(
+            "print-button"
+          ),
+
+        documentLabel:
+          document.getElementById(
+            "document-label"
+          ),
+
+        documentNumber:
+          document.getElementById(
+            "document-number"
+          ),
+
+        issuedDate:
+          document.getElementById(
+            "issued-date"
+          ),
+
+        customerName:
+          document.getElementById(
+            "customer-name"
+          ),
+
+        customerPhone:
+          document.getElementById(
+            "customer-phone"
+          ),
+
+        customerEmail:
+          document.getElementById(
+            "customer-email"
+          ),
+
+        eventDate:
+          document.getElementById(
+            "event-date"
+          ),
+
+        eventTime:
+          document.getElementById(
+            "event-time"
+          ),
+
+        eventAddress:
+          document.getElementById(
+            "event-address"
+          ),
+
+        itemsBody:
+          document.getElementById(
+            "invoice-items-body"
+          ),
+
+        subtotal:
+          document.getElementById(
+            "subtotal"
+          ),
+
+        finalTotal:
+          document.getElementById(
+            "final-total"
+          ),
+
+        amountPaid:
+          document.getElementById(
+            "amount-paid"
+          ),
+
+        balanceDue:
+          document.getElementById(
+            "balance-due"
+          ),
+
+        paymentList:
+          document.getElementById(
+            "payment-list"
+          ),
+
+        noPayments:
+          document.getElementById(
+            "no-payments"
+          )
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(message) {
+        elements.alert.className =
+          "alert visible error";
+
+        elements.alert.innerHTML = `
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>${escapeHtml(message)}</div>
+        `;
+      }
+
+      function hideAlert() {
+        elements.alert.className =
+          "alert";
+
+        elements.alert.textContent =
+          "";
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "Not provided";
+        }
+
+        const date =
+          new Date(
+            `${value}T12:00:00`
+          );
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+          }
+        ).format(date);
+      }
+
+      function formatDateTime(value) {
+        if (!value) {
+          return "Not provided";
+        }
+
+        const date =
+          new Date(value);
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        ).format(date);
+      }
+
+      function formatTime(value) {
+        if (!value) {
+          return "Not provided";
+        }
+
+        const parts =
+          String(value)
+            .split(":")
+            .map(Number);
+
+        if (
+          parts.length < 2 ||
+          !Number.isFinite(parts[0]) ||
+          !Number.isFinite(parts[1])
+        ) {
+          return String(value);
+        }
+
+        const date =
+          new Date();
+
+        date.setHours(
+          parts[0],
+          parts[1],
+          0,
+          0
+        );
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        ).format(date);
+      }
+
+      function customerName(customer) {
+        return [
+          customer?.first_name,
+          customer?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Unknown Customer";
+      }
+
+      function selectedBooking() {
+        return state.bookings.find(
+          booking =>
+            booking.id ===
+            state.selectedBookingId
+        ) || null;
+      }
+
+      function customerForBooking(
+        booking
+      ) {
+        return (
+          state.customers.get(
+            booking?.customer_id
+          ) || null
+        );
+      }
+
+      function itemsForBooking(
+        bookingId
+      ) {
+        return state.items.filter(
+          item =>
+            item.booking_id ===
+            bookingId
+        );
+      }
+
+      function paymentsForBooking(
+        bookingId
+      ) {
+        return state.payments.filter(
+          payment =>
+            payment.booking_id ===
+            bookingId
+        );
+      }
+
+      function completedPaymentAmount(
+        bookingId
+      ) {
+        const acceptedStatuses = [
+          "COMPLETED",
+          "PAID",
+          "SUCCESS",
+          "SUCCEEDED"
+        ];
+
+        return paymentsForBooking(
+          bookingId
+        ).reduce(
+          (total, payment) => {
+            const status =
+              String(
+                payment.status || ""
+              ).toUpperCase();
+
+            if (
+              !acceptedStatuses.includes(
+                status
+              )
+            ) {
+              return total;
+            }
+
+            return (
+              total +
+              Number(
+                payment.amount || 0
+              )
+            );
+          },
+          0
+        );
+      }
+
+      function statusClass(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase();
+      }
+
+      function fullAddress(booking) {
+        return [
+          booking?.event_address,
+          booking?.event_city,
+          booking?.event_state,
+          booking?.event_zip
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      function populateBookingSelect() {
+        elements.bookingSelect.innerHTML = `
+          <option value="">
+            Select a booking
+          </option>
+
+          ${state.bookings
+            .map(booking => {
+              const customer =
+                customerForBooking(
+                  booking
+                );
+
+              return `
+                <option value="${escapeHtml(
+                  booking.id
+                )}">
+                  ${escapeHtml(
+                    booking.booking_number ||
+                    booking.id
+                  )} — ${escapeHtml(
+                    customerName(customer)
+                  )} — ${escapeHtml(
+                    formatDate(
+                      booking.event_date
+                    )
+                  )}
+                </option>
+              `;
+            })
+            .join("")}
+        `;
+      }
+
+      function renderInvoice() {
+        const booking =
+          selectedBooking();
+
+        if (!booking) {
+          elements.invoice.hidden =
+            true;
+
+          elements.empty.hidden =
+            false;
+
+          return;
+        }
+
+        const customer =
+          customerForBooking(
+            booking
+          );
+
+        const items =
+          itemsForBooking(
+            booking.id
+          );
+
+        const payments =
+          paymentsForBooking(
+            booking.id
+          );
+
+        const subtotal =
+          Number(
+            booking.subtotal || 0
+          );
+
+        const finalTotal =
+          Number(
+            booking.final_total ??
+            booking.subtotal ??
+            0
+          );
+
+        const amountPaid =
+          completedPaymentAmount(
+            booking.id
+          );
+
+        const balanceDue =
+          booking.balance_due !== null &&
+          booking.balance_due !== undefined
+            ? Math.max(
+                0,
+                Number(
+                  booking.balance_due || 0
+                )
+              )
+            : Math.max(
+                0,
+                finalTotal -
+                amountPaid
+              );
+
+        elements.documentLabel.textContent =
+          state.documentType === "RECEIPT"
+            ? "Payment Receipt"
+            : "Customer Invoice";
+
+        elements.documentNumber.textContent =
+          booking.booking_number ||
+          booking.id;
+
+        elements.issuedDate.textContent =
+          new Intl.DateTimeFormat(
+            "en-US",
+            {
+              month: "long",
+              day: "numeric",
+              year: "numeric"
+            }
+          ).format(
+            new Date()
+          );
+
+        elements.customerName.textContent =
+          customerName(customer);
+
+        elements.customerPhone.textContent =
+          customer?.phone ||
+          "Phone not provided";
+
+        elements.customerEmail.textContent =
+          customer?.email ||
+          "Email not provided";
+
+        elements.eventDate.textContent =
+          formatDate(
+            booking.event_date
+          );
+
+        elements.eventTime.textContent =
+          `${formatTime(
+            booking.start_time
+          )} – ${formatTime(
+            booking.end_time
+          )}`;
+
+        elements.eventAddress.textContent =
+          fullAddress(booking) ||
+          "Address not provided";
+
+        elements.itemsBody.innerHTML =
+          items.length
+            ? items
+                .map(item => {
+                  const quantity =
+                    Number(
+                      item.quantity || 1
+                    );
+
+                  const unitPrice =
+                    Number(
+                      item.unit_price || 0
+                    );
+
+                  const lineTotal =
+                    Number(
+                      item.line_total ??
+                      quantity *
+                      unitPrice
+                    );
+
+                  return `
+                    <tr>
+                      <td>
+                        <strong>
+                          ${escapeHtml(
+                            item.item_name ||
+                            "Rental item"
+                          )}
+                        </strong>
+                      </td>
+
+                      <td>
+                        ${quantity}
+                      </td>
+
+                      <td>
+                        ${money.format(
+                          unitPrice
+                        )}
+                      </td>
+
+                      <td>
+                        <strong>
+                          ${money.format(
+                            lineTotal
+                          )}
+                        </strong>
+                      </td>
+                    </tr>
+                  `;
+                })
+                .join("")
+            : `
+                <tr>
+                  <td colspan="4">
+                    No rental items found.
+                  </td>
+                </tr>
+              `;
+
+        elements.subtotal.textContent =
+          money.format(subtotal);
+
+        elements.finalTotal.textContent =
+          money.format(finalTotal);
+
+        elements.amountPaid.textContent =
+          money.format(amountPaid);
+
+        elements.balanceDue.textContent =
+          money.format(balanceDue);
+
+        elements.paymentList.innerHTML =
+          payments
+            .map(payment => `
+              <div class="payment-row">
+
+                <div>
+                  <strong>
+                    ${escapeHtml(
+                      payment.method ||
+                      "Payment"
+                    )}
+                  </strong>
+
+                  <small>
+                    ${escapeHtml(
+                      payment.transaction_reference ||
+                      formatDateTime(
+                        payment.paid_at ||
+                        payment.created_at
+                      )
+                    )}
+                  </small>
+                </div>
+
+                <strong>
+                  ${money.format(
+                    Number(
+                      payment.amount || 0
+                    )
+                  )}
+                </strong>
+
+                <span
+                  class="status-badge ${statusClass(
+                    payment.status
+                  )}"
+                >
+                  ${escapeHtml(
+                    payment.status ||
+                    "UNKNOWN"
+                  )}
+                </span>
+
+              </div>
+            `)
+            .join("");
+
+        elements.noPayments.hidden =
+          payments.length > 0;
+
+        elements.invoice.hidden =
+          false;
+
+        elements.empty.hidden =
+          true;
+
+        document.title =
+          `${
+            state.documentType === "RECEIPT"
+              ? "Receipt"
+              : "Invoice"
+          } ${booking.booking_number} | Sen Party Rentals`;
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        const {
+          data: admin,
+          error: adminError
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("id")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq(
+              "active",
+              true
+            )
+            .maybeSingle();
+
+        if (
+          adminError ||
+          !admin
+        ) {
+          await senSupabase
+            .auth
+            .signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        return true;
+      }
+
+      async function loadData() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading = true;
+
+        hideAlert();
+
+        elements.loading.hidden =
+          false;
+
+        elements.invoice.hidden =
+          true;
+
+        elements.empty.hidden =
+          true;
+
+        elements.refresh.disabled =
+          true;
+
+        try {
+          const [
+            bookingsResult,
+            customersResult,
+            itemsResult,
+            paymentsResult
+          ] =
+            await Promise.all([
+              senSupabase
+                .from("bookings")
+                .select(`
+                  id,
+                  booking_number,
+                  customer_id,
+                  status,
+                  payment_status,
+                  event_date,
+                  start_time,
+                  end_time,
+                  event_address,
+                  event_city,
+                  event_state,
+                  event_zip,
+                  subtotal,
+                  final_total,
+                  balance_due,
+                  created_at
+                `)
+                .order(
+                  "created_at",
+                  {
+                    ascending: false
+                  }
+                ),
+
+              senSupabase
+                .from("customers")
+                .select(`
+                  id,
+                  first_name,
+                  last_name,
+                  phone,
+                  email
+                `),
+
+              senSupabase
+                .from("booking_items")
+                .select(`
+                  id,
+                  booking_id,
+                  item_name,
+                  quantity,
+                  unit_price,
+                  line_total
+                `),
+
+              senSupabase
+                .from("payments")
+                .select(`
+                  id,
+                  booking_id,
+                  amount,
+                  method,
+                  status,
+                  transaction_reference,
+                  notes,
+                  paid_at,
+                  created_at
+                `)
+                .order(
+                  "paid_at",
+                  {
+                    ascending: false,
+                    nullsFirst: false
+                  }
+                )
+            ]);
+
+          if (bookingsResult.error) {
+            throw bookingsResult.error;
+          }
+
+          if (customersResult.error) {
+            throw customersResult.error;
+          }
+
+          if (itemsResult.error) {
+            throw itemsResult.error;
+          }
+
+          if (paymentsResult.error) {
+            throw paymentsResult.error;
+          }
+
+          state.bookings =
+            bookingsResult.data || [];
+
+          state.customers =
+            new Map(
+              (
+                customersResult.data ||
+                []
+              ).map(
+                customer => [
+                  customer.id,
+                  customer
+                ]
+              )
+            );
+
+          state.items =
+            itemsResult.data || [];
+
+          state.payments =
+            paymentsResult.data || [];
+
+          populateBookingSelect();
+
+          const bookingIdFromUrl =
+            new URLSearchParams(
+              window.location.search
+            ).get("id");
+
+          if (
+            bookingIdFromUrl &&
+            state.bookings.some(
+              booking =>
+                booking.id ===
+                bookingIdFromUrl
+            )
+          ) {
+            state.selectedBookingId =
+              bookingIdFromUrl;
+
+            elements.bookingSelect.value =
+              bookingIdFromUrl;
+          }
+
+          elements.loading.hidden =
+            true;
+
+          renderInvoice();
+
+        } catch (error) {
+          console.error(
+            "Invoice page error:",
+            error
+          );
+
+          elements.loading.hidden =
+            true;
+
+          showAlert(
+            `Invoice data could not be loaded: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.loading = false;
+
+          elements.refresh.disabled =
+            false;
+        }
+      }
+
+      elements.bookingSelect.addEventListener(
+        "change",
+        event => {
+          state.selectedBookingId =
+            event.target.value;
+
+          state.documentType =
+            "INVOICE";
+
+          renderInvoice();
+        }
+      );
+
+      elements.receiptButton.addEventListener(
+        "click",
+        () => {
+          if (
+            !state.selectedBookingId
+          ) {
+            showAlert(
+              "Select a booking first."
+            );
+
+            return;
+          }
+
+          state.documentType =
+            state.documentType ===
+              "RECEIPT"
+              ? "INVOICE"
+              : "RECEIPT";
+
+          elements.receiptButton.innerHTML =
+            state.documentType ===
+              "RECEIPT"
+              ? `
+                <i class="fa-solid fa-file-invoice"></i>
+                Invoice
+              `
+              : `
+                <i class="fa-solid fa-receipt"></i>
+                Receipt
+              `;
+
+          renderInvoice();
+        }
+      );
+
+      elements.printButton.addEventListener(
+        "click",
+        () => {
+          if (
+            !state.selectedBookingId
+          ) {
+            showAlert(
+              "Select a booking first."
+            );
+
+            return;
+          }
+
+          window.print();
+        }
+      );
+
+      elements.refresh.addEventListener(
+        "click",
+        loadData
+      );
+
+      async function initialize() {
+        try {
+          const authorized =
+            await requireAdmin();
+
+          if (!authorized) {
+            return;
+          }
+
+          await loadData();
+
+        } catch (error) {
+          elements.loading.hidden =
+            true;
+
+          showAlert(
+            errorMessage(error)
+          );
+        }
+      }
+
+      initialize();
+    })();
+  </script>
+
+</body>
+
+</html>
