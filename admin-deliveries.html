@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Deliveries | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --black: #0b0b0d;
+      --dark: #17181c;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --yellow: #9a6700;
+      --blue: #2563eb;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .back-button,
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .icon-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .icon-button.loading i {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-input {
+      min-height: 44px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .date-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .action-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: var(--white);
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .action-button.primary {
+      border-color: transparent;
+      color: #ffffff;
+      background: var(--gradient);
+      box-shadow: 0 12px 24px rgba(217, 4, 41, 0.2);
+    }
+
+    .page-content {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .stat-icon {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 13px;
+      color: #ffffff;
+      background: var(--gradient);
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 13px;
+      font-size: 1.85rem;
+      line-height: 1;
+    }
+
+    .route-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding: 22px;
+      border-radius: var(--radius);
+      color: #ffffff;
+      background:
+        radial-gradient(
+          circle at 85% 15%,
+          rgba(255, 106, 0, 0.3),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #08080a,
+          #201015 60%,
+          #700014
+        );
+      box-shadow: var(--shadow);
+    }
+
+    .route-banner h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .route-banner p {
+      margin: 7px 0 0;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    .route-banner-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .route-banner .action-button {
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .delivery-list {
+      display: grid;
+    }
+
+    .delivery-card {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) auto;
+      gap: 16px;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+
+    .delivery-card:last-child {
+      border-bottom: 0;
+    }
+
+    .delivery-card:hover {
+      background: #fffafb;
+    }
+
+    .route-number {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 15px;
+      color: #ffffff;
+      background: var(--gradient);
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(217, 4, 41, 0.2);
+    }
+
+    .delivery-main {
+      min-width: 0;
+    }
+
+    .delivery-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .delivery-title-row h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .booking-number {
+      color: var(--red);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .delivery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .delivery-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .delivery-address {
+      margin-top: 9px;
+      color: var(--text);
+      font-size: 0.83rem;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .item-summary {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .delivery-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .row-button {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--red);
+      background: #ffffff;
+      text-decoration: none;
+      font-size: 0.74rem;
+      font-weight: 900;
+    }
+
+    .row-button:hover {
+      border-color: var(--red);
+      background: #fff1f3;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .status-badge.pending,
+    .status-badge.scheduled {
+      color: #8a5b00;
+      background: #fff4d6;
+    }
+
+    .status-badge.assigned,
+    .status-badge.in_transit,
+    .status-badge.out_for_delivery {
+      color: #1d4ed8;
+      background: #dbeafe;
+    }
+
+    .status-badge.delivered,
+    .status-badge.completed,
+    .status-badge.returned {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .status-badge.cancelled {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .loading,
+    .empty {
+      padding: 64px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 900;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(10, 10, 12, 0.68);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(760px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .modal-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .modal-close {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      background: #ffffff;
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .detail-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-item span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .detail-item strong {
+      display: block;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .checklist-title {
+      margin: 26px 0 12px;
+      font-size: 1rem;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .checklist-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) repeat(3, 90px);
+      gap: 10px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+
+    .checklist-name strong,
+    .checklist-name small {
+      display: block;
+    }
+
+    .checklist-name small {
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .check-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .check-control input {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--red);
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .delivery-card {
+        grid-template-columns: 50px minmax(0, 1fr);
+      }
+
+      .delivery-actions {
+        grid-column: 2;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .date-input {
+        flex: 1;
+      }
+
+      .route-banner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .page-content {
+        width: min(100% - 22px, 1280px);
+      }
+
+      .panel-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .delivery-card {
+        grid-template-columns: 44px minmax(0, 1fr);
+        padding: 17px 14px;
+      }
+
+      .route-number {
+        width: 42px;
+        height: 42px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-item.full {
+        grid-column: auto;
+      }
+
+      .checklist-row {
+        grid-template-columns: 1fr;
+      }
+
+      .check-control {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 22px 22px 0 0;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .topbar,
+      .stats-grid,
+      .route-banner-actions,
+      .delivery-actions,
+      .modal-backdrop,
+      .alert {
+        display: none !important;
+      }
+
+      .page-content {
+        width: 100%;
+        padding: 0;
+      }
+
+      .route-banner,
+      .panel {
+        box-shadow: none;
+      }
+
+      .route-banner {
+        margin-bottom: 18px;
+        color: #000000;
+        background: #ffffff;
+        border: 2px solid #000000;
+      }
+
+      .route-banner p {
+        color: #333333;
+      }
+
+      .delivery-card {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <a
+        href="./admin.html"
+        class="back-button"
+        aria-label="Return to dashboard"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <div>
+        <h1>Deliveries</h1>
+
+        <p>
+          Manage delivery schedules, routes and equipment checklists.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="topbar-actions">
+
+      <input
+        id="delivery-date"
+        class="date-input"
+        type="date"
+      >
+
+      <button
+        type="button"
+        class="icon-button"
+        id="refresh-button"
+        aria-label="Refresh deliveries"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <button
+        type="button"
+        class="action-button"
+        id="print-route-button"
+      >
+        <i class="fa-solid fa-print"></i>
+        Print
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page-content">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+    ></div>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <div class="stat-head">
+          <span>Scheduled Stops</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+        </div>
+
+        <strong id="stat-stops">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-head">
+          <span>Pending Deliveries</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
+
+        <strong id="stat-pending">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-head">
+          <span>Delivered</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+
+        <strong id="stat-delivered">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-head">
+          <span>Checklist Items</span>
+
+          <div class="stat-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+        </div>
+
+        <strong id="stat-items">0</strong>
+      </article>
+
+    </section>
+
+    <section class="route-banner">
+
+      <div>
+        <h2 id="route-title">
+          Delivery Route
+        </h2>
+
+        <p>
+          Starting location:
+          <strong>
+            1 Bradley Forest, Manassas, VA 20112
+          </strong>
+        </p>
+      </div>
+
+      <div class="route-banner-actions">
+
+        <a
+          href="#"
+          class="action-button"
+          id="open-full-route"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fa-solid fa-route"></i>
+          Open Full Route
+        </a>
+
+        <button
+          type="button"
+          class="action-button"
+          id="print-route-button-secondary"
+        >
+          <i class="fa-solid fa-file-arrow-down"></i>
+          Route Sheet
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <h2>Delivery Schedule</h2>
+
+          <p id="schedule-description">
+            Loading scheduled deliveries...
+          </p>
+        </div>
+
+      </div>
+
+      <div
+        class="loading"
+        id="loading"
+      >
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading deliveries...
+      </div>
+
+      <div
+        class="delivery-list"
+        id="delivery-list"
+        hidden
+      ></div>
+
+      <div
+        class="empty"
+        id="empty"
+        hidden
+      >
+        <i class="fa-solid fa-truck-fast"></i>
+        No delivery assignments were found for this date.
+      </div>
+
+    </section>
+
+  </main>
+
+  <div
+    class="modal-backdrop"
+    id="delivery-modal-backdrop"
+    aria-hidden="true"
+  >
+
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+
+      <div class="modal-head">
+
+        <div>
+          <h2 id="modal-title">
+            Delivery Details
+          </h2>
+
+          <p id="modal-subtitle">
+            Booking and checklist information.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          id="close-modal"
+          aria-label="Close delivery details"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div
+          class="alert"
+          id="modal-alert"
+          role="alert"
+        ></div>
+
+        <div
+          class="detail-grid"
+          id="modal-details"
+        ></div>
+
+        <h3 class="checklist-title">
+          Delivery Checklist
+        </h3>
+
+        <div
+          class="checklist"
+          id="modal-checklist"
+        ></div>
+
+        <div class="modal-actions">
+
+          <a
+            href="#"
+            class="action-button"
+            id="modal-map-link"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fa-solid fa-map-location-dot"></i>
+            Navigate
+          </a>
+
+          <a
+            href="#"
+            class="action-button"
+            id="modal-booking-link"
+          >
+            <i class="fa-solid fa-calendar-check"></i>
+            View Booking
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      const STARTING_ADDRESS =
+        "1 Bradley Forest, Manassas, VA 20112";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const senSupabase =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const state = {
+        deliveries: [],
+        bookings: new Map(),
+        customers: new Map(),
+        bookingItems: [],
+        checklistItems: [],
+        selectedDate: "",
+        selectedDeliveryId: null,
+        loading: false
+      };
+
+      const elements = {
+        pageAlert:
+          document.getElementById(
+            "page-alert"
+          ),
+
+        modalAlert:
+          document.getElementById(
+            "modal-alert"
+          ),
+
+        date:
+          document.getElementById(
+            "delivery-date"
+          ),
+
+        refresh:
+          document.getElementById(
+            "refresh-button"
+          ),
+
+        loading:
+          document.getElementById(
+            "loading"
+          ),
+
+        list:
+          document.getElementById(
+            "delivery-list"
+          ),
+
+        empty:
+          document.getElementById(
+            "empty"
+          ),
+
+        description:
+          document.getElementById(
+            "schedule-description"
+          ),
+
+        routeTitle:
+          document.getElementById(
+            "route-title"
+          ),
+
+        fullRoute:
+          document.getElementById(
+            "open-full-route"
+          ),
+
+        printButton:
+          document.getElementById(
+            "print-route-button"
+          ),
+
+        printSecondary:
+          document.getElementById(
+            "print-route-button-secondary"
+          ),
+
+        modalBackdrop:
+          document.getElementById(
+            "delivery-modal-backdrop"
+          ),
+
+        closeModal:
+          document.getElementById(
+            "close-modal"
+          ),
+
+        modalTitle:
+          document.getElementById(
+            "modal-title"
+          ),
+
+        modalSubtitle:
+          document.getElementById(
+            "modal-subtitle"
+          ),
+
+        modalDetails:
+          document.getElementById(
+            "modal-details"
+          ),
+
+        modalChecklist:
+          document.getElementById(
+            "modal-checklist"
+          ),
+
+        modalMap:
+          document.getElementById(
+            "modal-map-link"
+          ),
+
+        modalBooking:
+          document.getElementById(
+            "modal-booking-link"
+          )
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        if (error instanceof Error) {
+          return error.message;
+        }
+
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(
+        element,
+        message,
+        type = "error"
+      ) {
+        element.className =
+          `alert visible ${type}`;
+
+        element.innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>
+            ${escapeHtml(message)}
+          </div>
+        `;
+      }
+
+      function hideAlert(element) {
+        element.className = "alert";
+        element.textContent = "";
+      }
+
+      function todayValue() {
+        const date = new Date();
+        const offset = date.getTimezoneOffset();
+
+        return new Date(
+          date.getTime() -
+          offset * 60 * 1000
+        )
+          .toISOString()
+          .slice(0, 10);
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "Date not set";
+        }
+
+        const date =
+          new Date(`${value}T12:00:00`);
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+          }
+        ).format(date);
+      }
+
+      function formatTime(value) {
+        if (!value) {
+          return "Not set";
+        }
+
+        const parts =
+          String(value)
+            .split(":")
+            .map(Number);
+
+        if (
+          parts.length < 2 ||
+          !Number.isFinite(parts[0])
+        ) {
+          return String(value);
+        }
+
+        const date = new Date();
+
+        date.setHours(
+          parts[0],
+          parts[1],
+          0,
+          0
+        );
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        ).format(date);
+      }
+
+      function statusClass(value) {
+        return String(value || "PENDING")
+          .trim()
+          .toLowerCase()
+          .replaceAll(" ", "_");
+      }
+
+      function bookingForDelivery(delivery) {
+        return (
+          state.bookings.get(
+            delivery.booking_id
+          ) || null
+        );
+      }
+
+      function customerForBooking(booking) {
+        return (
+          state.customers.get(
+            booking?.customer_id
+          ) || null
+        );
+      }
+
+      function customerName(customer) {
+        return [
+          customer?.first_name,
+          customer?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Unknown Customer";
+      }
+
+      function fullAddress(booking) {
+        return [
+          booking?.event_address,
+          booking?.event_city,
+          booking?.event_state,
+          booking?.event_zip
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      function itemsForBooking(bookingId) {
+        return state.bookingItems.filter(
+          item =>
+            item.booking_id === bookingId
+        );
+      }
+
+      function checklistForDelivery(deliveryId) {
+        return state.checklistItems.filter(
+          item =>
+            item.delivery_assignment_id ===
+            deliveryId
+        );
+      }
+
+      function detailHtml(label, value, full = false) {
+        return `
+          <div class="detail-item ${
+            full ? "full" : ""
+          }">
+            <span>
+              ${escapeHtml(label)}
+            </span>
+
+            <strong>
+              ${escapeHtml(
+                value || "Not provided"
+              )}
+            </strong>
+          </div>
+        `;
+      }
+
+      function mapLink(address) {
+        return address
+          ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+              STARTING_ADDRESS
+            )}&destination=${encodeURIComponent(
+              address
+            )}&travelmode=driving`
+          : "#";
+      }
+
+      function fullRouteLink(deliveries) {
+        const addresses =
+          deliveries
+            .map(bookingForDelivery)
+            .map(fullAddress)
+            .filter(Boolean);
+
+        if (!addresses.length) {
+          return "#";
+        }
+
+        const destination =
+          addresses[
+            addresses.length - 1
+          ];
+
+        const waypoints =
+          addresses
+            .slice(0, -1)
+            .join("|");
+
+        let url =
+          `https://www.google.com/maps/dir/?api=1` +
+          `&origin=${encodeURIComponent(
+            STARTING_ADDRESS
+          )}` +
+          `&destination=${encodeURIComponent(
+            destination
+          )}` +
+          `&travelmode=driving`;
+
+        if (waypoints) {
+          url +=
+            `&waypoints=${encodeURIComponent(
+              waypoints
+            )}`;
+        }
+
+        return url;
+      }
+
+      function sortedDeliveries() {
+        return [...state.deliveries].sort(
+          (a, b) => {
+            const first =
+              a.delivery_window_start ||
+              a.setup_time ||
+              a.event_start_time ||
+              "23:59";
+
+            const second =
+              b.delivery_window_start ||
+              b.setup_time ||
+              b.event_start_time ||
+              "23:59";
+
+            return String(first)
+              .localeCompare(
+                String(second)
+              );
+          }
+        );
+      }
+
+      function renderStats() {
+        const deliveries =
+          sortedDeliveries();
+
+        const pending =
+          deliveries.filter(
+            delivery => {
+              const status =
+                String(
+                  delivery.status || ""
+                ).toUpperCase();
+
+              return ![
+                "DELIVERED",
+                "COMPLETED",
+                "RETURNED",
+                "CANCELLED"
+              ].includes(status);
+            }
+          ).length;
+
+        const delivered =
+          deliveries.filter(
+            delivery =>
+              [
+                "DELIVERED",
+                "COMPLETED",
+                "RETURNED"
+              ].includes(
+                String(
+                  delivery.status || ""
+                ).toUpperCase()
+              )
+          ).length;
+
+        document.getElementById(
+          "stat-stops"
+        ).textContent =
+          String(deliveries.length);
+
+        document.getElementById(
+          "stat-pending"
+        ).textContent =
+          String(pending);
+
+        document.getElementById(
+          "stat-delivered"
+        ).textContent =
+          String(delivered);
+
+        document.getElementById(
+          "stat-items"
+        ).textContent =
+          String(
+            state.checklistItems.length
+          );
+      }
+
+      function deliveryCard(delivery, index) {
+        const booking =
+          bookingForDelivery(delivery);
+
+        const customer =
+          customerForBooking(booking);
+
+        const items =
+          itemsForBooking(
+            delivery.booking_id
+          );
+
+        const itemNames =
+          items.length
+            ? items
+                .map(item => {
+                  const quantity =
+                    Number(
+                      item.quantity || 1
+                    );
+
+                  return `${quantity}× ${
+                    item.item_name ||
+                    "Rental item"
+                  }`;
+                })
+                .join(", ")
+            : "No rental items listed";
+
+        const address =
+          fullAddress(booking);
+
+        const windowText =
+          delivery.delivery_window_start ||
+          delivery.delivery_window_end
+            ? `${formatTime(
+                delivery.delivery_window_start
+              )} – ${formatTime(
+                delivery.delivery_window_end
+              )}`
+            : "Window not set";
+
+        return `
+          <article class="delivery-card">
+
+            <div class="route-number">
+              ${index + 1}
+            </div>
+
+            <div class="delivery-main">
+
+              <div class="delivery-title-row">
+
+                <h3>
+                  ${escapeHtml(
+                    customerName(customer)
+                  )}
+                </h3>
+
+                <span class="booking-number">
+                  ${escapeHtml(
+                    booking?.booking_number ||
+                    delivery.booking_id
+                  )}
+                </span>
+
+                <span
+                  class="status-badge ${statusClass(
+                    delivery.status
+                  )}"
+                >
+                  ${escapeHtml(
+                    delivery.status ||
+                    "PENDING"
+                  )}
+                </span>
+
+              </div>
+
+              <div class="delivery-meta">
+
+                <span>
+                  <i class="fa-solid fa-truck-ramp-box"></i>
+                  Delivery:
+                  ${escapeHtml(windowText)}
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                  Setup:
+                  ${escapeHtml(
+                    formatTime(
+                      delivery.setup_time
+                    )
+                  )}
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-cake-candles"></i>
+                  Event:
+                  ${escapeHtml(
+                    formatTime(
+                      delivery.event_start_time ||
+                      booking?.start_time
+                    )
+                  )}
+                </span>
+
+              </div>
+
+              <div class="delivery-address">
+                <i class="fa-solid fa-location-dot"></i>
+                ${escapeHtml(
+                  address ||
+                  "Address not provided"
+                )}
+              </div>
+
+              <div class="item-summary">
+                ${escapeHtml(itemNames)}
+              </div>
+
+            </div>
+
+            <div class="delivery-actions">
+
+              <a
+                class="row-button"
+                href="${escapeHtml(
+                  mapLink(address)
+                )}"
+                target="_blank"
+                rel="noopener"
+              >
+                <i class="fa-solid fa-diamond-turn-right"></i>
+                Navigate
+              </a>
+
+              <button
+                type="button"
+                class="row-button"
+                data-delivery-id="${escapeHtml(
+                  delivery.id
+                )}"
+              >
+                <i class="fa-solid fa-list-check"></i>
+                Checklist
+              </button>
+
+            </div>
+
+          </article>
+        `;
+      }
+
+      function renderDeliveries() {
+        const deliveries =
+          sortedDeliveries();
+
+        elements.loading.hidden = true;
+
+        elements.list.hidden =
+          deliveries.length === 0;
+
+        elements.empty.hidden =
+          deliveries.length > 0;
+
+        elements.list.innerHTML =
+          deliveries
+            .map(deliveryCard)
+            .join("");
+
+        const dateLabel =
+          formatDate(
+            state.selectedDate
+          );
+
+        elements.routeTitle.textContent =
+          `Delivery Route — ${dateLabel}`;
+
+        elements.description.textContent =
+          `${deliveries.length} ${
+            deliveries.length === 1
+              ? "delivery"
+              : "deliveries"
+          } scheduled for ${dateLabel}.`;
+
+        elements.fullRoute.href =
+          fullRouteLink(deliveries);
+
+        renderStats();
+      }
+
+      function renderChecklist(delivery) {
+        const checklist =
+          checklistForDelivery(
+            delivery.id
+          );
+
+        if (!checklist.length) {
+          elements.modalChecklist.innerHTML = `
+            <div class="empty" style="padding:30px 15px">
+              <i class="fa-solid fa-list-check"></i>
+              No delivery checklist items were found.
+            </div>
+          `;
+
+          return;
+        }
+
+        elements.modalChecklist.innerHTML =
+          checklist
+            .map(item => `
+              <div class="checklist-row">
+
+                <div class="checklist-name">
+                  <strong>
+                    ${escapeHtml(
+                      item.item_name ||
+                      "Checklist item"
+                    )}
+                  </strong>
+
+                  <small>
+                    ${escapeHtml(
+                      item.item_type ||
+                      "ITEM"
+                    )}
+                    • Quantity:
+                    ${Number(
+                      item.quantity || 1
+                    )}
+                  </small>
+                </div>
+
+                <label class="check-control">
+                  <input
+                    type="checkbox"
+                    data-checklist-id="${escapeHtml(
+                      item.id
+                    )}"
+                    data-checklist-field="loaded"
+                    ${
+                      item.loaded
+                        ? "checked"
+                        : ""
+                    }
+                  >
+                  Loaded
+                </label>
+
+                <label class="check-control">
+                  <input
+                    type="checkbox"
+                    data-checklist-id="${escapeHtml(
+                      item.id
+                    )}"
+                    data-checklist-field="delivered"
+                    ${
+                      item.delivered
+                        ? "checked"
+                        : ""
+                    }
+                  >
+                  Delivered
+                </label>
+
+                <label class="check-control">
+                  <input
+                    type="checkbox"
+                    data-checklist-id="${escapeHtml(
+                      item.id
+                    )}"
+                    data-checklist-field="returned"
+                    ${
+                      item.returned
+                        ? "checked"
+                        : ""
+                    }
+                  >
+                  Returned
+                </label>
+
+              </div>
+            `)
+            .join("");
+      }
+
+      function openDeliveryModal(deliveryId) {
+        hideAlert(
+          elements.modalAlert
+        );
+
+        const delivery =
+          state.deliveries.find(
+            item =>
+              item.id === deliveryId
+          );
+
+        if (!delivery) {
+          return;
+        }
+
+        state.selectedDeliveryId =
+          deliveryId;
+
+        const booking =
+          bookingForDelivery(delivery);
+
+        const customer =
+          customerForBooking(booking);
+
+        const address =
+          fullAddress(booking);
+
+        elements.modalTitle.textContent =
+          customerName(customer);
+
+        elements.modalSubtitle.textContent =
+          booking?.booking_number ||
+          delivery.booking_id;
+
+        elements.modalDetails.innerHTML =
+          [
+            detailHtml(
+              "Delivery Date",
+              formatDate(
+                delivery.delivery_date
+              )
+            ),
+
+            detailHtml(
+              "Status",
+              delivery.status ||
+              "PENDING"
+            ),
+
+            detailHtml(
+              "Delivery Window",
+              `${formatTime(
+                delivery.delivery_window_start
+              )} – ${formatTime(
+                delivery.delivery_window_end
+              )}`
+            ),
+
+            detailHtml(
+              "Setup Time",
+              formatTime(
+                delivery.setup_time
+              )
+            ),
+
+            detailHtml(
+              "Event Time",
+              `${formatTime(
+                delivery.event_start_time ||
+                booking?.start_time
+              )} – ${formatTime(
+                delivery.event_end_time ||
+                booking?.end_time
+              )}`
+            ),
+
+            detailHtml(
+              "Phone",
+              customer?.phone
+            ),
+
+            detailHtml(
+              "Delivery Address",
+              address,
+              true
+            )
+          ].join("");
+
+        elements.modalMap.href =
+          mapLink(address);
+
+        elements.modalBooking.href =
+          `./admin-booking.html?id=${encodeURIComponent(
+            delivery.booking_id
+          )}`;
+
+        renderChecklist(delivery);
+
+        elements.modalBackdrop.classList.add(
+          "visible"
+        );
+
+        elements.modalBackdrop.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        document.body.classList.add(
+          "modal-open"
+        );
+      }
+
+      function closeDeliveryModal() {
+        elements.modalBackdrop.classList.remove(
+          "visible"
+        );
+
+        elements.modalBackdrop.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        document.body.classList.remove(
+          "modal-open"
+        );
+
+        state.selectedDeliveryId = null;
+      }
+
+      async function updateChecklist(
+        itemId,
+        field,
+        checked
+      ) {
+        hideAlert(
+          elements.modalAlert
+        );
+
+        const allowedFields = [
+          "loaded",
+          "delivered",
+          "returned"
+        ];
+
+        if (
+          !allowedFields.includes(field)
+        ) {
+          return;
+        }
+
+        const {
+          error
+        } =
+          await senSupabase
+            .from(
+              "delivery_checklist_items"
+            )
+            .update({
+              [field]: checked,
+              updated_at:
+                new Date().toISOString()
+            })
+            .eq("id", itemId);
+
+        if (error) {
+          showAlert(
+            elements.modalAlert,
+            `Checklist could not be updated: ${error.message}`
+          );
+
+          throw error;
+        }
+
+        const item =
+          state.checklistItems.find(
+            checklistItem =>
+              checklistItem.id === itemId
+          );
+
+        if (item) {
+          item[field] = checked;
+        }
+
+        showAlert(
+          elements.modalAlert,
+          "Checklist updated.",
+          "success"
+        );
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return null;
+        }
+
+        const {
+          data: admin,
+          error: adminError
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("*")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq("active", true)
+            .maybeSingle();
+
+        if (
+          adminError ||
+          !admin
+        ) {
+          await senSupabase
+            .auth
+            .signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return null;
+        }
+
+        return {
+          session,
+          admin
+        };
+      }
+
+      async function loadDeliveries() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading = true;
+
+        hideAlert(
+          elements.pageAlert
+        );
+
+        elements.refresh.disabled = true;
+
+        elements.refresh.classList.add(
+          "loading"
+        );
+
+        elements.loading.hidden = false;
+        elements.list.hidden = true;
+        elements.empty.hidden = true;
+
+        try {
+          const [
+            deliveriesResult,
+            bookingsResult,
+            customersResult,
+            bookingItemsResult
+          ] =
+            await Promise.all([
+              senSupabase
+                .from(
+                  "delivery_assignments"
+                )
+                .select(`
+                  id,
+                  booking_id,
+                  driver_id,
+                  status,
+                  delivery_date,
+                  delivery_window_start,
+                  delivery_window_end,
+                  setup_time,
+                  event_start_time,
+                  event_end_time
+                `)
+                .eq(
+                  "delivery_date",
+                  state.selectedDate
+                ),
+
+              senSupabase
+                .from("bookings")
+                .select(`
+                  id,
+                  booking_number,
+                  customer_id,
+                  event_date,
+                  start_time,
+                  end_time,
+                  event_address,
+                  event_city,
+                  event_state,
+                  event_zip,
+                  setup_location,
+                  surface_type,
+                  status
+                `),
+
+              senSupabase
+                .from("customers")
+                .select(`
+                  id,
+                  first_name,
+                  last_name,
+                  phone,
+                  email
+                `),
+
+              senSupabase
+                .from("booking_items")
+                .select(`
+                  id,
+                  booking_id,
+                  item_name,
+                  quantity,
+                  unit_price,
+                  line_total
+                `)
+            ]);
+
+          if (deliveriesResult.error) {
+            throw new Error(
+              `Deliveries could not be loaded: ${deliveriesResult.error.message}`
+            );
+          }
+
+          if (bookingsResult.error) {
+            throw new Error(
+              `Bookings could not be loaded: ${bookingsResult.error.message}`
+            );
+          }
+
+          if (customersResult.error) {
+            throw new Error(
+              `Customers could not be loaded: ${customersResult.error.message}`
+            );
+          }
+
+          if (bookingItemsResult.error) {
+            throw new Error(
+              `Rental items could not be loaded: ${bookingItemsResult.error.message}`
+            );
+          }
+
+          state.deliveries =
+            deliveriesResult.data || [];
+
+          state.bookings =
+            new Map(
+              (
+                bookingsResult.data ||
+                []
+              ).map(
+                booking => [
+                  booking.id,
+                  booking
+                ]
+              )
+            );
+
+          state.customers =
+            new Map(
+              (
+                customersResult.data ||
+                []
+              ).map(
+                customer => [
+                  customer.id,
+                  customer
+                ]
+              )
+            );
+
+          state.bookingItems =
+            bookingItemsResult.data || [];
+
+          const deliveryIds =
+            state.deliveries
+              .map(
+                delivery =>
+                  delivery.id
+              )
+              .filter(Boolean);
+
+          if (deliveryIds.length) {
+            const {
+              data: checklist,
+              error: checklistError
+            } =
+              await senSupabase
+                .from(
+                  "delivery_checklist_items"
+                )
+                .select(`
+                  id,
+                  delivery_assignment_id,
+                  item_type,
+                  item_name,
+                  quantity,
+                  loaded,
+                  delivered,
+                  returned,
+                  notes,
+                  created_at,
+                  updated_at
+                `)
+                .in(
+                  "delivery_assignment_id",
+                  deliveryIds
+                );
+
+            if (checklistError) {
+              throw new Error(
+                `Delivery checklist could not be loaded: ${checklistError.message}`
+              );
+            }
+
+            state.checklistItems =
+              checklist || [];
+          } else {
+            state.checklistItems = [];
+          }
+
+          renderDeliveries();
+
+        } catch (error) {
+          console.error(
+            "Delivery page error:",
+            error
+          );
+
+          const message =
+            errorMessage(error);
+
+          showAlert(
+            elements.pageAlert,
+            message
+          );
+
+          elements.loading.hidden = true;
+          elements.empty.hidden = false;
+
+          elements.empty.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${escapeHtml(message)}
+          `;
+
+        } finally {
+          state.loading = false;
+
+          elements.refresh.disabled =
+            false;
+
+          elements.refresh.classList.remove(
+            "loading"
+          );
+        }
+      }
+
+      elements.date.addEventListener(
+        "change",
+        async event => {
+          state.selectedDate =
+            event.target.value;
+
+          await loadDeliveries();
+        }
+      );
+
+      elements.refresh.addEventListener(
+        "click",
+        loadDeliveries
+      );
+
+      elements.printButton.addEventListener(
+        "click",
+        () => window.print()
+      );
+
+      elements.printSecondary.addEventListener(
+        "click",
+        () => window.print()
+      );
+
+      elements.closeModal.addEventListener(
+        "click",
+        closeDeliveryModal
+      );
+
+      elements.modalBackdrop.addEventListener(
+        "click",
+        event => {
+          if (
+            event.target ===
+            elements.modalBackdrop
+          ) {
+            closeDeliveryModal();
+          }
+        }
+      );
+
+      document.addEventListener(
+        "keydown",
+        event => {
+          if (
+            event.key === "Escape" &&
+            elements.modalBackdrop.classList
+              .contains("visible")
+          ) {
+            closeDeliveryModal();
+          }
+        }
+      );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const deliveryButton =
+            event.target.closest(
+              "[data-delivery-id]"
+            );
+
+          if (deliveryButton) {
+            openDeliveryModal(
+              deliveryButton.dataset
+                .deliveryId
+            );
+          }
+        }
+      );
+
+      document.addEventListener(
+        "change",
+        async event => {
+          const checkbox =
+            event.target.closest(
+              "[data-checklist-id]"
+            );
+
+          if (!checkbox) {
+            return;
+          }
+
+          const itemId =
+            checkbox.dataset
+              .checklistId;
+
+          const field =
+            checkbox.dataset
+              .checklistField;
+
+          try {
+            checkbox.disabled = true;
+
+            await updateChecklist(
+              itemId,
+              field,
+              checkbox.checked
+            );
+          } catch {
+            checkbox.checked =
+              !checkbox.checked;
+          } finally {
+            checkbox.disabled = false;
+          }
+        }
+      );
+
+      async function initializePage() {
+        try {
+          const admin =
+            await requireAdmin();
+
+          if (!admin) {
+            return;
+          }
+
+          state.selectedDate =
+            todayValue();
+
+          elements.date.value =
+            state.selectedDate;
+
+          await loadDeliveries();
+
+        } catch (error) {
+          showAlert(
+            elements.pageAlert,
+            errorMessage(error)
+          );
+
+          elements.loading.hidden = true;
+        }
+      }
+
+      initializePage();
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Inventory | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient: linear-gradient(
+        135deg,
+        #970018,
+        #d90429 58%,
+        #ff6a00
+      );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left,
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button,
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .search-box {
+      position: relative;
+      width: min(320px, 40vw);
+    }
+
+    .search-box i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .search-box input,
+    .category-filter {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0 14px 0 42px;
+    }
+
+    .category-filter {
+      padding: 0 13px;
+    }
+
+    .search-box input:focus,
+    .category-filter:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .primary-button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 12px;
+      color: #ffffff;
+      background: var(--gradient);
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(217, 4, 41, 0.2);
+    }
+
+    .page-content {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 1.85rem;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .inventory-table th,
+    .inventory-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .inventory-table th {
+      color: var(--muted);
+      background: #fafafa;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .inventory-table td {
+      font-size: 0.83rem;
+    }
+
+    .inventory-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 250px;
+    }
+
+    .inventory-image {
+      width: 66px;
+      height: 52px;
+      flex: 0 0 66px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f3f4f6;
+    }
+
+    .inventory-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .inventory-placeholder {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+    }
+
+    .inventory-item strong,
+    .inventory-item small {
+      display: block;
+    }
+
+    .inventory-item small {
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .badge.active,
+    .badge.featured {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .badge.inactive {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .badge.standard {
+      color: #475569;
+      background: #e2e8f0;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .row-button {
+      min-height: 34px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--red);
+      background: #ffffff;
+      font-size: 0.73rem;
+      font-weight: 900;
+    }
+
+    .row-button.danger {
+      color: var(--danger);
+    }
+
+    .loading,
+    .empty {
+      padding: 60px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 900;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(10, 10, 12, 0.68);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(760px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      border-radius: 22px;
+      background: #ffffff;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head h2 {
+      margin: 0;
+    }
+
+    .modal-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+    }
+
+    .modal-close {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #ffffff;
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d8dde5;
+      border-radius: 12px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .field input,
+    .field select {
+      min-height: 48px;
+      padding: 0 13px;
+    }
+
+    .field textarea {
+      min-height: 105px;
+      padding: 13px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      padding: 12px 0;
+    }
+
+    .checkbox-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+    }
+
+    .checkbox-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--red);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 18px 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .secondary-button,
+    .save-button {
+      min-height: 45px;
+      padding: 0 17px;
+      border-radius: 11px;
+      font-weight: 900;
+    }
+
+    .secondary-button {
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .save-button {
+      border: 0;
+      color: #ffffff;
+      background: var(--gradient);
+    }
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .search-box {
+        flex: 1;
+        width: auto;
+      }
+
+      .page-content {
+        width: min(100% - 22px, 1280px);
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 22px 22px 0 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <a
+        href="./admin.html"
+        class="back-button"
+        aria-label="Return to dashboard"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <div>
+        <h1>Inventory</h1>
+        <p>Manage rental items, pricing and availability.</p>
+      </div>
+
+    </div>
+
+    <div class="topbar-actions">
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          id="inventory-search"
+          type="search"
+          placeholder="Search inventory..."
+          autocomplete="off"
+        >
+      </div>
+
+      <select
+        id="category-filter"
+        class="category-filter"
+      >
+        <option value="ALL">All Categories</option>
+      </select>
+
+      <button
+        type="button"
+        class="icon-button"
+        id="refresh-button"
+        aria-label="Refresh inventory"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <button
+        type="button"
+        class="primary-button"
+        id="add-item-button"
+      >
+        <i class="fa-solid fa-plus"></i>
+        Add Rental
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page-content">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+    ></div>
+
+    <section class="stats-grid">
+
+      <article class="stat-card">
+        <span>Total Rentals</span>
+        <strong id="stat-total">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Active Rentals</span>
+        <strong id="stat-active">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Featured Rentals</span>
+        <strong id="stat-featured">0</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Total Units</span>
+        <strong id="stat-quantity">0</strong>
+      </article>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <h2>Rental Inventory</h2>
+          <p>View and edit all equipment listed in Supabase.</p>
+        </div>
+
+        <strong id="inventory-count">
+          0 items
+        </strong>
+
+      </div>
+
+      <div
+        class="loading"
+        id="loading"
+      >
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading inventory...
+      </div>
+
+      <div
+        class="table-wrap"
+        id="table-wrap"
+        hidden
+      >
+        <table class="inventory-table">
+
+          <thead>
+            <tr>
+              <th>Rental</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Deposit</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Featured</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="inventory-body"></tbody>
+
+        </table>
+      </div>
+
+      <div
+        class="empty"
+        id="empty"
+        hidden
+      >
+        <i class="fa-solid fa-box-open"></i>
+        No inventory items found.
+      </div>
+
+    </section>
+
+  </main>
+
+  <div
+    class="modal-backdrop"
+    id="item-modal"
+    aria-hidden="true"
+  >
+
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+
+      <div class="modal-head">
+
+        <div>
+          <h2 id="modal-title">Add Rental Item</h2>
+
+          <p>
+            Enter the inventory information below.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          id="close-modal"
+          aria-label="Close form"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <form id="item-form">
+
+        <div class="modal-body">
+
+          <div
+            class="alert"
+            id="modal-alert"
+          ></div>
+
+          <div class="form-grid">
+
+            <div class="field full">
+              <label for="item-name">Rental Name</label>
+
+              <input
+                id="item-name"
+                type="text"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-category">Category</label>
+
+              <select
+                id="item-category"
+                required
+              >
+                <option value="">
+                  Select category
+                </option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="item-slug">URL Slug</label>
+
+              <input
+                id="item-slug"
+                type="text"
+                required
+              >
+            </div>
+
+            <div class="field full">
+              <label for="item-description">Description</label>
+
+              <textarea id="item-description"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="item-price">Rental Price</label>
+
+              <input
+                id="item-price"
+                type="number"
+                min="0"
+                step="0.01"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-deposit">Deposit Amount</label>
+
+              <input
+                id="item-deposit"
+                type="number"
+                min="0"
+                step="0.01"
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-quantity">Quantity Available</label>
+
+              <input
+                id="item-quantity"
+                type="number"
+                min="0"
+                step="1"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-dimensions">Dimensions</label>
+
+              <input
+                id="item-dimensions"
+                type="text"
+                placeholder="30ft L × 13ft W × 15ft H"
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-capacity">Capacity</label>
+
+              <input
+                id="item-capacity"
+                type="text"
+                placeholder="Up to 8 children"
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-rental-use">Rental Use</label>
+
+              <select id="item-rental-use">
+                <option value="">Not specified</option>
+                <option value="DRY">Dry only</option>
+                <option value="WET">Wet only</option>
+                <option value="WET_OR_DRY">Wet or dry</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="item-water">Water Requirements</label>
+
+              <input
+                id="item-water"
+                type="text"
+                placeholder="Standard garden hose required"
+              >
+            </div>
+
+            <div class="field full">
+              <label for="item-image">Primary Image URL</label>
+
+              <input
+                id="item-image"
+                type="url"
+                placeholder="https://..."
+              >
+            </div>
+
+            <div class="field full">
+              <label for="item-page">Public Product Page URL</label>
+
+              <input
+                id="item-page"
+                type="text"
+                placeholder="./product-page.html"
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-sort">Sort Order</label>
+
+              <input
+                id="item-sort"
+                type="number"
+                min="0"
+                step="1"
+                value="0"
+              >
+            </div>
+
+            <div class="field">
+              <label>Visibility</label>
+
+              <div class="checkbox-row">
+
+                <label>
+                  <input
+                    id="item-active"
+                    type="checkbox"
+                    checked
+                  >
+                  Active
+                </label>
+
+                <label>
+                  <input
+                    id="item-featured"
+                    type="checkbox"
+                  >
+                  Featured
+                </label>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="secondary-button"
+            id="cancel-button"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="save-button"
+            id="save-button"
+          >
+            Save Rental Item
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      const senSupabase =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const money =
+        new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+            currency: "USD"
+          }
+        );
+
+      const state = {
+        items: [],
+        categories: [],
+        search: "",
+        category: "ALL",
+        editingId: null,
+        loading: false,
+        saving: false
+      };
+
+      const elements = {
+        pageAlert:
+          document.getElementById("page-alert"),
+
+        modalAlert:
+          document.getElementById("modal-alert"),
+
+        loading:
+          document.getElementById("loading"),
+
+        tableWrap:
+          document.getElementById("table-wrap"),
+
+        empty:
+          document.getElementById("empty"),
+
+        body:
+          document.getElementById("inventory-body"),
+
+        search:
+          document.getElementById("inventory-search"),
+
+        categoryFilter:
+          document.getElementById("category-filter"),
+
+        refresh:
+          document.getElementById("refresh-button"),
+
+        count:
+          document.getElementById("inventory-count"),
+
+        addButton:
+          document.getElementById("add-item-button"),
+
+        modal:
+          document.getElementById("item-modal"),
+
+        closeModal:
+          document.getElementById("close-modal"),
+
+        cancel:
+          document.getElementById("cancel-button"),
+
+        form:
+          document.getElementById("item-form"),
+
+        modalTitle:
+          document.getElementById("modal-title"),
+
+        save:
+          document.getElementById("save-button"),
+
+        name:
+          document.getElementById("item-name"),
+
+        category:
+          document.getElementById("item-category"),
+
+        slug:
+          document.getElementById("item-slug"),
+
+        description:
+          document.getElementById("item-description"),
+
+        price:
+          document.getElementById("item-price"),
+
+        deposit:
+          document.getElementById("item-deposit"),
+
+        quantity:
+          document.getElementById("item-quantity"),
+
+        dimensions:
+          document.getElementById("item-dimensions"),
+
+        capacity:
+          document.getElementById("item-capacity"),
+
+        rentalUse:
+          document.getElementById("item-rental-use"),
+
+        water:
+          document.getElementById("item-water"),
+
+        image:
+          document.getElementById("item-image"),
+
+        page:
+          document.getElementById("item-page"),
+
+        sort:
+          document.getElementById("item-sort"),
+
+        active:
+          document.getElementById("item-active"),
+
+        featured:
+          document.getElementById("item-featured")
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(
+        element,
+        message,
+        type = "error"
+      ) {
+        element.className =
+          `alert visible ${type}`;
+
+        element.innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>${escapeHtml(message)}</div>
+        `;
+      }
+
+      function hideAlert(element) {
+        element.className = "alert";
+        element.textContent = "";
+      }
+
+      function slugify(value) {
+        return String(value || "")
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+
+      function categoryName(categoryId) {
+        return (
+          state.categories.find(
+            category =>
+              category.id === categoryId
+          )?.name ||
+          "Uncategorized"
+        );
+      }
+
+      function filteredItems() {
+        const term =
+          state.search
+            .trim()
+            .toLowerCase();
+
+        return state.items.filter(
+          item => {
+            const matchesCategory =
+              state.category === "ALL" ||
+              item.category_id === state.category;
+
+            const searchable =
+              [
+                item.name,
+                item.slug,
+                item.description,
+                item.dimensions,
+                categoryName(item.category_id)
+              ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return (
+              matchesCategory &&
+              (
+                !term ||
+                searchable.includes(term)
+              )
+            );
+          }
+        );
+      }
+
+      function renderStats() {
+        document.getElementById(
+          "stat-total"
+        ).textContent =
+          String(state.items.length);
+
+        document.getElementById(
+          "stat-active"
+        ).textContent =
+          String(
+            state.items.filter(
+              item => item.active
+            ).length
+          );
+
+        document.getElementById(
+          "stat-featured"
+        ).textContent =
+          String(
+            state.items.filter(
+              item => item.featured
+            ).length
+          );
+
+        document.getElementById(
+          "stat-quantity"
+        ).textContent =
+          String(
+            state.items.reduce(
+              (total, item) =>
+                total +
+                Number(
+                  item.quantity_available || 0
+                ),
+              0
+            )
+          );
+      }
+
+      function itemRow(item) {
+        return `
+          <tr>
+
+            <td>
+              <div class="inventory-item">
+
+                <div class="inventory-image">
+                  ${
+                    item.image_url
+                      ? `
+                        <img
+                          src="${escapeHtml(item.image_url)}"
+                          alt="${escapeHtml(item.name)}"
+                          onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"
+                        >
+
+                        <div
+                          class="inventory-placeholder"
+                          style="display:none"
+                        >
+                          <i class="fa-solid fa-image"></i>
+                        </div>
+                      `
+                      : `
+                        <div class="inventory-placeholder">
+                          <i class="fa-solid fa-image"></i>
+                        </div>
+                      `
+                  }
+                </div>
+
+                <div>
+                  <strong>
+                    ${escapeHtml(item.name)}
+                  </strong>
+
+                  <small>
+                    ${escapeHtml(
+                      item.dimensions ||
+                      item.slug ||
+                      "No dimensions"
+                    )}
+                  </small>
+                </div>
+
+              </div>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                categoryName(item.category_id)
+              )}
+            </td>
+
+            <td>
+              <strong>
+                ${money.format(
+                  Number(item.price || 0)
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${money.format(
+                Number(item.deposit_amount || 0)
+              )}
+            </td>
+
+            <td>
+              ${Number(item.quantity_available || 0)}
+            </td>
+
+            <td>
+              <span
+                class="badge ${
+                  item.active
+                    ? "active"
+                    : "inactive"
+                }"
+              >
+                ${
+                  item.active
+                    ? "Active"
+                    : "Inactive"
+                }
+              </span>
+            </td>
+
+            <td>
+              <span
+                class="badge ${
+                  item.featured
+                    ? "featured"
+                    : "standard"
+                }"
+              >
+                ${
+                  item.featured
+                    ? "Featured"
+                    : "Standard"
+                }
+              </span>
+            </td>
+
+            <td>
+              <div class="row-actions">
+
+                <button
+                  type="button"
+                  class="row-button"
+                  data-edit-id="${escapeHtml(item.id)}"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="row-button"
+                  data-toggle-id="${escapeHtml(item.id)}"
+                >
+                  ${
+                    item.active
+                      ? "Disable"
+                      : "Enable"
+                  }
+                </button>
+
+                <button
+                  type="button"
+                  class="row-button danger"
+                  data-delete-id="${escapeHtml(item.id)}"
+                >
+                  Delete
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+        `;
+      }
+
+      function renderItems() {
+        const items =
+          filteredItems();
+
+        elements.loading.hidden = true;
+
+        elements.tableWrap.hidden =
+          items.length === 0;
+
+        elements.empty.hidden =
+          items.length > 0;
+
+        elements.body.innerHTML =
+          items
+            .map(itemRow)
+            .join("");
+
+        elements.count.textContent =
+          `${items.length} ${
+            items.length === 1
+              ? "item"
+              : "items"
+          }`;
+
+        renderStats();
+      }
+
+      function populateCategories() {
+        elements.category.innerHTML = `
+          <option value="">
+            Select category
+          </option>
+
+          ${state.categories
+            .filter(category => category.active !== false)
+            .map(category => `
+              <option value="${escapeHtml(category.id)}">
+                ${escapeHtml(category.name)}
+              </option>
+            `)
+            .join("")}
+        `;
+
+        elements.categoryFilter.innerHTML = `
+          <option value="ALL">
+            All Categories
+          </option>
+
+          ${state.categories
+            .map(category => `
+              <option value="${escapeHtml(category.id)}">
+                ${escapeHtml(category.name)}
+              </option>
+            `)
+            .join("")}
+        `;
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        const {
+          data: admin,
+          error
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("id")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq("active", true)
+            .maybeSingle();
+
+        if (error || !admin) {
+          await senSupabase.auth.signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return false;
+        }
+
+        return true;
+      }
+
+      async function loadInventory() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading = true;
+
+        hideAlert(elements.pageAlert);
+
+        elements.loading.hidden = false;
+        elements.tableWrap.hidden = true;
+        elements.empty.hidden = true;
+        elements.refresh.disabled = true;
+
+        try {
+          const [
+            itemsResult,
+            categoriesResult
+          ] =
+            await Promise.all([
+              senSupabase
+                .from("rental_items")
+                .select("*")
+                .order("sort_order", {
+                  ascending: true
+                })
+                .order("name", {
+                  ascending: true
+                }),
+
+              senSupabase
+                .from("rental_categories")
+                .select("*")
+                .order("sort_order", {
+                  ascending: true
+                })
+            ]);
+
+          if (itemsResult.error) {
+            throw itemsResult.error;
+          }
+
+          if (categoriesResult.error) {
+            throw categoriesResult.error;
+          }
+
+          state.items =
+            itemsResult.data || [];
+
+          state.categories =
+            categoriesResult.data || [];
+
+          populateCategories();
+          renderItems();
+
+        } catch (error) {
+          showAlert(
+            elements.pageAlert,
+            `Inventory could not be loaded: ${errorMessage(error)}`
+          );
+
+          elements.loading.hidden = true;
+          elements.empty.hidden = false;
+
+        } finally {
+          state.loading = false;
+          elements.refresh.disabled = false;
+        }
+      }
+
+      function openModal(item = null) {
+        hideAlert(elements.modalAlert);
+
+        elements.form.reset();
+
+        state.editingId =
+          item?.id || null;
+
+        elements.modalTitle.textContent =
+          item
+            ? "Edit Rental Item"
+            : "Add Rental Item";
+
+        elements.name.value =
+          item?.name || "";
+
+        elements.category.value =
+          item?.category_id || "";
+
+        elements.slug.value =
+          item?.slug || "";
+
+        elements.description.value =
+          item?.description || "";
+
+        elements.price.value =
+          Number(item?.price || 0).toFixed(2);
+
+        elements.deposit.value =
+          Number(
+            item?.deposit_amount || 0
+          ).toFixed(2);
+
+        elements.quantity.value =
+          Number(
+            item?.quantity_available || 1
+          );
+
+        elements.dimensions.value =
+          item?.dimensions || "";
+
+        elements.capacity.value =
+          item?.capacity || "";
+
+        elements.rentalUse.value =
+          item?.rental_use || "";
+
+        elements.water.value =
+          item?.water_requirements || "";
+
+        elements.image.value =
+          item?.image_url || "";
+
+        elements.page.value =
+          item?.product_page_url || "";
+
+        elements.sort.value =
+          Number(item?.sort_order || 0);
+
+        elements.active.checked =
+          item
+            ? item.active !== false
+            : true;
+
+        elements.featured.checked =
+          Boolean(item?.featured);
+
+        elements.modal.classList.add(
+          "visible"
+        );
+
+        elements.modal.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        document.body.classList.add(
+          "modal-open"
+        );
+
+        elements.name.focus();
+      }
+
+      function closeModal() {
+        if (state.saving) {
+          return;
+        }
+
+        elements.modal.classList.remove(
+          "visible"
+        );
+
+        elements.modal.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        document.body.classList.remove(
+          "modal-open"
+        );
+
+        state.editingId = null;
+      }
+
+      async function saveItem(event) {
+        event.preventDefault();
+
+        if (state.saving) {
+          return;
+        }
+
+        hideAlert(elements.modalAlert);
+
+        const payload = {
+          category_id:
+            elements.category.value,
+
+          name:
+            elements.name.value.trim(),
+
+          slug:
+            elements.slug.value.trim(),
+
+          description:
+            elements.description.value.trim() ||
+            null,
+
+          price:
+            Number(elements.price.value || 0),
+
+          deposit_amount:
+            Number(elements.deposit.value || 0),
+
+          quantity_available:
+            Number(elements.quantity.value || 0),
+
+          dimensions:
+            elements.dimensions.value.trim() ||
+            null,
+
+          capacity:
+            elements.capacity.value.trim() ||
+            null,
+
+          rental_use:
+            elements.rentalUse.value ||
+            null,
+
+          water_requirements:
+            elements.water.value.trim() ||
+            null,
+
+          image_url:
+            elements.image.value.trim() ||
+            null,
+
+          product_page_url:
+            elements.page.value.trim() ||
+            null,
+
+          active:
+            elements.active.checked,
+
+          featured:
+            elements.featured.checked,
+
+          sort_order:
+            Number(elements.sort.value || 0),
+
+          updated_at:
+            new Date().toISOString()
+        };
+
+        if (
+          !payload.name ||
+          !payload.slug ||
+          !payload.category_id
+        ) {
+          showAlert(
+            elements.modalAlert,
+            "Name, slug and category are required."
+          );
+
+          return;
+        }
+
+        state.saving = true;
+        elements.save.disabled = true;
+        elements.save.textContent =
+          "Saving...";
+
+        try {
+          let result;
+
+          if (state.editingId) {
+            result =
+              await senSupabase
+                .from("rental_items")
+                .update(payload)
+                .eq(
+                  "id",
+                  state.editingId
+                );
+          } else {
+            result =
+              await senSupabase
+                .from("rental_items")
+                .insert(payload);
+          }
+
+          if (result.error) {
+            throw result.error;
+          }
+
+          showAlert(
+            elements.modalAlert,
+            state.editingId
+              ? "Rental item updated successfully."
+              : "Rental item created successfully.",
+            "success"
+          );
+
+          setTimeout(async () => {
+            closeModal();
+            await loadInventory();
+          }, 500);
+
+        } catch (error) {
+          showAlert(
+            elements.modalAlert,
+            `Rental item could not be saved: ${errorMessage(error)}`
+          );
+
+        } finally {
+          state.saving = false;
+          elements.save.disabled = false;
+          elements.save.textContent =
+            "Save Rental Item";
+        }
+      }
+
+      async function toggleItem(itemId) {
+        const item =
+          state.items.find(
+            value => value.id === itemId
+          );
+
+        if (!item) {
+          return;
+        }
+
+        const {
+          error
+        } =
+          await senSupabase
+            .from("rental_items")
+            .update({
+              active: !item.active,
+              updated_at:
+                new Date().toISOString()
+            })
+            .eq("id", itemId);
+
+        if (error) {
+          showAlert(
+            elements.pageAlert,
+            error.message
+          );
+
+          return;
+        }
+
+        await loadInventory();
+      }
+
+      async function deleteItem(itemId) {
+        const item =
+          state.items.find(
+            value => value.id === itemId
+          );
+
+        if (!item) {
+          return;
+        }
+
+        const confirmed =
+          window.confirm(
+            `Delete "${item.name}" permanently?`
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        const {
+          error
+        } =
+          await senSupabase
+            .from("rental_items")
+            .delete()
+            .eq("id", itemId);
+
+        if (error) {
+          showAlert(
+            elements.pageAlert,
+            `Item could not be deleted: ${error.message}`
+          );
+
+          return;
+        }
+
+        await loadInventory();
+      }
+
+      elements.name.addEventListener(
+        "input",
+        () => {
+          if (!state.editingId) {
+            elements.slug.value =
+              slugify(
+                elements.name.value
+              );
+          }
+        }
+      );
+
+      elements.search.addEventListener(
+        "input",
+        event => {
+          state.search =
+            event.target.value;
+
+          renderItems();
+        }
+      );
+
+      elements.categoryFilter.addEventListener(
+        "change",
+        event => {
+          state.category =
+            event.target.value;
+
+          renderItems();
+        }
+      );
+
+      elements.refresh.addEventListener(
+        "click",
+        loadInventory
+      );
+
+      elements.addButton.addEventListener(
+        "click",
+        () => openModal()
+      );
+
+      elements.closeModal.addEventListener(
+        "click",
+        closeModal
+      );
+
+      elements.cancel.addEventListener(
+        "click",
+        closeModal
+      );
+
+      elements.form.addEventListener(
+        "submit",
+        saveItem
+      );
+
+      elements.modal.addEventListener(
+        "click",
+        event => {
+          if (
+            event.target ===
+            elements.modal
+          ) {
+            closeModal();
+          }
+        }
+      );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const edit =
+            event.target.closest(
+              "[data-edit-id]"
+            );
+
+          const toggle =
+            event.target.closest(
+              "[data-toggle-id]"
+            );
+
+          const remove =
+            event.target.closest(
+              "[data-delete-id]"
+            );
+
+          if (edit) {
+            const item =
+              state.items.find(
+                value =>
+                  value.id ===
+                  edit.dataset.editId
+              );
+
+            openModal(item);
+            return;
+          }
+
+          if (toggle) {
+            toggleItem(
+              toggle.dataset.toggleId
+            );
+
+            return;
+          }
+
+          if (remove) {
+            deleteItem(
+              remove.dataset.deleteId
+            );
+          }
+        }
+      );
+
+      async function initialize() {
+        try {
+          const authorized =
+            await requireAdmin();
+
+          if (!authorized) {
+            return;
+          }
+
+          await loadInventory();
+
+        } catch (error) {
+          showAlert(
+            elements.pageAlert,
+            errorMessage(error)
+          );
+
+          elements.loading.hidden = true;
+        }
+      }
+
+      initialize();
+    })();
+  </script>
+
+</body>
+</html>

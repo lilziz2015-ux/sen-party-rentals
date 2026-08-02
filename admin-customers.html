@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>
+    Customers | Sen Party Rentals
+  </title>
+
+  <meta
+    name="robots"
+    content="noindex, nofollow"
+  >
+
+  <meta
+    name="theme-color"
+    content="#d90429"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --black: #0b0b0d;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f5f6f8;
+      --white: #ffffff;
+      --success: #15803d;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow:
+        0 18px 45px rgba(17, 24, 39, 0.09);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .page-shell {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 28px;
+      border-bottom:
+        1px solid var(--line);
+      background:
+        rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .back-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      width: min(340px, 44vw);
+    }
+
+    .search-box i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .search-box input {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px 0 42px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--red);
+      box-shadow:
+        0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .refresh-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+    }
+
+    .refresh-button.loading i {
+      animation:
+        spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .page-content {
+      width:
+        min(
+          1240px,
+          calc(100% - 32px)
+        );
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 13px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .stat-card strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      border-bottom:
+        1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .customer-count {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .customer-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .customer-table th,
+    .customer-table td {
+      padding: 14px 16px;
+      border-bottom:
+        1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .customer-table th {
+      color: var(--muted);
+      background: #fafafa;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .customer-table td {
+      font-size: 0.84rem;
+    }
+
+    .customer-table tbody tr:hover {
+      background: #fffafb;
+    }
+
+    .customer-cell {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .customer-avatar {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--gradient);
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .customer-cell strong,
+    .customer-cell small {
+      display: block;
+    }
+
+    .customer-cell small {
+      margin-top: 3px;
+      color: var(--muted);
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .contact-button {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--red);
+      background: #ffffff;
+      text-decoration: none;
+    }
+
+    .contact-button:hover {
+      border-color: var(--red);
+      background: #fff1f3;
+    }
+
+    .view-button {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--red);
+      background: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .loading,
+    .empty {
+      padding: 60px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 16px;
+      }
+
+      .topbar-actions {
+        width: 100%;
+      }
+
+      .search-box {
+        flex: 1;
+        width: auto;
+      }
+
+      .page-content {
+        width:
+          min(
+            100% - 22px,
+            1240px
+          );
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-shell">
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <a
+          href="./admin.html"
+          class="back-button"
+          aria-label="Return to dashboard"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+
+        <div>
+          <h1>
+            Customers
+          </h1>
+
+          <p>
+            View customer information and booking activity.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="topbar-actions">
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+          <input
+            id="customer-search"
+            type="search"
+            placeholder="Search customers..."
+            autocomplete="off"
+          >
+        </div>
+
+        <button
+          type="button"
+          class="refresh-button"
+          id="refresh-button"
+          aria-label="Refresh customers"
+        >
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+
+      </div>
+
+    </header>
+
+    <main class="page-content">
+
+      <div
+        class="alert"
+        id="page-alert"
+        role="alert"
+      ></div>
+
+      <section class="stats-grid">
+
+        <article class="stat-card">
+          <span>
+            Total Customers
+          </span>
+
+          <strong id="stat-total-customers">
+            0
+          </strong>
+        </article>
+
+        <article class="stat-card">
+          <span>
+            Repeat Customers
+          </span>
+
+          <strong id="stat-repeat-customers">
+            0
+          </strong>
+        </article>
+
+        <article class="stat-card">
+          <span>
+            Total Bookings
+          </span>
+
+          <strong id="stat-total-bookings">
+            0
+          </strong>
+        </article>
+
+        <article class="stat-card">
+          <span>
+            Booked Value
+          </span>
+
+          <strong id="stat-booked-value">
+            $0.00
+          </strong>
+        </article>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <h2>
+              Customer Directory
+            </h2>
+
+            <p>
+              Contact details and booking totals.
+            </p>
+          </div>
+
+          <div
+            class="customer-count"
+            id="customer-count"
+          >
+            0 customers
+          </div>
+
+        </div>
+
+        <div
+          class="loading"
+          id="loading"
+        >
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading customers...
+        </div>
+
+        <div
+          class="table-wrap"
+          id="table-wrap"
+          hidden
+        >
+          <table class="customer-table">
+
+            <thead>
+              <tr>
+                <th>
+                  Customer
+                </th>
+
+                <th>
+                  Phone
+                </th>
+
+                <th>
+                  Bookings
+                </th>
+
+                <th>
+                  Last Event
+                </th>
+
+                <th>
+                  Total Value
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Action
+                </th>
+              </tr>
+            </thead>
+
+            <tbody id="customers-body"></tbody>
+
+          </table>
+        </div>
+
+        <div
+          class="empty"
+          id="empty"
+          hidden
+        >
+          <i class="fa-solid fa-users-slash"></i>
+          No customers found.
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SEN_SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SEN_SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const senSupabase =
+        window.supabase.createClient(
+          SEN_SUPABASE_URL,
+          SEN_SUPABASE_PUBLISHABLE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const money =
+        new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+            currency: "USD"
+          }
+        );
+
+      const state = {
+        customers: [],
+        search: "",
+        loading: false
+      };
+
+      const elements = {
+        alert:
+          document.getElementById(
+            "page-alert"
+          ),
+
+        loading:
+          document.getElementById(
+            "loading"
+          ),
+
+        tableWrap:
+          document.getElementById(
+            "table-wrap"
+          ),
+
+        empty:
+          document.getElementById(
+            "empty"
+          ),
+
+        body:
+          document.getElementById(
+            "customers-body"
+          ),
+
+        search:
+          document.getElementById(
+            "customer-search"
+          ),
+
+        refresh:
+          document.getElementById(
+            "refresh-button"
+          ),
+
+        count:
+          document.getElementById(
+            "customer-count"
+          )
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        if (
+          error instanceof Error
+        ) {
+          return error.message;
+        }
+
+        return (
+          error?.message ||
+          error?.details ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(message) {
+        elements.alert.className =
+          "alert visible error";
+
+        elements.alert.innerHTML = `
+          <i class="fa-solid fa-triangle-exclamation"></i>
+
+          <div>
+            ${escapeHtml(message)}
+          </div>
+        `;
+      }
+
+      function hideAlert() {
+        elements.alert.className =
+          "alert";
+
+        elements.alert.textContent =
+          "";
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "No bookings";
+        }
+
+        const date =
+          new Date(
+            `${value}T12:00:00`
+          );
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+          }
+        ).format(date);
+      }
+
+      function fullName(customer) {
+        return [
+          customer.first_name,
+          customer.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Unknown Customer";
+      }
+
+      function initials(customer) {
+        return [
+          customer.first_name,
+          customer.last_name
+        ]
+          .filter(Boolean)
+          .map(
+            value =>
+              String(value)
+                .charAt(0)
+                .toUpperCase()
+          )
+          .join("")
+          .slice(0, 2) ||
+          "C";
+      }
+
+      function normalizePhone(phone) {
+        return String(
+          phone || ""
+        ).replace(
+          /[^\d+]/g,
+          ""
+        );
+      }
+
+      function filteredCustomers() {
+        const term =
+          state.search
+            .trim()
+            .toLowerCase();
+
+        if (!term) {
+          return state.customers;
+        }
+
+        return state.customers.filter(
+          customer => {
+            const searchable =
+              [
+                fullName(customer),
+                customer.phone,
+                customer.email,
+                customer.last_event_date,
+                customer.booking_count
+              ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return searchable.includes(term);
+          }
+        );
+      }
+
+      function renderStats() {
+        const totalCustomers =
+          state.customers.length;
+
+        const repeatCustomers =
+          state.customers.filter(
+            customer =>
+              Number(
+                customer.booking_count || 0
+              ) > 1
+          ).length;
+
+        const totalBookings =
+          state.customers.reduce(
+            (
+              total,
+              customer
+            ) =>
+              total +
+              Number(
+                customer.booking_count || 0
+              ),
+            0
+          );
+
+        const totalValue =
+          state.customers.reduce(
+            (
+              total,
+              customer
+            ) =>
+              total +
+              Number(
+                customer.total_value || 0
+              ),
+            0
+          );
+
+        document.getElementById(
+          "stat-total-customers"
+        ).textContent =
+          String(totalCustomers);
+
+        document.getElementById(
+          "stat-repeat-customers"
+        ).textContent =
+          String(repeatCustomers);
+
+        document.getElementById(
+          "stat-total-bookings"
+        ).textContent =
+          String(totalBookings);
+
+        document.getElementById(
+          "stat-booked-value"
+        ).textContent =
+          money.format(totalValue);
+      }
+
+      function customerRow(customer) {
+        const phone =
+          normalizePhone(
+            customer.phone
+          );
+
+        const email =
+          String(
+            customer.email || ""
+          ).trim();
+
+        return `
+          <tr>
+
+            <td>
+              <div class="customer-cell">
+
+                <div class="customer-avatar">
+                  ${escapeHtml(
+                    initials(customer)
+                  )}
+                </div>
+
+                <div>
+                  <strong>
+                    ${escapeHtml(
+                      fullName(customer)
+                    )}
+                  </strong>
+
+                  <small>
+                    ${escapeHtml(
+                      email ||
+                      "No email"
+                    )}
+                  </small>
+                </div>
+
+              </div>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                customer.phone ||
+                "Not provided"
+              )}
+            </td>
+
+            <td>
+              ${Number(
+                customer.booking_count || 0
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                formatDate(
+                  customer.last_event_date
+                )
+              )}
+            </td>
+
+            <td>
+              <strong>
+                ${money.format(
+                  Number(
+                    customer.total_value || 0
+                  )
+                )}
+              </strong>
+            </td>
+
+            <td>
+              <div class="contact-actions">
+
+                <a
+                  class="contact-button"
+                  href="${
+                    phone
+                      ? `tel:${phone}`
+                      : "#"
+                  }"
+                  aria-label="Call customer"
+                >
+                  <i class="fa-solid fa-phone"></i>
+                </a>
+
+                <a
+                  class="contact-button"
+                  href="${
+                    phone
+                      ? `sms:${phone}`
+                      : "#"
+                  }"
+                  aria-label="Text customer"
+                >
+                  <i class="fa-solid fa-comment-sms"></i>
+                </a>
+
+                <a
+                  class="contact-button"
+                  href="${
+                    email
+                      ? `mailto:${encodeURIComponent(
+                          email
+                        )}`
+                      : "#"
+                  }"
+                  aria-label="Email customer"
+                >
+                  <i class="fa-solid fa-envelope"></i>
+                </a>
+
+              </div>
+            </td>
+
+            <td>
+              <button
+                type="button"
+                class="view-button"
+                data-customer-id="${escapeHtml(
+                  customer.id
+                )}"
+              >
+                View Bookings
+              </button>
+            </td>
+
+          </tr>
+        `;
+      }
+
+      function renderCustomers() {
+        const customers =
+          filteredCustomers();
+
+        elements.loading.hidden =
+          true;
+
+        elements.tableWrap.hidden =
+          customers.length === 0;
+
+        elements.empty.hidden =
+          customers.length > 0;
+
+        elements.body.innerHTML =
+          customers
+            .map(customerRow)
+            .join("");
+
+        elements.count.textContent =
+          `${customers.length} ${
+            customers.length === 1
+              ? "customer"
+              : "customers"
+          }`;
+
+        renderStats();
+      }
+
+      async function requireAdmin() {
+        const {
+          data: sessionData,
+          error: sessionError
+        } =
+          await senSupabase
+            .auth
+            .getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        const session =
+          sessionData.session;
+
+        if (!session) {
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return null;
+        }
+
+        const {
+          data: admin,
+          error: adminError
+        } =
+          await senSupabase
+            .from("admin_users")
+            .select("*")
+            .eq(
+              "user_id",
+              session.user.id
+            )
+            .eq(
+              "active",
+              true
+            )
+            .maybeSingle();
+
+        if (
+          adminError ||
+          !admin
+        ) {
+          await senSupabase
+            .auth
+            .signOut();
+
+          window.location.replace(
+            "./admin-login.html"
+          );
+
+          return null;
+        }
+
+        return {
+          session,
+          admin
+        };
+      }
+
+      async function loadCustomers() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading =
+          true;
+
+        hideAlert();
+
+        elements.refresh.classList.add(
+          "loading"
+        );
+
+        elements.refresh.disabled =
+          true;
+
+        elements.loading.hidden =
+          false;
+
+        elements.tableWrap.hidden =
+          true;
+
+        elements.empty.hidden =
+          true;
+
+        try {
+          const {
+            data: customers,
+            error: customersError
+          } =
+            await senSupabase
+              .from("customers")
+              .select(`
+                id,
+                first_name,
+                last_name,
+                phone,
+                email,
+                created_at
+              `)
+              .order(
+                "created_at",
+                {
+                  ascending: false
+                }
+              );
+
+          if (customersError) {
+            throw new Error(
+              `Customers could not be loaded: ${customersError.message}`
+            );
+          }
+
+          const {
+            data: bookings,
+            error: bookingsError
+          } =
+            await senSupabase
+              .from("bookings")
+              .select(`
+                id,
+                customer_id,
+                event_date,
+                subtotal,
+                final_total,
+                status
+              `);
+
+          if (bookingsError) {
+            throw new Error(
+              `Customer bookings could not be loaded: ${bookingsError.message}`
+            );
+          }
+
+          const bookingMap =
+            new Map();
+
+          for (
+            const booking
+            of bookings || []
+          ) {
+            const customerId =
+              booking.customer_id;
+
+            if (!customerId) {
+              continue;
+            }
+
+            const existing =
+              bookingMap.get(
+                customerId
+              ) || {
+                booking_count: 0,
+                total_value: 0,
+                last_event_date: null
+              };
+
+            existing.booking_count += 1;
+
+            existing.total_value +=
+              Number(
+                booking.final_total ??
+                booking.subtotal ??
+                0
+              );
+
+            if (
+              !existing.last_event_date ||
+              String(
+                booking.event_date
+              ) >
+              String(
+                existing.last_event_date
+              )
+            ) {
+              existing.last_event_date =
+                booking.event_date;
+            }
+
+            bookingMap.set(
+              customerId,
+              existing
+            );
+          }
+
+          state.customers =
+            (customers || [])
+              .map(
+                customer => ({
+                  ...customer,
+
+                  booking_count:
+                    bookingMap.get(
+                      customer.id
+                    )?.booking_count ||
+                    0,
+
+                  total_value:
+                    bookingMap.get(
+                      customer.id
+                    )?.total_value ||
+                    0,
+
+                  last_event_date:
+                    bookingMap.get(
+                      customer.id
+                    )?.last_event_date ||
+                    null
+                })
+              )
+              .sort(
+                (
+                  a,
+                  b
+                ) =>
+                  Number(
+                    b.booking_count
+                  ) -
+                  Number(
+                    a.booking_count
+                  )
+              );
+
+          renderCustomers();
+
+        } catch (error) {
+          console.error(
+            "Customer page error:",
+            error
+          );
+
+          const message =
+            errorMessage(error);
+
+          showAlert(message);
+
+          elements.loading.hidden =
+            true;
+
+          elements.empty.hidden =
+            false;
+
+          elements.empty.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            ${escapeHtml(message)}
+          `;
+
+        } finally {
+          state.loading =
+            false;
+
+          elements.refresh.classList.remove(
+            "loading"
+          );
+
+          elements.refresh.disabled =
+            false;
+        }
+      }
+
+      elements.search.addEventListener(
+        "input",
+        event => {
+          state.search =
+            event.target.value;
+
+          renderCustomers();
+        }
+      );
+
+      elements.refresh.addEventListener(
+        "click",
+        loadCustomers
+      );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const customerButton =
+            event.target.closest(
+              "[data-customer-id]"
+            );
+
+          if (!customerButton) {
+            return;
+          }
+
+          const customerId =
+            customerButton.dataset.customerId;
+
+          window.location.href =
+            `./admin.html?customer=${encodeURIComponent(
+              customerId
+            )}`;
+        }
+      );
+
+      async function initializePage() {
+        try {
+          const admin =
+            await requireAdmin();
+
+          if (!admin) {
+            return;
+          }
+
+          await loadCustomers();
+
+        } catch (error) {
+          const message =
+            errorMessage(error);
+
+          showAlert(message);
+
+          elements.loading.hidden =
+            true;
+        }
+      }
+
+      initializePage();
+    })();
+  </script>
+
+</body>
+
+</html>
