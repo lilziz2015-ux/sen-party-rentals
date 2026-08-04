@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calendar | Sen Party Rentals</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --red:#d90429;--red-dark:#970018;--orange:#ff6a00;--text:#202329;--muted:#6b7280;
+      --line:#e5e7eb;--bg:#f5f6f8;--white:#fff;--green:#15803d;--blue:#2563eb;
+      --yellow:#9a6700;--purple:#7c3aed;--danger:#b42318;--cyan:#0f766e;
+      --radius:18px;--shadow:0 18px 45px rgba(17,24,39,.09);
+      --gradient:linear-gradient(135deg,#970018,#d90429 58%,#ff6a00)
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;color:var(--text);background:var(--bg);font-family:Arial,Helvetica,sans-serif}
+    body.modal-open{overflow:hidden}button,input,select,textarea{font:inherit}button{cursor:pointer}[hidden]{display:none!important}
+    .topbar{position:sticky;z-index:100;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+    .topbar-left,.topbar-actions,.toolbar,.toolbar-group,.modal-actions,.quick-actions{display:flex;align-items:center;gap:10px}
+    .back,.icon-button{display:grid;width:44px;height:44px;place-items:center;border:1px solid var(--line);border-radius:12px;color:var(--red);background:#fff;text-decoration:none}
+    .icon-button.loading i{animation:spin .8s linear infinite}.topbar h1{margin:0;font-size:1.35rem}.topbar p{margin:4px 0 0;color:var(--muted);font-size:.8rem}
+    .search{position:relative;width:min(350px,38vw)}.search i{position:absolute;top:50%;left:14px;color:var(--muted);transform:translateY(-50%)}
+    .search input{width:100%;height:44px;padding:0 14px 0 42px;border:1px solid var(--line);border-radius:12px;outline:none;background:#fff}
+    .search input:focus,.select:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(217,4,41,.08)}
+    .primary-button,.toolbar-button,.view-button,.filter-button,.action-button{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;border:1px solid var(--line);border-radius:11px;color:var(--text);background:#fff;font-weight:900;text-decoration:none;font-size:.78rem}
+    .primary-button,.view-button.active,.filter-button.active,.action-button.primary{border-color:transparent;color:#fff;background:var(--gradient)}
+    .page{width:min(1600px,calc(100% - 32px));margin:0 auto;padding:26px 0 80px}
+    .alert{display:none;align-items:flex-start;gap:10px;margin-bottom:18px;padding:14px;border-radius:12px;line-height:1.5}.alert.visible{display:flex}.alert.error{border:1px solid #fecaca;color:#991b1b;background:#fff1f2}.alert.success{border:1px solid #bbf7d0;color:#166534;background:#f0fdf4}.alert.warning{border:1px solid #fde68a;color:#854d0e;background:#fffbeb}
+    .kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:18px}
+    .kpi{padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:var(--shadow)}.kpi span{display:block;color:var(--muted);font-size:.68rem;font-weight:900;text-transform:uppercase}.kpi strong{display:block;margin-top:7px;font-size:1.35rem}.kpi small{display:block;margin-top:5px;color:var(--muted);font-size:.7rem}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr)330px;gap:20px;align-items:start}
+    .panel,.side-card{overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid var(--line)}.panel-head h2{margin:0;font-size:1.1rem}.panel-head p{margin:5px 0 0;color:var(--muted);font-size:.78rem}
+    .toolbar{flex-wrap:wrap;justify-content:flex-end}.calendar-title{min-width:190px;text-align:center;font-weight:900}.select{height:42px;padding:0 11px;border:1px solid var(--line);border-radius:11px;outline:none;background:#fff;font-weight:800}
+    .calendar-scroll{overflow:auto}.month-grid{min-width:960px;display:grid;grid-template-columns:repeat(7,minmax(137px,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .weekday,.day-cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.weekday{padding:11px;text-align:center;background:#fafafa;color:var(--muted);font-size:.7rem;font-weight:900;text-transform:uppercase}
+    .day-cell{min-height:155px;padding:8px;background:#fff}.day-cell.other-month{background:#fafafa}.day-cell.today{background:#fff8fa;box-shadow:inset 0 0 0 2px rgba(217,4,41,.15)}.day-cell.blocked{background:repeating-linear-gradient(135deg,#fff7ed,#fff7ed 8px,#ffedd5 8px,#ffedd5 16px)}
+    .day-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.day-number{display:grid;width:29px;height:29px;place-items:center;border-radius:50%;color:var(--muted);font-size:.75rem;font-weight:900}.today .day-number{color:#fff;background:var(--red)}.day-add{width:27px;height:27px;border:0;border-radius:8px;color:var(--red);background:#fff1f3}
+    .blocked-label{margin:0 0 6px;padding:5px 7px;border-radius:7px;color:#9a3412;background:#ffedd5;font-size:.65rem;font-weight:900}
+    .events{display:grid;gap:5px}.event{width:100%;padding:7px 8px;overflow:hidden;border:0;border-left:4px solid currentColor;border-radius:8px;text-align:left;font-size:.68rem;line-height:1.3}.event strong,.event small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.event small{margin-top:2px;opacity:.82}
+    .pending{color:#8a5b00;background:#fff4d6}.confirmed{color:#166534;background:#dcfce7}.delivered{color:#1d4ed8;background:#dbeafe}.completed{color:#5b21b6;background:#ede9fe}.cancelled{color:#991b1b;background:#fee2e2}.default{color:#374151;background:#f3f4f6}
+    .week-grid{min-width:1050px;display:grid;grid-template-columns:90px repeat(7,minmax(135px,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}.week-grid>*{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.week-time{padding:8px;color:var(--muted);background:#fafafa;font-size:.68rem;text-align:right}.week-day-head{padding:10px;text-align:center;background:#fafafa;font-size:.72rem;font-weight:900}.week-slot{min-height:62px;padding:4px;background:#fff}.week-slot.today-column{background:#fffafb}
+    .agenda-list{display:grid;gap:10px;padding:18px}.agenda-date{margin-top:8px;padding:10px 0;border-bottom:1px solid var(--line);color:var(--red);font-weight:900}.agenda-card{display:grid;grid-template-columns:85px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left}.agenda-card h3{margin:0 0 4px;font-size:.92rem}.agenda-card p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.45}.agenda-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.mini-tag{padding:4px 7px;border-radius:999px;background:#f3f4f6;color:#4b5563;font-size:.64rem;font-weight:900}
+    .side-stack{position:sticky;top:98px;display:grid;gap:15px}.side-card{padding:16px}.side-card h3{margin:0 0 13px;font-size:.95rem}.side-card p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.5}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.summary-box{padding:12px;border-radius:11px;background:#f7f7f8}.summary-box span{display:block;color:var(--muted);font-size:.65rem;font-weight:900;text-transform:uppercase}.summary-box strong{display:block;margin-top:6px;font-size:1.15rem}
+    .legend,.side-list{display:grid;gap:8px}.legend-row{display:flex;align-items:center;gap:8px;font-size:.76rem;font-weight:800}.dot{width:11px;height:11px;border-radius:50%}
+    .side-item{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;background:#fff;text-align:left}.side-item strong,.side-item small{display:block}.side-item small{margin-top:4px;color:var(--muted);line-height:1.4}
+    .quick-actions{flex-wrap:wrap}.quick-actions .action-button{flex:1;min-width:120px}
+    .loading,.empty{padding:58px 20px;color:var(--muted);text-align:center}.loading i,.empty i{display:block;margin-bottom:11px;color:var(--red);font-size:2rem}
+    .modal-backdrop{position:fixed;z-index:900;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(10,10,12,.68);backdrop-filter:blur(4px)}.modal-backdrop.visible{display:flex}
+    .modal{width:min(780px,100%);max-height:calc(100vh - 40px);overflow:auto;border-radius:22px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.28)}.modal.small{width:min(560px,100%)}
+    .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px;border-bottom:1px solid var(--line)}.modal-head h2{margin:0;font-size:1.2rem}.modal-head p{margin:5px 0 0;color:var(--muted);font-size:.8rem}.modal-close{display:grid;width:38px;height:38px;place-items:center;border:1px solid var(--line);border-radius:10px;color:var(--muted);background:#fff}
+    .modal-body{padding:20px}.details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.detail{padding:12px;border-radius:11px;background:#f7f7f8}.detail.full{grid-column:1/-1}.detail span{display:block;color:var(--muted);font-size:.66rem;font-weight:900;text-transform:uppercase}.detail strong{display:block;margin-top:5px;line-height:1.45;overflow-wrap:anywhere}
+    .item-list{display:grid;gap:8px;margin-top:14px}.item-row{display:flex;justify-content:space-between;gap:12px;padding:10px;border:1px solid var(--line);border-radius:10px}.item-row small{color:var(--muted)}
+    .modal-actions{flex-wrap:wrap;padding:17px 20px;border-top:1px solid var(--line)}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:7px;font-size:.8rem;font-weight:900}.field input,.field select,.field textarea{width:100%;border:1px solid #d8dde5;border-radius:11px;outline:none;background:#fff}.field input,.field select{height:46px;padding:0 12px}.field textarea{min-height:95px;padding:12px;resize:vertical}
+    .conflict-box{margin-top:14px;padding:13px;border:1px solid #fde68a;border-radius:11px;color:#854d0e;background:#fffbeb;font-size:.77rem;line-height:1.5}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:1250px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.layout{grid-template-columns:1fr}.side-stack{position:static;grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:850px){.topbar{align-items:flex-start;flex-direction:column;padding:14px 16px}.topbar-actions{width:100%;flex-wrap:wrap}.search{flex:1;width:auto}.page{width:min(100% - 22px,1600px)}.panel-head{align-items:flex-start;flex-direction:column}.toolbar{width:100%;justify-content:flex-start}.side-stack{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.kpi-grid{grid-template-columns:1fr}.calendar-title{width:100%;text-align:left}.view-button[data-view="month"],.view-button[data-view="week"]{display:none}#month-view,#week-view{display:none!important}#agenda-view{display:block!important}.agenda-card{grid-template-columns:72px 1fr}.agenda-card>.event{grid-column:1/-1}.details,.field-grid{grid-template-columns:1fr}.detail.full,.field.full{grid-column:auto}.modal-backdrop{align-items:flex-end;padding:0}.modal{width:100%;max-height:93vh;border-radius:22px 22px 0 0}}
+    @media print{.topbar,.kpi-grid,.side-stack,.panel-head,.modal-backdrop{display:none!important}.page{width:100%;padding:0}.layout{display:block}.panel{border:0;box-shadow:none}.month-grid{min-width:0}.day-cell{min-height:120px}.event{font-size:.6rem}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="./admin.html" class="back" aria-label="Return to dashboard"><i class="fa-solid fa-arrow-left"></i></a>
+      <div><h1>Business Calendar</h1><p>Bookings, deliveries, pickups, payments and inventory conflicts.</p></div>
+    </div>
+    <div class="topbar-actions">
+      <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="calendar-search" type="search" placeholder="Search customer, booking, phone, city or rental..." autocomplete="off"></div>
+      <button class="icon-button" id="refresh-button" aria-label="Refresh"><i class="fa-solid fa-rotate"></i></button>
+      <a class="primary-button" href="./admin-booking.html?new=1"><i class="fa-solid fa-plus"></i>New Booking</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="alert" id="page-alert" role="alert"></div>
+
+    <section class="kpi-grid">
+      <article class="kpi"><span>This Month</span><strong id="kpi-bookings">0</strong><small>Total bookings</small></article>
+      <article class="kpi"><span>This Week</span><strong id="kpi-week">0</strong><small>Upcoming events</small></article>
+      <article class="kpi"><span>Pending</span><strong id="kpi-pending">0</strong><small>Need confirmation</small></article>
+      <article class="kpi"><span>Unassigned</span><strong id="kpi-unassigned">0</strong><small>Delivery crew needed</small></article>
+      <article class="kpi"><span>Balance Due</span><strong id="kpi-balance">$0</strong><small>Upcoming balances</small></article>
+      <article class="kpi"><span>Conflicts</span><strong id="kpi-conflicts">0</strong><small>Possible inventory overlaps</small></article>
+    </section>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <div><h2>Operations Calendar</h2><p>Use Month, Week or Agenda view. Tap a date to create a booking and tap a booking to manage it.</p></div>
+          <div class="toolbar">
+            <div class="toolbar-group">
+              <button class="toolbar-button" id="previous-period"><i class="fa-solid fa-chevron-left"></i></button>
+              <button class="toolbar-button" id="today-button">Today</button>
+              <button class="toolbar-button" id="next-period"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="calendar-title" id="calendar-title"></div>
+            <div class="toolbar-group">
+              <button class="view-button active" data-view="month">Month</button>
+              <button class="view-button" data-view="week">Week</button>
+              <button class="view-button" data-view="agenda">Agenda</button>
+            </div>
+            <select class="select" id="status-filter">
+              <option value="ALL">All statuses</option><option value="PENDING">Pending</option><option value="CONFIRMED">Confirmed</option><option value="DELIVERED">Delivered</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option>
+            </select>
+            <select class="select" id="payment-filter">
+              <option value="ALL">All payments</option><option value="UNPAID">Unpaid</option><option value="PARTIAL">Partial</option><option value="PAID">Paid</option>
+            </select>
+            <select class="select" id="driver-filter"><option value="ALL">All drivers</option><option value="UNASSIGNED">Unassigned</option></select>
+            <button class="toolbar-button" id="print-button"><i class="fa-solid fa-print"></i>Print</button>
+            <button class="toolbar-button" id="export-button"><i class="fa-solid fa-file-csv"></i>Export</button>
+          </div>
+        </div>
+
+        <div class="loading" id="loading"><i class="fa-solid fa-spinner fa-spin"></i>Loading your business calendar...</div>
+        <div class="calendar-scroll" id="month-view" hidden><div class="month-grid" id="month-grid"></div></div>
+        <div class="calendar-scroll" id="week-view" hidden><div class="week-grid" id="week-grid"></div></div>
+        <div id="agenda-view" hidden><div class="agenda-list" id="agenda-list"></div></div>
+        <div class="empty" id="empty" hidden><i class="fa-solid fa-calendar-xmark"></i>No matching bookings in this period.</div>
+      </section>
+
+      <aside class="side-stack">
+        <section class="side-card">
+          <h3>Today & Tomorrow</h3>
+          <div class="side-list" id="today-list"></div>
+        </section>
+        <section class="side-card">
+          <h3>Needs Attention</h3>
+          <div class="side-list" id="attention-list"></div>
+        </section>
+        <section class="side-card">
+          <h3>Status Colors</h3>
+          <div class="legend">
+            <div class="legend-row"><span class="dot" style="background:#f59e0b"></span>Pending / New request</div>
+            <div class="legend-row"><span class="dot" style="background:#22c55e"></span>Confirmed</div>
+            <div class="legend-row"><span class="dot" style="background:#3b82f6"></span>Delivered</div>
+            <div class="legend-row"><span class="dot" style="background:#8b5cf6"></span>Completed / Picked up</div>
+            <div class="legend-row"><span class="dot" style="background:#ef4444"></span>Cancelled</div>
+            <div class="legend-row"><span class="dot" style="background:#fb923c"></span>Blocked date</div>
+          </div>
+        </section>
+        <section class="side-card">
+          <h3>Quick Actions</h3>
+          <div class="quick-actions">
+            <a class="action-button" href="./admin-deliveries.html"><i class="fa-solid fa-truck"></i>Deliveries</a>
+            <a class="action-button" href="./admin-payments.html"><i class="fa-solid fa-dollar-sign"></i>Payments</a>
+            <a class="action-button" href="./admin-inventory.html"><i class="fa-solid fa-warehouse"></i>Inventory</a>
+            <button class="action-button" id="route-button"><i class="fa-solid fa-route"></i>Today Route</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="booking-modal" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div><h2 id="booking-modal-title">Booking Details</h2><p id="booking-modal-subtitle"></p></div>
+        <button class="modal-close" data-close-modal="booking-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="details" id="booking-details"></div>
+        <div class="item-list" id="booking-items-list"></div>
+        <div class="conflict-box" id="booking-conflicts" hidden></div>
+      </div>
+      <div class="modal-actions">
+        <a class="action-button primary" id="open-booking" href="#"><i class="fa-solid fa-pen-to-square"></i>Open Booking</a>
+        <button class="action-button" id="quick-status-button"><i class="fa-solid fa-arrows-rotate"></i>Change Status</button>
+        <a class="action-button" id="maps-button" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-map-location-dot"></i>Maps</a>
+        <a class="action-button" id="call-button" href="#"><i class="fa-solid fa-phone"></i>Call</a>
+        <a class="action-button" id="text-button" href="#"><i class="fa-solid fa-comment-sms"></i>Text</a>
+        <a class="action-button" id="email-button" href="#"><i class="fa-solid fa-envelope"></i>Email</a>
+        <button class="action-button" id="print-booking-button"><i class="fa-solid fa-print"></i>Print Details</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="status-modal" aria-hidden="true">
+    <section class="modal small" role="dialog" aria-modal="true">
+      <div class="modal-head"><div><h2>Update Booking Status</h2><p>Save the new status directly to Supabase.</p></div><button class="modal-close" data-close-modal="status-modal"><i class="fa-solid fa-xmark"></i></button></div>
+      <form id="status-form">
+        <div class="modal-body">
+          <div class="alert" id="status-alert"></div>
+          <div class="field-grid">
+            <div class="field full"><label for="status-value">Status</label><select id="status-value" required><option value="PENDING">Pending</option><option value="CONFIRMED">Confirmed</option><option value="DELIVERED">Delivered</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option></select></div>
+            <div class="field full"><label for="status-note">Internal note</label><textarea id="status-note" placeholder="Optional reason or note"></textarea></div>
+          </div>
+        </div>
+        <div class="modal-actions"><button type="button" class="action-button" data-close-modal="status-modal">Cancel</button><button type="submit" class="action-button primary" id="save-status-button"><i class="fa-solid fa-floppy-disk"></i>Save Status</button></div>
+      </form>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+    "use strict";
+
+    const SUPABASE_URL = "https://tuttkwpnicgfcyeptrkv.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+    const DEFAULT_START_ADDRESS = "1 Bradley Forest, Manassas, VA 20112";
+
+    if (!window.supabase) throw new Error("Supabase JavaScript library did not load.");
+
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storageKey:"sen-party-rentals-auth" }
+    });
+
+    const money = new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"});
+    const state = {
+      admin:null, bookings:[], customers:new Map(), bookingItems:[], rentalItems:new Map(),
+      deliveries:[], admins:new Map(), blockedDates:[], settings:null, currentDate:new Date(),
+      view:"month", search:"", status:"ALL", payment:"ALL", driver:"ALL",
+      selectedBookingId:null, loading:false, savingStatus:false
+    };
+
+    const $ = id => document.getElementById(id);
+    const esc = value => String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    const dateOnly = value => value ? String(value).slice(0,10) : "";
+
+    function errorMessage(error){ return error?.message || error?.details || error?.hint || "Unknown error"; }
+    function parseDate(value){ const clean=dateOnly(value); if(!clean)return null; const date=new Date(clean+"T12:00:00"); return Number.isNaN(date.getTime())?null:date; }
+    function localDateKey(date=new Date()){ const copy=new Date(date.getTime()-date.getTimezoneOffset()*60000); return copy.toISOString().slice(0,10); }
+    function formatDate(value, options={}){ const date=value instanceof Date?value:parseDate(value); if(!date)return"Not provided"; return new Intl.DateTimeFormat("en-US",{weekday:options.weekday?"long":undefined,month:options.short?"short":"long",day:"numeric",year:options.year===false?undefined:"numeric"}).format(date); }
+    function formatTime(value){ if(!value)return""; const match=String(value).match(/^(\\d{1,2}):(\\d{2})/); if(!match)return String(value); const d=new Date(); d.setHours(Number(match[1]),Number(match[2]),0,0); return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit"}).format(d); }
+    function showAlert(element,message,type="error"){ element.className=`alert visible ${type}`; element.innerHTML=`<i class="fa-solid ${type==="success"?"fa-circle-check":type==="warning"?"fa-triangle-exclamation":"fa-circle-exclamation"}"></i><div>${esc(message)}</div>`; }
+    function hideAlert(element){ element.className="alert"; element.textContent=""; }
+    function customerFor(booking){ return state.customers.get(booking?.customer_id)||null; }
+    function customerName(customer){ return [customer?.first_name,customer?.last_name].filter(Boolean).join(" ").trim() || customer?.name || "Unknown Customer"; }
+    function statusOf(booking){ return String(booking?.status||"PENDING").toUpperCase(); }
+    function paymentStatusOf(booking){ return String(booking?.payment_status||((Number(booking?.balance_due||0)<=0&&Number(booking?.final_total||0)>0)?"PAID":"UNPAID")).toUpperCase(); }
+    function statusClass(status){ const s=String(status||"").toUpperCase(); if(s.includes("CONFIRM"))return"confirmed"; if(s.includes("DELIVER"))return"delivered"; if(s.includes("COMPLETE")||s.includes("PICKED"))return"completed"; if(s.includes("CANCEL")||s.includes("DECLIN"))return"cancelled"; if(s.includes("PEND")||s.includes("NEW")||s.includes("REQUEST"))return"pending"; return"default"; }
+    function addressOf(booking){ return [booking.event_address||booking.delivery_address||booking.address,booking.event_city||booking.city,booking.event_state||booking.state,booking.event_zip||booking.zip].filter(Boolean).join(", "); }
+    function eventStart(booking){ return booking.delivery_time||booking.setup_time||booking.start_time||booking.event_start_time||""; }
+    function eventEnd(booking){ return booking.pickup_time||booking.end_time||booking.event_end_time||""; }
+    function timeLabel(booking){ return formatTime(eventStart(booking))||"Time not set"; }
+    function deliveryFor(bookingId){ return state.deliveries.find(item=>item.booking_id===bookingId)||null; }
+    function driverIdFor(booking){ const delivery=deliveryFor(booking.id); return delivery?.driver_id||delivery?.assigned_to||delivery?.admin_user_id||booking.driver_id||booking.assigned_driver_id||null; }
+    function driverNameFor(booking){ const id=driverIdFor(booking); if(!id)return"Unassigned"; const admin=state.admins.get(id); return [admin?.first_name,admin?.last_name].filter(Boolean).join(" ").trim()||admin?.name||admin?.email||"Assigned"; }
+    function itemsFor(bookingId){ return state.bookingItems.filter(item=>item.booking_id===bookingId); }
+    function itemName(item){ const rental=state.rentalItems.get(item.rental_item_id); return item.item_name||item.name||rental?.name||"Rental item"; }
+    function startOfWeek(date){ const result=new Date(date); result.setDate(result.getDate()-result.getDay()); result.setHours(12,0,0,0); return result; }
+    function endOfWeek(date){ const result=startOfWeek(date); result.setDate(result.getDate()+6); return result; }
+    function currentPeriodBookings(){
+      const visible=filteredBookings();
+      if(state.view==="week"){ const start=startOfWeek(state.currentDate),end=endOfWeek(state.currentDate); return visible.filter(b=>{const d=parseDate(b.event_date);return d&&d>=start&&d<=end;}); }
+      const y=state.currentDate.getFullYear(),m=state.currentDate.getMonth();
+      return visible.filter(b=>{const d=parseDate(b.event_date);return d&&d.getFullYear()===y&&d.getMonth()===m;});
+    }
+    function searchableText(booking){
+      const customer=customerFor(booking);
+      const items=itemsFor(booking.id).map(itemName).join(" ");
+      return [booking.booking_number,booking.event_type,booking.event_address,booking.event_city,booking.event_state,booking.event_zip,booking.notes,booking.special_instructions,customerName(customer),customer?.email,customer?.phone,items,driverNameFor(booking)].filter(Boolean).join(" ").toLowerCase();
+    }
+    function filteredBookings(){
+      const term=state.search.trim().toLowerCase();
+      return state.bookings.filter(booking=>{
+        const status=statusOf(booking),payment=paymentStatusOf(booking),driver=driverIdFor(booking);
+        const matchesStatus=state.status==="ALL"||status===state.status||status.includes(state.status);
+        const matchesPayment=state.payment==="ALL"||payment===state.payment||payment.includes(state.payment);
+        const matchesDriver=state.driver==="ALL"||(state.driver==="UNASSIGNED"&&!driver)||driver===state.driver;
+        return matchesStatus&&matchesPayment&&matchesDriver&&(!term||searchableText(booking).includes(term));
+      });
+    }
+    function bookingsForDate(date){ const key=localDateKey(date); return filteredBookings().filter(b=>dateOnly(b.event_date)===key).sort((a,b)=>String(eventStart(a)).localeCompare(String(eventStart(b)))); }
+    function blockedForDate(date){ const key=localDateKey(date); return state.blockedDates.filter(item=>{const start=dateOnly(item.start_date||item.blocked_date||item.date);const end=dateOnly(item.end_date||item.start_date||item.blocked_date||item.date);return start&&key>=start&&key<=end;}); }
+    function conflictMap(){
+      const map=new Map();
+      const active=state.bookings.filter(b=>!statusOf(b).includes("CANCEL"));
+      for(const booking of active){
+        const key=dateOnly(booking.event_date); if(!key)continue;
+        for(const item of itemsFor(booking.id)){
+          if(!item.rental_item_id)continue;
+          const conflictKey=`${key}|${item.rental_item_id}`;
+          if(!map.has(conflictKey))map.set(conflictKey,[]);
+          map.get(conflictKey).push({booking,item});
+        }
+      }
+      return map;
+    }
+    function conflictsForBooking(booking){
+      const map=conflictMap(), conflicts=[];
+      for(const item of itemsFor(booking.id)){
+        const key=`${dateOnly(booking.event_date)}|${item.rental_item_id}`;
+        const entries=map.get(key)||[];
+        const total=entries.reduce((sum,entry)=>sum+Number(entry.item.quantity||1),0);
+        const rental=state.rentalItems.get(item.rental_item_id);
+        const available=Number(rental?.quantity_available??rental?.quantity??rental?.inventory_count??1);
+        if(entries.length>1||total>available)conflicts.push(`${itemName(item)}: ${total} booked, ${available} available`);
+      }
+      return conflicts;
+    }
+    function eventHtml(booking){
+      const customer=customerFor(booking),status=statusOf(booking),conflicts=conflictsForBooking(booking);
+      return `<button type="button" class="event ${statusClass(status)}" data-booking-id="${esc(booking.id)}" title="${esc(customerName(customer))}">
+        <strong>${esc(timeLabel(booking))} · ${esc(customerName(customer))}${conflicts.length?" ⚠":""}</strong>
+        <small>${esc(booking.booking_number||booking.event_type||"Booking")} · ${esc(paymentStatusOf(booking))}</small>
+      </button>`;
+    }
+
+    function renderTitle(){
+      if(state.view==="week"){
+        const start=startOfWeek(state.currentDate),end=endOfWeek(state.currentDate);
+        $("calendar-title").textContent=`${formatDate(start,{short:true,year:false})} – ${formatDate(end,{short:true})}`;
+      }else{
+        $("calendar-title").textContent=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(state.currentDate);
+      }
+    }
+    function renderMonth(){
+      const year=state.currentDate.getFullYear(),month=state.currentDate.getMonth(),first=new Date(year,month,1),start=new Date(year,month,1-first.getDay()),today=localDateKey();
+      let html=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(day=>`<div class="weekday">${day}</div>`).join("");
+      let hasAny=false;
+      for(let index=0;index<42;index++){
+        const date=new Date(start); date.setDate(start.getDate()+index);
+        const key=localDateKey(date),bookings=bookingsForDate(date),blocks=blockedForDate(date); hasAny ||= bookings.length>0||blocks.length>0;
+        html+=`<div class="day-cell ${date.getMonth()!==month?"other-month":""} ${key===today?"today":""} ${blocks.length?"blocked":""}">
+          <div class="day-head"><span class="day-number">${date.getDate()}</span><button type="button" class="day-add" data-new-date="${key}" aria-label="New booking on ${key}"><i class="fa-solid fa-plus"></i></button></div>
+          ${blocks.map(block=>`<div class="blocked-label">${esc(block.reason||block.title||"Blocked")}</div>`).join("")}
+          <div class="events">${bookings.slice(0,5).map(eventHtml).join("")}${bookings.length>5?`<button class="event default" data-agenda-date="${key}"><strong>+${bookings.length-5} more</strong></button>`:""}</div>
+        </div>`;
+      }
+      $("month-grid").innerHTML=html;
+      $("empty").hidden=hasAny;
+    }
+    function renderWeek(){
+      const start=startOfWeek(state.currentDate),today=localDateKey(),hours=[];
+      for(let hour=7;hour<=22;hour++)hours.push(hour);
+      let html=`<div class="week-day-head">Time</div>`;
+      for(let day=0;day<7;day++){const date=new Date(start);date.setDate(start.getDate()+day);html+=`<div class="week-day-head">${formatDate(date,{short:true,year:false})}</div>`;}
+      for(const hour of hours){
+        const hourDate=new Date();hourDate.setHours(hour,0,0,0);
+        html+=`<div class="week-time">${new Intl.DateTimeFormat("en-US",{hour:"numeric"}).format(hourDate)}</div>`;
+        for(let day=0;day<7;day++){
+          const date=new Date(start);date.setDate(start.getDate()+day);
+          const bookings=bookingsForDate(date).filter(b=>Number(String(eventStart(b)||"0").split(":")[0])===hour);
+          html+=`<div class="week-slot ${localDateKey(date)===today?"today-column":""}">${bookings.map(eventHtml).join("")}</div>`;
+        }
+      }
+      $("week-grid").innerHTML=html;
+      $("empty").hidden=currentPeriodBookings().length>0;
+    }
+    function renderAgenda(){
+      const bookings=currentPeriodBookings().sort((a,b)=>dateOnly(a.event_date).localeCompare(dateOnly(b.event_date))||String(eventStart(a)).localeCompare(String(eventStart(b))));
+      let lastDate="",html="";
+      for(const booking of bookings){
+        const key=dateOnly(booking.event_date),customer=customerFor(booking),status=statusOf(booking),items=itemsFor(booking.id),delivery=deliveryFor(booking.id);
+        if(key!==lastDate){ html+=`<div class="agenda-date">${esc(formatDate(key,{weekday:true}))}</div>`; lastDate=key; }
+        html+=`<button type="button" class="agenda-card" data-booking-id="${esc(booking.id)}">
+          <div><strong>${esc(timeLabel(booking))}</strong></div>
+          <div><h3>${esc(customerName(customer))} · ${esc(booking.booking_number||"Booking")}</h3>
+          <p>${esc(booking.event_type||"Event")} · ${esc(addressOf(booking)||"No address")}</p>
+          <div class="agenda-meta"><span class="mini-tag">${items.length} item${items.length===1?"":"s"}</span><span class="mini-tag">${esc(driverNameFor(booking))}</span><span class="mini-tag">${esc(paymentStatusOf(booking))}</span>${delivery?.pickup_time?`<span class="mini-tag">Pickup ${esc(formatTime(delivery.pickup_time))}</span>`:""}</div></div>
+          <span class="event ${statusClass(status)}">${esc(status)}</span>
+        </button>`;
+      }
+      $("agenda-list").innerHTML=html;
+      $("empty").hidden=bookings.length>0;
+    }
+    function renderKPIs(){
+      const now=new Date(),monthBookings=state.bookings.filter(b=>{const d=parseDate(b.event_date);return d&&d.getFullYear()===state.currentDate.getFullYear()&&d.getMonth()===state.currentDate.getMonth();});
+      const weekStart=startOfWeek(now),weekEnd=endOfWeek(now),weekBookings=state.bookings.filter(b=>{const d=parseDate(b.event_date);return d&&d>=weekStart&&d<=weekEnd&&!statusOf(b).includes("CANCEL");});
+      const pending=state.bookings.filter(b=>{const s=statusOf(b);return s.includes("PEND")||s.includes("NEW")||s.includes("REQUEST");});
+      const unassigned=state.bookings.filter(b=>{const d=parseDate(b.event_date);return d&&d>=now&&!driverIdFor(b)&&!statusOf(b).includes("CANCEL");});
+      const balance=state.bookings.filter(b=>{const d=parseDate(b.event_date);return d&&d>=now&&!statusOf(b).includes("CANCEL");}).reduce((sum,b)=>sum+Math.max(0,Number(b.balance_due||0)),0);
+      let conflictCount=0; for(const booking of state.bookings)if(conflictsForBooking(booking).length)conflictCount++;
+      $("kpi-bookings").textContent=monthBookings.length;$("kpi-week").textContent=weekBookings.length;$("kpi-pending").textContent=pending.length;$("kpi-unassigned").textContent=unassigned.length;$("kpi-balance").textContent=money.format(balance);$("kpi-conflicts").textContent=conflictCount;
+    }
+    function renderSidebar(){
+      const today=new Date(),tomorrow=new Date();tomorrow.setDate(today.getDate()+1);
+      const todayKeys=new Set([localDateKey(today),localDateKey(tomorrow)]);
+      const near=filteredBookings().filter(b=>todayKeys.has(dateOnly(b.event_date))).sort((a,b)=>dateOnly(a.event_date).localeCompare(dateOnly(b.event_date))||String(eventStart(a)).localeCompare(String(eventStart(b))));
+      $("today-list").innerHTML=near.length?near.map(b=>`<button class="side-item" data-booking-id="${esc(b.id)}"><strong>${dateOnly(b.event_date)===localDateKey(today)?"Today":"Tomorrow"} · ${esc(timeLabel(b))}</strong><small>${esc(customerName(customerFor(b)))} · ${esc(b.booking_number||"Booking")}</small></button>`).join(""):`<p>No bookings today or tomorrow.</p>`;
+      const attention=[];
+      for(const b of state.bookings){
+        const d=parseDate(b.event_date); if(!d||d<new Date(new Date().setHours(0,0,0,0))||statusOf(b).includes("CANCEL"))continue;
+        if(!driverIdFor(b))attention.push({b,text:"Delivery not assigned"});
+        else if(Number(b.balance_due||0)>0)attention.push({b,text:`Balance ${money.format(Number(b.balance_due||0))}`});
+        else if(conflictsForBooking(b).length)attention.push({b,text:"Possible inventory conflict"});
+      }
+      $("attention-list").innerHTML=attention.slice(0,8).map(x=>`<button class="side-item" data-booking-id="${esc(x.b.id)}"><strong>${esc(x.text)}</strong><small>${esc(formatDate(x.b.event_date,{short:true}))} · ${esc(customerName(customerFor(x.b)))}</small></button>`).join("")||`<p>Nothing urgent right now.</p>`;
+    }
+    function render(){
+      renderTitle();
+      $("month-view").hidden=state.view!=="month";$("week-view").hidden=state.view!=="week";$("agenda-view").hidden=state.view!=="agenda";
+      if(state.view==="month")renderMonth(); if(state.view==="week")renderWeek(); if(state.view==="agenda")renderAgenda();
+      renderKPIs();renderSidebar();
+    }
+    function populateDrivers(){
+      const select=$("driver-filter"),current=select.value;
+      select.innerHTML=`<option value="ALL">All drivers</option><option value="UNASSIGNED">Unassigned</option>${[...state.admins.entries()].map(([id,admin])=>`<option value="${esc(id)}">${esc([admin.first_name,admin.last_name].filter(Boolean).join(" ")||admin.name||admin.email||"Staff")}</option>`).join("")}`;
+      if([...select.options].some(o=>o.value===current))select.value=current;
+    }
+    function openBookingModal(id){
+      const booking=state.bookings.find(item=>item.id===id);if(!booking)return;state.selectedBookingId=id;
+      const customer=customerFor(booking),address=addressOf(booking),phone=customer?.phone||"",email=customer?.email||"",delivery=deliveryFor(id),items=itemsFor(id),conflicts=conflictsForBooking(booking);
+      $("booking-modal-title").textContent=booking.booking_number||"Booking Details";$("booking-modal-subtitle").textContent=`${formatDate(booking.event_date,{weekday:true})} · ${statusOf(booking)}`;
+      const details=[
+        ["Customer",customerName(customer)],["Phone",phone||"Not provided"],["Email",email||"Not provided"],["Event Type",booking.event_type||"Not provided"],
+        ["Event Time",`${formatTime(booking.start_time||booking.event_start_time)||"Not set"}${eventEnd(booking)?` – ${formatTime(eventEnd(booking))}`:""}`],
+        ["Delivery / Setup",formatTime(delivery?.delivery_time||eventStart(booking))||"Not set"],["Pickup",formatTime(delivery?.pickup_time||booking.pickup_time)||"Not set"],
+        ["Driver / Crew",driverNameFor(booking)],["Address",address||"Not provided"],["Status",statusOf(booking)],["Payment",paymentStatusOf(booking)],
+        ["Final Total",money.format(Number(booking.final_total??booking.subtotal??0))],["Balance Due",money.format(Math.max(0,Number(booking.balance_due||0)))],
+        ["Setup",`${booking.setup_location||"Not provided"} / ${booking.surface_type||"Surface not provided"}`],
+        ["Notes",booking.special_instructions||booking.notes||"No notes"]
+      ];
+      $("booking-details").innerHTML=details.map(([label,value],index)=>`<div class="detail ${index===8||index===13?"full":""}"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join("");
+      $("booking-items-list").innerHTML=items.length?`<h3>Rental Items</h3>${items.map(item=>`<div class="item-row"><div><strong>${esc(itemName(item))}</strong><small>Quantity ${esc(item.quantity||1)}</small></div><strong>${money.format(Number(item.unit_price||item.price||0)*Number(item.quantity||1))}</strong></div>`).join("")}`:`<p>No booking items found.</p>`;
+      $("booking-conflicts").hidden=!conflicts.length;$("booking-conflicts").innerHTML=conflicts.length?`<strong><i class="fa-solid fa-triangle-exclamation"></i> Inventory warning</strong><br>${conflicts.map(esc).join("<br>")}`:"";
+      $("open-booking").href=`./admin-booking.html?id=${encodeURIComponent(id)}`;
+      $("maps-button").hidden=!address;$("maps-button").href=address?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`:"#";
+      $("call-button").hidden=!phone;$("call-button").href=phone?`tel:${phone.replace(/[^\\d+]/g,"")}`:"#";
+      $("text-button").hidden=!phone;$("text-button").href=phone?`sms:${phone.replace(/[^\\d+]/g,"")}`:"#";
+      $("email-button").hidden=!email;$("email-button").href=email?`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Sen Party Rentals - "+(booking.booking_number||"Booking"))}`:"#";
+      openModal("booking-modal");
+    }
+    function openModal(id){ $(id).classList.add("visible");$(id).setAttribute("aria-hidden","false");document.body.classList.add("modal-open"); }
+    function closeModal(id){ $(id).classList.remove("visible");$(id).setAttribute("aria-hidden","true"); if(!document.querySelector(".modal-backdrop.visible"))document.body.classList.remove("modal-open"); }
+    function openStatusModal(){
+      const booking=state.bookings.find(item=>item.id===state.selectedBookingId);if(!booking)return;
+      $("status-value").value=statusOf(booking);$("status-note").value="";hideAlert($("status-alert"));openModal("status-modal");
+    }
+    async function saveStatus(event){
+      event.preventDefault();if(state.savingStatus||!state.selectedBookingId)return;state.savingStatus=true;$("save-status-button").disabled=true;
+      try{
+        const newStatus=$("status-value").value,note=$("status-note").value.trim();
+        const update={status:newStatus,updated_at:new Date().toISOString()};
+        const result=await db.from("bookings").update(update).eq("id",state.selectedBookingId).select().single();
+        if(result.error)throw result.error;
+        if(note){
+          const history=await db.from("booking_status_history").insert({booking_id:state.selectedBookingId,status:newStatus,notes:note,changed_by:state.admin?.id||null});
+          if(history.error)console.warn("Status history note was not saved:",history.error);
+        }
+        const index=state.bookings.findIndex(item=>item.id===state.selectedBookingId);if(index>=0)state.bookings[index]={...state.bookings[index],...result.data};
+        showAlert($("status-alert"),"Status updated successfully.","success");render();
+        setTimeout(()=>{closeModal("status-modal");closeModal("booking-modal");},500);
+      }catch(error){showAlert($("status-alert"),`Status could not be saved: ${errorMessage(error)}`);}
+      finally{state.savingStatus=false;$("save-status-button").disabled=false;}
+    }
+    function exportCSV(){
+      const rows=[["Booking","Date","Start","End","Customer","Phone","Email","Address","Status","Payment","Balance","Driver","Items"]];
+      for(const b of currentPeriodBookings()){
+        const c=customerFor(b);
+        rows.push([b.booking_number||b.id,dateOnly(b.event_date),eventStart(b),eventEnd(b),customerName(c),c?.phone||"",c?.email||"",addressOf(b),statusOf(b),paymentStatusOf(b),Number(b.balance_due||0),driverNameFor(b),itemsFor(b.id).map(item=>`${itemName(item)} x${item.quantity||1}`).join("; ")]);
+      }
+      const csv=rows.map(row=>row.map(value=>`"${String(value??"").replaceAll('"','""')}"`).join(",")).join("\\n");
+      const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=url;a.download=`sen-party-calendar-${localDateKey()}.csv`;a.click();URL.revokeObjectURL(url);
+    }
+    function openTodayRoute(){
+      const today=localDateKey(),bookings=state.bookings.filter(b=>dateOnly(b.event_date)===today&&!statusOf(b).includes("CANCEL")&&addressOf(b));
+      if(!bookings.length){showAlert($("page-alert"),"There are no delivery addresses for today.","warning");return;}
+      const start=state.settings?.delivery_start_address||state.settings?.business_address||DEFAULT_START_ADDRESS;
+      const addresses=bookings.sort((a,b)=>String(eventStart(a)).localeCompare(String(eventStart(b)))).map(addressOf);
+      const destination=addresses.pop(),waypoints=addresses;
+      const url=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(destination)}${waypoints.length?`&waypoints=${encodeURIComponent(waypoints.join("|"))}`:""}&travelmode=driving`;
+      window.open(url,"_blank","noopener");
+    }
+    async function requireAdmin(){
+      const sessionResult=await db.auth.getSession();if(sessionResult.error)throw sessionResult.error;
+      const session=sessionResult.data.session;if(!session){location.replace("./admin-login.html");return false;}
+      const adminResult=await db.from("admin_users").select("*").eq("user_id",session.user.id).eq("active",true).maybeSingle();
+      if(adminResult.error||!adminResult.data){await db.auth.signOut();location.replace("./admin-login.html");return false;}
+      state.admin=adminResult.data;return true;
+    }
+    async function optionalQuery(table){
+      const result=await db.from(table).select("*");if(result.error){console.warn(`${table} could not be loaded:`,result.error);return [];}return result.data||[];
+    }
+    async function loadData(){
+      if(state.loading)return;state.loading=true;hideAlert($("page-alert"));$("refresh-button").classList.add("loading");$("loading").hidden=false;$("month-view").hidden=true;$("week-view").hidden=true;$("agenda-view").hidden=true;
+      try{
+        const [bookings,customers,bookingItems,rentalItems,deliveries,admins,blocked,settings] = await Promise.all([
+          db.from("bookings").select("*").order("event_date",{ascending:true}),
+          db.from("customers").select("*"),
+          optionalQuery("booking_items"),optionalQuery("rental_items"),optionalQuery("delivery_assignments"),optionalQuery("admin_users"),optionalQuery("blocked_dates"),optionalQuery("business_settings")
+        ]);
+        if(bookings.error)throw new Error(`Bookings could not be loaded: ${bookings.error.message}`);
+        if(customers.error)throw new Error(`Customers could not be loaded: ${customers.error.message}`);
+        state.bookings=bookings.data||[];state.customers=new Map((customers.data||[]).map(item=>[item.id,item]));state.bookingItems=bookingItems;
+        state.rentalItems=new Map(rentalItems.map(item=>[item.id,item]));state.deliveries=deliveries;state.admins=new Map(admins.map(item=>[item.id||item.user_id,item]));
+        state.blockedDates=blocked;state.settings=settings[0]||null;populateDrivers();$("loading").hidden=true;render();
+      }catch(error){$("loading").hidden=true;showAlert($("page-alert"),errorMessage(error));}
+      finally{state.loading=false;$("refresh-button").classList.remove("loading");}
+    }
+
+    $("previous-period").addEventListener("click",()=>{ if(state.view==="week")state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth(),state.currentDate.getDate()-7);else state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth()-1,1);render(); });
+    $("next-period").addEventListener("click",()=>{ if(state.view==="week")state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth(),state.currentDate.getDate()+7);else state.currentDate=new Date(state.currentDate.getFullYear(),state.currentDate.getMonth()+1,1);render(); });
+    $("today-button").addEventListener("click",()=>{state.currentDate=new Date();render();});
+    $("calendar-search").addEventListener("input",event=>{state.search=event.target.value;render();});
+    $("status-filter").addEventListener("change",event=>{state.status=event.target.value;render();});
+    $("payment-filter").addEventListener("change",event=>{state.payment=event.target.value;render();});
+    $("driver-filter").addEventListener("change",event=>{state.driver=event.target.value;render();});
+    $("refresh-button").addEventListener("click",loadData);$("print-button").addEventListener("click",()=>window.print());$("export-button").addEventListener("click",exportCSV);$("route-button").addEventListener("click",openTodayRoute);
+    $("quick-status-button").addEventListener("click",openStatusModal);$("status-form").addEventListener("submit",saveStatus);
+    $("print-booking-button").addEventListener("click",()=>window.print());
+    document.addEventListener("click",event=>{
+      const view=event.target.closest("[data-view]"),booking=event.target.closest("[data-booking-id]"),newDate=event.target.closest("[data-new-date]"),agendaDate=event.target.closest("[data-agenda-date]"),close=event.target.closest("[data-close-modal]");
+      if(view){state.view=view.dataset.view;document.querySelectorAll("[data-view]").forEach(button=>button.classList.toggle("active",button===view));render();return;}
+      if(booking){openBookingModal(booking.dataset.bookingId);return;}
+      if(newDate){location.href=`./admin-booking.html?new=1&event_date=${encodeURIComponent(newDate.dataset.newDate)}`;return;}
+      if(agendaDate){state.view="agenda";document.querySelectorAll("[data-view]").forEach(button=>button.classList.toggle("active",button.dataset.view==="agenda"));render();return;}
+      if(close){closeModal(close.dataset.closeModal);}
+    });
+    document.querySelectorAll(".modal-backdrop").forEach(backdrop=>backdrop.addEventListener("click",event=>{if(event.target===backdrop)closeModal(backdrop.id);}));
+    document.addEventListener("keydown",event=>{if(event.key==="Escape")document.querySelectorAll(".modal-backdrop.visible").forEach(modal=>closeModal(modal.id));});
+
+    (async()=>{try{if(await requireAdmin())await loadData();}catch(error){$("loading").hidden=true;showAlert($("page-alert"),errorMessage(error));}})();
+  })();
+  </script>
+</body>
+</html>
