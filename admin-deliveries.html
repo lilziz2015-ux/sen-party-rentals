@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
 
@@ -9,7 +8,7 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
-  <title>Deliveries | Sen Party Rentals</title>
+  <title>Delivery Operations | Sen Party Rentals</title>
 
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#d90429">
@@ -24,16 +23,14 @@
       --red: #d90429;
       --red-dark: #970018;
       --orange: #ff6a00;
-      --black: #0b0b0d;
-      --dark: #17181c;
       --text: #202329;
       --muted: #6b7280;
       --line: #e5e7eb;
       --background: #f5f6f8;
       --white: #ffffff;
       --green: #15803d;
-      --yellow: #9a6700;
       --blue: #2563eb;
+      --yellow: #9a6700;
       --danger: #b42318;
       --radius: 18px;
       --shadow: 0 18px 45px rgba(17, 24, 39, 0.09);
@@ -76,6 +73,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
     [hidden] {
       display: none !important;
     }
@@ -84,21 +86,40 @@
       position: sticky;
       z-index: 100;
       top: 0;
-      min-height: 76px;
       display: flex;
+      min-height: 76px;
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      padding: 14px 28px;
+      padding: 14px 24px;
       border-bottom: 1px solid var(--line);
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(14px);
     }
 
-    .topbar-left {
+    .topbar-left,
+    .topbar-actions,
+    .route-actions,
+    .modal-actions,
+    .filter-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
+    }
+
+    .topbar-left {
+      min-width: 0;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .topbar p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
     }
 
     .back-button,
@@ -115,55 +136,32 @@
       text-decoration: none;
     }
 
-    .icon-button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
     .icon-button.loading i {
       animation: spin 0.8s linear infinite;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .topbar h1 {
-      margin: 0;
-      font-size: 1.35rem;
-    }
-
-    .topbar p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .date-input {
+    .date-input,
+    .toolbar-select {
       min-height: 44px;
-      padding: 0 13px;
+      padding: 0 12px;
       border: 1px solid var(--line);
       border-radius: 12px;
       background: var(--white);
       outline: none;
     }
 
-    .date-input:focus {
+    .date-input:focus,
+    .toolbar-select:focus,
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
       border-color: var(--red);
       box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
     }
 
-    .action-button {
-      min-height: 44px;
+    .button {
       display: inline-flex;
+      min-height: 44px;
       align-items: center;
       justify-content: center;
       gap: 8px;
@@ -176,26 +174,32 @@
       font-weight: 900;
     }
 
-    .action-button.primary {
+    .button.primary {
       border-color: transparent;
-      color: #ffffff;
+      color: var(--white);
       background: var(--gradient);
-      box-shadow: 0 12px 24px rgba(217, 4, 41, 0.2);
+      box-shadow: 0 12px 25px rgba(217, 4, 41, 0.2);
     }
 
-    .page-content {
-      width: min(1280px, calc(100% - 32px));
+    .button.danger {
+      border-color: #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .page {
+      width: min(1500px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 28px 0 80px;
+      padding: 26px 0 80px;
     }
 
     .alert {
       display: none;
       align-items: flex-start;
-      gap: 11px;
-      margin-bottom: 20px;
-      padding: 15px;
-      border-radius: 13px;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 14px;
+      border-radius: 12px;
       line-height: 1.5;
     }
 
@@ -215,60 +219,57 @@
       background: #f0fdf4;
     }
 
-    .stats-grid {
+    .alert.warning {
+      border: 1px solid #fde68a;
+      color: #854d0e;
+      background: #fffbeb;
+    }
+
+    .stats {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
     .stat-card {
-      padding: 22px;
+      padding: 17px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 15px;
       background: var(--white);
       box-shadow: var(--shadow);
     }
 
-    .stat-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
     .stat-card span {
+      display: block;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.67rem;
       font-weight: 900;
-    }
-
-    .stat-icon {
-      display: grid;
-      width: 44px;
-      height: 44px;
-      place-items: center;
-      border-radius: 13px;
-      color: #ffffff;
-      background: var(--gradient);
+      text-transform: uppercase;
     }
 
     .stat-card strong {
       display: block;
-      margin-top: 13px;
-      font-size: 1.85rem;
-      line-height: 1;
+      margin-top: 7px;
+      font-size: 1.35rem;
+    }
+
+    .stat-card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.7rem;
     }
 
     .route-banner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 24px;
-      padding: 22px;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding: 21px;
       border-radius: var(--radius);
-      color: #ffffff;
+      color: var(--white);
       background:
         radial-gradient(
           circle at 85% 15%,
@@ -286,28 +287,29 @@
 
     .route-banner h2 {
       margin: 0;
-      font-size: 1.3rem;
     }
 
     .route-banner p {
-      margin: 7px 0 0;
-      color: rgba(255, 255, 255, 0.7);
+      margin: 6px 0 0;
+      color: rgba(255, 255, 255, 0.75);
       line-height: 1.5;
     }
 
-    .route-banner-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-
-    .route-banner .action-button {
-      border-color: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+    .route-banner .button {
+      border-color: rgba(255, 255, 255, 0.16);
+      color: var(--white);
       background: rgba(255, 255, 255, 0.1);
     }
 
-    .panel {
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel,
+    .side-card {
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -319,8 +321,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      padding: 20px 22px;
+      gap: 16px;
+      padding: 18px 20px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -335,6 +337,26 @@
       font-size: 0.78rem;
     }
 
+    .filter-row {
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .filter-button.active {
+      border-color: transparent;
+      color: var(--white);
+      background: var(--gradient);
+    }
+
     .delivery-list {
       display: grid;
     }
@@ -342,10 +364,10 @@
     .delivery-card {
       display: grid;
       grid-template-columns: 58px minmax(0, 1fr) auto;
-      gap: 16px;
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--line);
+      gap: 15px;
       align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
     }
 
     .delivery-card:last-child {
@@ -362,105 +384,46 @@
       height: 48px;
       place-items: center;
       border-radius: 15px;
-      color: #ffffff;
+      color: var(--white);
       background: var(--gradient);
       font-weight: 900;
-      box-shadow: 0 10px 22px rgba(217, 4, 41, 0.2);
     }
 
     .delivery-main {
       min-width: 0;
     }
 
-    .delivery-title-row {
+    .delivery-title {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
-    .delivery-title-row h3 {
+    .delivery-title h3 {
       margin: 0;
       font-size: 1rem;
     }
 
     .booking-number {
       color: var(--red);
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       font-weight: 900;
-    }
-
-    .delivery-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.78rem;
-    }
-
-    .delivery-meta span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .delivery-address {
-      margin-top: 9px;
-      color: var(--text);
-      font-size: 0.83rem;
-      font-weight: 800;
-      line-height: 1.5;
-    }
-
-    .item-summary {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.5;
-    }
-
-    .delivery-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .row-button {
-      min-height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--red);
-      background: #ffffff;
-      text-decoration: none;
-      font-size: 0.74rem;
-      font-weight: 900;
-    }
-
-    .row-button:hover {
-      border-color: var(--red);
-      background: #fff1f3;
     }
 
     .status-badge {
       display: inline-flex;
-      min-height: 28px;
+      min-height: 27px;
       align-items: center;
-      padding: 0 10px;
+      padding: 0 9px;
       border-radius: 999px;
-      font-size: 0.67rem;
+      font-size: 0.65rem;
       font-weight: 900;
       text-transform: uppercase;
     }
 
-    .status-badge.pending,
-    .status-badge.scheduled {
+    .status-badge.scheduled,
+    .status-badge.pending {
       color: #8a5b00;
       background: #fff4d6;
     }
@@ -479,14 +442,107 @@
       background: #dcfce7;
     }
 
-    .status-badge.cancelled {
+    .status-badge.cancelled,
+    .status-badge.failed {
       color: #991b1b;
       background: #fee2e2;
     }
 
+    .delivery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .delivery-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .delivery-address {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .delivery-items {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+
+    .delivery-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .row-button {
+      display: inline-flex;
+      min-height: 35px;
+      align-items: center;
+      gap: 7px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+
+    .side-stack {
+      position: sticky;
+      top: 98px;
+      display: grid;
+      gap: 15px;
+    }
+
+    .side-card {
+      padding: 16px;
+    }
+
+    .side-card h3 {
+      margin: 0 0 12px;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .side-item {
+      display: block;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--text);
+      background: var(--white);
+      text-decoration: none;
+    }
+
+    .side-item strong,
+    .side-item small {
+      display: block;
+    }
+
+    .side-item small {
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
     .loading,
     .empty {
-      padding: 64px 20px;
+      padding: 60px 20px;
       color: var(--muted);
       text-align: center;
     }
@@ -494,7 +550,7 @@
     .loading i,
     .empty i {
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 11px;
       color: var(--red);
       font-size: 2rem;
     }
@@ -516,32 +572,34 @@
     }
 
     .modal {
-      width: min(760px, 100%);
+      width: min(860px, 100%);
       max-height: calc(100vh - 40px);
       overflow-y: auto;
       border-radius: 22px;
-      background: #ffffff;
+      background: var(--white);
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal.small {
+      width: min(650px, 100%);
     }
 
     .modal-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 20px;
-      padding: 22px;
+      gap: 16px;
+      padding: 20px;
       border-bottom: 1px solid var(--line);
     }
 
     .modal-head h2 {
       margin: 0;
-      font-size: 1.25rem;
     }
 
     .modal-head p {
       margin: 5px 0 0;
       color: var(--muted);
-      line-height: 1.5;
     }
 
     .modal-close {
@@ -552,19 +610,23 @@
       place-items: center;
       border: 1px solid var(--line);
       border-radius: 10px;
-      color: var(--muted);
-      background: #ffffff;
+      background: var(--white);
     }
 
     .modal-body {
-      padding: 22px;
+      padding: 20px;
     }
 
-    .detail-grid {
+    .details-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-bottom: 22px;
+      gap: 12px;
+    }
+
+    .detail-item {
+      padding: 12px;
+      border-radius: 11px;
+      background: #f7f7f8;
     }
 
     .detail-item.full {
@@ -573,38 +635,36 @@
 
     .detail-item span {
       display: block;
-      margin-bottom: 5px;
       color: var(--muted);
-      font-size: 0.7rem;
+      font-size: 0.66rem;
       font-weight: 900;
-      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     .detail-item strong {
       display: block;
-      line-height: 1.5;
+      margin-top: 5px;
+      line-height: 1.45;
       overflow-wrap: anywhere;
     }
 
-    .checklist-title {
-      margin: 26px 0 12px;
-      font-size: 1rem;
+    .section-title {
+      margin: 24px 0 10px;
     }
 
     .checklist {
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .checklist-row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) repeat(3, 90px);
-      gap: 10px;
+      grid-template-columns: minmax(0, 1fr) repeat(3, 100px);
+      gap: 8px;
       align-items: center;
-      padding: 13px;
+      padding: 12px;
       border: 1px solid var(--line);
-      border-radius: 13px;
+      border-radius: 12px;
     }
 
     .checklist-name strong,
@@ -621,43 +681,106 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      font-size: 0.72rem;
+      gap: 5px;
+      font-size: 0.69rem;
       font-weight: 900;
     }
 
     .check-control input {
-      width: 19px;
-      height: 19px;
+      width: 18px;
+      height: 18px;
       accent-color: var(--red);
     }
 
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.79rem;
+      font-weight: 900;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d8dde5;
+      border-radius: 11px;
+      outline: none;
+      background: var(--white);
+    }
+
+    .field input,
+    .field select {
+      min-height: 46px;
+      padding: 0 12px;
+    }
+
+    .field textarea {
+      min-height: 100px;
+      padding: 12px;
+      resize: vertical;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .photo-card {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #f3f4f6;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .modal-actions {
-      display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 9px;
-      margin-top: 22px;
-      padding-top: 18px;
+      padding: 17px 20px;
       border-top: 1px solid var(--line);
     }
 
-    @media (max-width: 1000px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .delivery-card {
-        grid-template-columns: 50px minmax(0, 1fr);
-      }
-
-      .delivery-actions {
-        grid-column: 2;
-        justify-content: flex-start;
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 1200px) {
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .side-stack {
+        position: static;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 800px) {
       .topbar {
         align-items: flex-start;
         flex-direction: column;
@@ -669,17 +792,18 @@
         flex-wrap: wrap;
       }
 
-      .date-input {
+      .date-input,
+      .toolbar-select {
         flex: 1;
+      }
+
+      .page {
+        width: min(100% - 22px, 1500px);
       }
 
       .route-banner {
         align-items: flex-start;
         flex-direction: column;
-      }
-
-      .page-content {
-        width: min(100% - 22px, 1280px);
       }
 
       .panel-head {
@@ -688,21 +812,16 @@
       }
 
       .delivery-card {
-        grid-template-columns: 44px minmax(0, 1fr);
-        padding: 17px 14px;
+        grid-template-columns: 48px minmax(0, 1fr);
       }
 
-      .route-number {
-        width: 42px;
-        height: 42px;
+      .delivery-actions {
+        grid-column: 2;
+        justify-content: flex-start;
       }
 
-      .detail-grid {
+      .side-stack {
         grid-template-columns: 1fr;
-      }
-
-      .detail-item.full {
-        grid-column: auto;
       }
 
       .checklist-row {
@@ -714,9 +833,23 @@
       }
     }
 
-    @media (max-width: 520px) {
-      .stats-grid {
+    @media (max-width: 560px) {
+      .stats {
         grid-template-columns: 1fr;
+      }
+
+      .details-grid,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-item.full,
+      .field.full {
+        grid-column: auto;
+      }
+
+      .photo-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
       .modal-backdrop {
@@ -726,39 +859,44 @@
 
       .modal {
         width: 100%;
-        max-height: 92vh;
+        max-height: 93vh;
         border-radius: 22px 22px 0 0;
       }
     }
 
     @media print {
       body {
-        background: #ffffff;
+        background: var(--white);
       }
 
       .topbar,
-      .stats-grid,
-      .route-banner-actions,
+      .stats,
+      .route-actions,
       .delivery-actions,
+      .side-stack,
       .modal-backdrop,
-      .alert {
+      .alert,
+      .filter-row {
         display: none !important;
       }
 
-      .page-content {
+      .page {
         width: 100%;
         padding: 0;
       }
 
-      .route-banner,
-      .panel {
+      .layout {
+        display: block;
+      }
+
+      .panel,
+      .route-banner {
         box-shadow: none;
       }
 
       .route-banner {
-        margin-bottom: 18px;
         color: #000000;
-        background: #ffffff;
+        background: var(--white);
         border: 2px solid #000000;
       }
 
@@ -788,10 +926,10 @@
       </a>
 
       <div>
-        <h1>Deliveries</h1>
+        <h1>Delivery Operations</h1>
 
         <p>
-          Manage delivery schedules, routes and equipment checklists.
+          Routes, drivers, checklists, photos and returns.
         </p>
       </div>
 
@@ -805,6 +943,14 @@
         type="date"
       >
 
+      <select
+        id="driver-filter"
+        class="toolbar-select"
+      >
+        <option value="ALL">All drivers</option>
+        <option value="UNASSIGNED">Unassigned</option>
+      </select>
+
       <button
         type="button"
         class="icon-button"
@@ -816,73 +962,71 @@
 
       <button
         type="button"
-        class="action-button"
-        id="print-route-button"
+        class="button"
+        id="print-button"
       >
         <i class="fa-solid fa-print"></i>
         Print
+      </button>
+
+      <button
+        type="button"
+        class="button primary"
+        id="new-assignment-button"
+      >
+        <i class="fa-solid fa-plus"></i>
+        New Assignment
       </button>
 
     </div>
 
   </header>
 
-  <main class="page-content">
+  <main class="page">
 
     <div
       class="alert"
       id="page-alert"
       role="alert"
+      aria-live="assertive"
     ></div>
 
-    <section class="stats-grid">
+    <section class="stats">
 
       <article class="stat-card">
-        <div class="stat-head">
-          <span>Scheduled Stops</span>
-
-          <div class="stat-icon">
-            <i class="fa-solid fa-location-dot"></i>
-          </div>
-        </div>
-
+        <span>Stops</span>
         <strong id="stat-stops">0</strong>
+        <small>Scheduled today</small>
       </article>
 
       <article class="stat-card">
-        <div class="stat-head">
-          <span>Pending Deliveries</span>
-
-          <div class="stat-icon">
-            <i class="fa-solid fa-clock"></i>
-          </div>
-        </div>
-
-        <strong id="stat-pending">0</strong>
+        <span>Unassigned</span>
+        <strong id="stat-unassigned">0</strong>
+        <small>Need a driver</small>
       </article>
 
       <article class="stat-card">
-        <div class="stat-head">
-          <span>Delivered</span>
+        <span>In Transit</span>
+        <strong id="stat-transit">0</strong>
+        <small>Currently moving</small>
+      </article>
 
-          <div class="stat-icon">
-            <i class="fa-solid fa-circle-check"></i>
-          </div>
-        </div>
-
+      <article class="stat-card">
+        <span>Delivered</span>
         <strong id="stat-delivered">0</strong>
+        <small>Completed drop-offs</small>
       </article>
 
       <article class="stat-card">
-        <div class="stat-head">
-          <span>Checklist Items</span>
+        <span>Returns Due</span>
+        <strong id="stat-returns">0</strong>
+        <small>Pickup or return needed</small>
+      </article>
 
-          <div class="stat-icon">
-            <i class="fa-solid fa-list-check"></i>
-          </div>
-        </div>
-
-        <strong id="stat-items">0</strong>
+      <article class="stat-card">
+        <span>Checklist</span>
+        <strong id="stat-checklist">0%</strong>
+        <small>Completion rate</small>
       </article>
 
     </section>
@@ -890,24 +1034,22 @@
     <section class="route-banner">
 
       <div>
-        <h2 id="route-title">
-          Delivery Route
-        </h2>
+        <h2 id="route-title">Delivery Route</h2>
 
         <p>
           Starting location:
-          <strong>
+          <strong id="start-address">
             1 Bradley Forest, Manassas, VA 20112
           </strong>
         </p>
       </div>
 
-      <div class="route-banner-actions">
+      <div class="route-actions">
 
         <a
+          class="button"
+          id="full-route-link"
           href="#"
-          class="action-button"
-          id="open-full-route"
           target="_blank"
           rel="noopener"
         >
@@ -917,61 +1059,193 @@
 
         <button
           type="button"
-          class="action-button"
-          id="print-route-button-secondary"
+          class="button"
+          id="optimize-route-button"
         >
-          <i class="fa-solid fa-file-arrow-down"></i>
+          <i class="fa-solid fa-shuffle"></i>
+          Optimize Order
+        </button>
+
+        <button
+          type="button"
+          class="button"
+          id="route-sheet-button"
+        >
+          <i class="fa-solid fa-file-pdf"></i>
           Route Sheet
+        </button>
+
+        <button
+          type="button"
+          class="button"
+          id="export-button"
+        >
+          <i class="fa-solid fa-file-csv"></i>
+          Export CSV
         </button>
 
       </div>
 
     </section>
 
-    <section class="panel">
+    <div class="layout">
 
-      <div class="panel-head">
+      <section class="panel">
 
-        <div>
-          <h2>Delivery Schedule</h2>
+        <div class="panel-head">
 
-          <p id="schedule-description">
-            Loading scheduled deliveries...
-          </p>
+          <div>
+            <h2>Delivery Schedule</h2>
+
+            <p id="schedule-description">
+              Loading delivery assignments...
+            </p>
+          </div>
+
+          <div class="filter-row">
+
+            <button
+              type="button"
+              class="filter-button active"
+              data-status-filter="ALL"
+            >
+              All
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-status-filter="SCHEDULED"
+            >
+              Scheduled
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-status-filter="IN_TRANSIT"
+            >
+              In Transit
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-status-filter="DELIVERED"
+            >
+              Delivered
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-status-filter="RETURNED"
+            >
+              Returned
+            </button>
+
+          </div>
+
         </div>
 
-      </div>
+        <div
+          class="loading"
+          id="loading"
+        >
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading deliveries...
+        </div>
 
-      <div
-        class="loading"
-        id="loading"
-      >
-        <i class="fa-solid fa-spinner fa-spin"></i>
-        Loading deliveries...
-      </div>
+        <div
+          class="delivery-list"
+          id="delivery-list"
+          hidden
+        ></div>
 
-      <div
-        class="delivery-list"
-        id="delivery-list"
-        hidden
-      ></div>
+        <div
+          class="empty"
+          id="empty"
+          hidden
+        >
+          <i class="fa-solid fa-truck-fast"></i>
+          No deliveries found for this date.
+        </div>
 
-      <div
-        class="empty"
-        id="empty"
-        hidden
-      >
-        <i class="fa-solid fa-truck-fast"></i>
-        No delivery assignments were found for this date.
-      </div>
+      </section>
 
-    </section>
+      <aside class="side-stack">
+
+        <section class="side-card">
+          <h3>Needs Attention</h3>
+
+          <div
+            class="side-list"
+            id="attention-list"
+          ></div>
+        </section>
+
+        <section class="side-card">
+          <h3>Driver Summary</h3>
+
+          <div
+            class="side-list"
+            id="driver-summary"
+          ></div>
+        </section>
+
+        <section class="side-card">
+
+          <h3>Quick Links</h3>
+
+          <div class="side-list">
+
+            <a
+              class="side-item"
+              href="./admin-calendar.html"
+            >
+              <strong>Calendar</strong>
+              <small>View all bookings by date</small>
+            </a>
+
+            <a
+              class="side-item"
+              href="./admin.html"
+            >
+              <strong>Bookings</strong>
+              <small>Manage customer reservations</small>
+            </a>
+
+            <a
+              class="side-item"
+              href="./admin-drivers.html"
+            >
+              <strong>Drivers</strong>
+              <small>Manage driver profiles and availability</small>
+            </a>
+
+            <a
+              class="side-item"
+              href="./admin-inventory.html"
+            >
+              <strong>Inventory</strong>
+              <small>Check rental availability</small>
+            </a>
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </div>
 
   </main>
 
+  <!-- DELIVERY DETAILS MODAL -->
+
   <div
     class="modal-backdrop"
-    id="delivery-modal-backdrop"
+    id="delivery-modal"
     aria-hidden="true"
   >
 
@@ -979,25 +1253,23 @@
       class="modal"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="modal-title"
+      aria-labelledby="delivery-modal-title"
     >
 
       <div class="modal-head">
 
         <div>
-          <h2 id="modal-title">
+          <h2 id="delivery-modal-title">
             Delivery Details
           </h2>
 
-          <p id="modal-subtitle">
-            Booking and checklist information.
-          </p>
+          <p id="delivery-modal-subtitle"></p>
         </div>
 
         <button
           type="button"
           class="modal-close"
-          id="close-modal"
+          data-close-modal="delivery-modal"
           aria-label="Close delivery details"
         >
           <i class="fa-solid fa-xmark"></i>
@@ -1011,51 +1283,394 @@
           class="alert"
           id="modal-alert"
           role="alert"
+          aria-live="assertive"
         ></div>
 
         <div
-          class="detail-grid"
-          id="modal-details"
+          class="details-grid"
+          id="delivery-details"
         ></div>
 
-        <h3 class="checklist-title">
-          Delivery Checklist
+        <h3 class="section-title">
+          Manage Delivery
+        </h3>
+
+        <div class="field-grid">
+
+          <div class="field">
+            <label for="delivery-status-edit">
+              Delivery Status
+            </label>
+
+            <select id="delivery-status-edit">
+              <option value="SCHEDULED">Scheduled</option>
+              <option value="ASSIGNED">Assigned</option>
+              <option value="IN_TRANSIT">In Transit</option>
+              <option value="DELIVERED">Delivered</option>
+              <option value="RETURNED">Returned</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="delivery-driver-edit">
+              Driver
+            </label>
+
+            <select id="delivery-driver-edit">
+              <option value="">Unassigned</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="driver-notes">
+              Driver Notes
+            </label>
+
+            <textarea
+              id="driver-notes"
+              placeholder="Setup notes, access issues, damage, customer instructions or return details."
+            ></textarea>
+          </div>
+
+        </div>
+
+        <h3 class="section-title">
+          Equipment Checklist
         </h3>
 
         <div
           class="checklist"
-          id="modal-checklist"
+          id="checklist"
         ></div>
 
-        <div class="modal-actions">
+        <h3 class="section-title">
+          Proof and Photos
+        </h3>
 
-          <a
-            href="#"
-            class="action-button"
-            id="modal-map-link"
-            target="_blank"
-            rel="noopener"
-          >
-            <i class="fa-solid fa-map-location-dot"></i>
-            Navigate
-          </a>
+        <div
+          class="photo-grid"
+          id="photo-grid"
+        ></div>
 
-          <a
-            href="#"
-            class="action-button"
-            id="modal-booking-link"
-          >
-            <i class="fa-solid fa-calendar-check"></i>
-            View Booking
-          </a>
+      </div>
 
-        </div>
+      <div class="modal-actions">
+
+        <a
+          class="button"
+          id="navigate-link"
+          href="#"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fa-solid fa-diamond-turn-right"></i>
+          Navigate
+        </a>
+
+        <a
+          class="button"
+          id="call-link"
+          href="#"
+        >
+          <i class="fa-solid fa-phone"></i>
+          Call
+        </a>
+
+        <a
+          class="button"
+          id="text-link"
+          href="#"
+        >
+          <i class="fa-solid fa-comment-sms"></i>
+          Text
+        </a>
+
+        <a
+          class="button"
+          id="booking-link"
+          href="#"
+        >
+          <i class="fa-solid fa-calendar-check"></i>
+          Booking
+        </a>
+
+        <button
+          type="button"
+          class="button"
+          id="upload-photo-button"
+        >
+          <i class="fa-solid fa-camera"></i>
+          Add Photo
+        </button>
+
+        <button
+          type="button"
+          class="button primary"
+          id="save-delivery-button"
+        >
+          <i class="fa-solid fa-floppy-disk"></i>
+          Save Changes
+        </button>
 
       </div>
 
     </section>
 
   </div>
+
+  <!-- ASSIGNMENT MODAL -->
+
+  <div
+    class="modal-backdrop"
+    id="assignment-modal"
+    aria-hidden="true"
+  >
+
+    <section
+      class="modal small"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assignment-modal-title"
+    >
+
+      <div class="modal-head">
+
+        <div>
+          <h2 id="assignment-modal-title">
+            Delivery Assignment
+          </h2>
+
+          <p>
+            Create or update a driver assignment.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          data-close-modal="assignment-modal"
+          aria-label="Close assignment form"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <form id="assignment-form">
+
+        <div class="modal-body">
+
+          <div
+            class="alert"
+            id="assignment-alert"
+            role="alert"
+            aria-live="assertive"
+          ></div>
+
+          <div class="field-grid">
+
+            <div class="field full">
+
+              <label for="assignment-booking">
+                Booking
+              </label>
+
+              <select
+                id="assignment-booking"
+                required
+              >
+                <option value="">
+                  Select booking
+                </option>
+              </select>
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-driver">
+                Driver / Crew
+              </label>
+
+              <select id="assignment-driver">
+                <option value="">
+                  Unassigned
+                </option>
+              </select>
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-status">
+                Status
+              </label>
+
+              <select id="assignment-status">
+                <option value="SCHEDULED">Scheduled</option>
+                <option value="ASSIGNED">Assigned</option>
+                <option value="IN_TRANSIT">In Transit</option>
+                <option value="DELIVERED">Delivered</option>
+                <option value="RETURNED">Returned</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-date">
+                Delivery Date
+              </label>
+
+              <input
+                id="assignment-date"
+                type="date"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-window-start">
+                Window Start
+              </label>
+
+              <input
+                id="assignment-window-start"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-window-end">
+                Window End
+              </label>
+
+              <input
+                id="assignment-window-end"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-setup-time">
+                Setup Time
+              </label>
+
+              <input
+                id="assignment-setup-time"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-event-start">
+                Event Start
+              </label>
+
+              <input
+                id="assignment-event-start"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-event-end">
+                Event End
+              </label>
+
+              <input
+                id="assignment-event-end"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="assignment-pickup-time">
+                Pickup Time
+              </label>
+
+              <input
+                id="assignment-pickup-time"
+                type="time"
+              >
+
+            </div>
+
+            <div class="field full">
+
+              <label for="assignment-notes">
+                Driver Notes
+              </label>
+
+              <textarea
+                id="assignment-notes"
+                placeholder="Delivery, setup, access or pickup instructions."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="button"
+            data-close-modal="assignment-modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="button danger"
+            id="delete-assignment-button"
+            hidden
+          >
+            <i class="fa-solid fa-trash"></i>
+            Delete
+          </button>
+
+          <button
+            type="submit"
+            class="button primary"
+            id="save-assignment-button"
+          >
+            <i class="fa-solid fa-floppy-disk"></i>
+            Save Assignment
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+  <input
+    id="photo-input"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    hidden
+  >
 
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
@@ -1071,8 +1686,11 @@
       const SUPABASE_KEY =
         "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
 
-      const STARTING_ADDRESS =
+      const DEFAULT_START_ADDRESS =
         "1 Bradley Forest, Manassas, VA 20112";
+
+      const PHOTO_BUCKET =
+        "delivery-photos";
 
       if (!window.supabase) {
         throw new Error(
@@ -1080,7 +1698,7 @@
         );
       }
 
-      const senSupabase =
+      const db =
         window.supabase.createClient(
           SUPABASE_URL,
           SUPABASE_KEY,
@@ -1096,117 +1714,26 @@
         );
 
       const state = {
+        admin: null,
         deliveries: [],
         bookings: new Map(),
         customers: new Map(),
+        drivers: new Map(),
         bookingItems: [],
-        checklistItems: [],
+        checklist: [],
+        photos: [],
+        settings: null,
         selectedDate: "",
+        statusFilter: "ALL",
+        driverFilter: "ALL",
         selectedDeliveryId: null,
-        loading: false
+        editingAssignmentId: null,
+        loading: false,
+        saving: false
       };
 
-      const elements = {
-        pageAlert:
-          document.getElementById(
-            "page-alert"
-          ),
-
-        modalAlert:
-          document.getElementById(
-            "modal-alert"
-          ),
-
-        date:
-          document.getElementById(
-            "delivery-date"
-          ),
-
-        refresh:
-          document.getElementById(
-            "refresh-button"
-          ),
-
-        loading:
-          document.getElementById(
-            "loading"
-          ),
-
-        list:
-          document.getElementById(
-            "delivery-list"
-          ),
-
-        empty:
-          document.getElementById(
-            "empty"
-          ),
-
-        description:
-          document.getElementById(
-            "schedule-description"
-          ),
-
-        routeTitle:
-          document.getElementById(
-            "route-title"
-          ),
-
-        fullRoute:
-          document.getElementById(
-            "open-full-route"
-          ),
-
-        printButton:
-          document.getElementById(
-            "print-route-button"
-          ),
-
-        printSecondary:
-          document.getElementById(
-            "print-route-button-secondary"
-          ),
-
-        modalBackdrop:
-          document.getElementById(
-            "delivery-modal-backdrop"
-          ),
-
-        closeModal:
-          document.getElementById(
-            "close-modal"
-          ),
-
-        modalTitle:
-          document.getElementById(
-            "modal-title"
-          ),
-
-        modalSubtitle:
-          document.getElementById(
-            "modal-subtitle"
-          ),
-
-        modalDetails:
-          document.getElementById(
-            "modal-details"
-          ),
-
-        modalChecklist:
-          document.getElementById(
-            "modal-checklist"
-          ),
-
-        modalMap:
-          document.getElementById(
-            "modal-map-link"
-          ),
-
-        modalBooking:
-          document.getElementById(
-            "modal-booking-link"
-          )
-      };
+      const $ =
+        id => document.getElementById(id);
 
       function escapeHtml(value) {
         return String(value ?? "")
@@ -1218,10 +1745,6 @@
       }
 
       function errorMessage(error) {
-        if (error instanceof Error) {
-          return error.message;
-        }
-
         return (
           error?.message ||
           error?.details ||
@@ -1242,7 +1765,9 @@
           <i class="fa-solid ${
             type === "success"
               ? "fa-circle-check"
-              : "fa-triangle-exclamation"
+              : type === "warning"
+                ? "fa-triangle-exclamation"
+                : "fa-circle-exclamation"
           }"></i>
 
           <div>
@@ -1252,13 +1777,19 @@
       }
 
       function hideAlert(element) {
-        element.className = "alert";
-        element.textContent = "";
+        element.className =
+          "alert";
+
+        element.textContent =
+          "";
       }
 
-      function todayValue() {
-        const date = new Date();
-        const offset = date.getTimezoneOffset();
+      function localDateValue() {
+        const date =
+          new Date();
+
+        const offset =
+          date.getTimezoneOffset();
 
         return new Date(
           date.getTime() -
@@ -1270,11 +1801,13 @@
 
       function formatDate(value) {
         if (!value) {
-          return "Date not set";
+          return "Not set";
         }
 
         const date =
-          new Date(`${value}T12:00:00`);
+          new Date(
+            `${String(value).slice(0, 10)}T12:00:00`
+          );
 
         if (
           Number.isNaN(
@@ -1300,23 +1833,21 @@
           return "Not set";
         }
 
-        const parts =
-          String(value)
-            .split(":")
-            .map(Number);
+        const match =
+          String(value).match(
+            /^(\d{1,2}):(\d{2})/
+          );
 
-        if (
-          parts.length < 2 ||
-          !Number.isFinite(parts[0])
-        ) {
+        if (!match) {
           return String(value);
         }
 
-        const date = new Date();
+        const date =
+          new Date();
 
         date.setHours(
-          parts[0],
-          parts[1],
+          Number(match[1]),
+          Number(match[2]),
           0,
           0
         );
@@ -1330,18 +1861,12 @@
         ).format(date);
       }
 
-      function statusClass(value) {
-        return String(value || "PENDING")
-          .trim()
-          .toLowerCase()
-          .replaceAll(" ", "_");
-      }
-
       function bookingForDelivery(delivery) {
         return (
           state.bookings.get(
-            delivery.booking_id
-          ) || null
+            delivery?.booking_id
+          ) ||
+          null
         );
       }
 
@@ -1349,7 +1874,8 @@
         return (
           state.customers.get(
             booking?.customer_id
-          ) || null
+          ) ||
+          null
         );
       }
 
@@ -1361,12 +1887,59 @@
           .filter(Boolean)
           .join(" ")
           .trim() ||
+          customer?.name ||
           "Unknown Customer";
+      }
+
+      function driverName(driverId) {
+        if (!driverId) {
+          return "Unassigned";
+        }
+
+        const driver =
+          state.drivers.get(
+            driverId
+          );
+
+        if (!driver) {
+          return "Unknown Driver";
+        }
+
+        return [
+          driver.first_name,
+          driver.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          driver.email ||
+          "Driver";
+      }
+
+      function driverLabel(driver) {
+        const parts = [
+          driverName(driver.id)
+        ];
+
+        if (driver.vehicle_name) {
+          parts.push(
+            driver.vehicle_name
+          );
+        }
+
+        if (!driver.available) {
+          parts.push(
+            "Unavailable"
+          );
+        }
+
+        return parts.join(" — ");
       }
 
       function fullAddress(booking) {
         return [
-          booking?.event_address,
+          booking?.event_address ||
+            booking?.delivery_address,
           booking?.event_city,
           booking?.event_state,
           booking?.event_zip
@@ -1378,47 +1951,169 @@
       function itemsForBooking(bookingId) {
         return state.bookingItems.filter(
           item =>
-            item.booking_id === bookingId
+            item.booking_id ===
+            bookingId
         );
       }
 
-      function checklistForDelivery(deliveryId) {
-        return state.checklistItems.filter(
+      function checklistForDelivery(
+        deliveryId
+      ) {
+        return state.checklist.filter(
           item =>
             item.delivery_assignment_id ===
             deliveryId
         );
       }
 
-      function detailHtml(label, value, full = false) {
-        return `
-          <div class="detail-item ${
-            full ? "full" : ""
-          }">
-            <span>
-              ${escapeHtml(label)}
-            </span>
+      function photosForDelivery(
+        deliveryId
+      ) {
+        return state.photos.filter(
+          item =>
+            item.delivery_assignment_id ===
+            deliveryId
+        );
+      }
 
-            <strong>
-              ${escapeHtml(
-                value || "Not provided"
-              )}
-            </strong>
-          </div>
-        `;
+      function statusClass(value) {
+        return String(
+          value ||
+          "SCHEDULED"
+        )
+          .trim()
+          .toLowerCase()
+          .replaceAll(" ", "_");
+      }
+
+      function startAddress() {
+        return (
+          state.settings
+            ?.delivery_start_address ||
+          state.settings
+            ?.business_address ||
+          DEFAULT_START_ADDRESS
+        );
       }
 
       function mapLink(address) {
-        return address
-          ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
-              STARTING_ADDRESS
-            )}&destination=${encodeURIComponent(
-              address
-            )}&travelmode=driving`
-          : "#";
+        if (!address) {
+          return "#";
+        }
+
+        return (
+          "https://www.google.com/maps/dir/?api=1" +
+          `&origin=${encodeURIComponent(
+            startAddress()
+          )}` +
+          `&destination=${encodeURIComponent(
+            address
+          )}` +
+          "&travelmode=driving"
+        );
       }
 
-      function fullRouteLink(deliveries) {
+      function itemSummary(bookingId) {
+        const items =
+          itemsForBooking(
+            bookingId
+          );
+
+        if (!items.length) {
+          return "No rental items listed";
+        }
+
+        return items
+          .map(item => {
+            const quantity =
+              Number(
+                item.quantity ||
+                1
+              );
+
+            const name =
+              item.item_name ||
+              item.name ||
+              "Rental item";
+
+            return `${quantity}× ${name}`;
+          })
+          .join(", ");
+      }
+
+      function visibleDeliveries() {
+        return state.deliveries
+          .filter(delivery => {
+            const status =
+              String(
+                delivery.status ||
+                "SCHEDULED"
+              ).toUpperCase();
+
+            const driverId =
+              delivery.driver_id ||
+              "";
+
+            const statusMatches =
+              state.statusFilter ===
+                "ALL" ||
+              status ===
+                state.statusFilter;
+
+            const driverMatches =
+              state.driverFilter ===
+                "ALL" ||
+              (
+                state.driverFilter ===
+                  "UNASSIGNED" &&
+                !driverId
+              ) ||
+              driverId ===
+                state.driverFilter;
+
+            return (
+              statusMatches &&
+              driverMatches
+            );
+          })
+          .sort((first, second) => {
+            const firstOrder =
+              Number(
+                first.route_order ??
+                999
+              );
+
+            const secondOrder =
+              Number(
+                second.route_order ??
+                999
+              );
+
+            if (
+              firstOrder !==
+              secondOrder
+            ) {
+              return (
+                firstOrder -
+                secondOrder
+              );
+            }
+
+            return String(
+              first.delivery_window_start ||
+              first.setup_time ||
+              "23:59"
+            ).localeCompare(
+              String(
+                second.delivery_window_start ||
+                second.setup_time ||
+                "23:59"
+              )
+            );
+          });
+      }
+
+      function fullRouteUrl(deliveries) {
         const addresses =
           deliveries
             .map(bookingForDelivery)
@@ -1440,14 +2135,14 @@
             .join("|");
 
         let url =
-          `https://www.google.com/maps/dir/?api=1` +
+          "https://www.google.com/maps/dir/?api=1" +
           `&origin=${encodeURIComponent(
-            STARTING_ADDRESS
+            startAddress()
           )}` +
           `&destination=${encodeURIComponent(
             destination
           )}` +
-          `&travelmode=driving`;
+          "&travelmode=driving";
 
         if (waypoints) {
           url +=
@@ -1459,48 +2154,28 @@
         return url;
       }
 
-      function sortedDeliveries() {
-        return [...state.deliveries].sort(
-          (a, b) => {
-            const first =
-              a.delivery_window_start ||
-              a.setup_time ||
-              a.event_start_time ||
-              "23:59";
-
-            const second =
-              b.delivery_window_start ||
-              b.setup_time ||
-              b.event_start_time ||
-              "23:59";
-
-            return String(first)
-              .localeCompare(
-                String(second)
-              );
-          }
-        );
-      }
-
       function renderStats() {
         const deliveries =
-          sortedDeliveries();
+          visibleDeliveries();
 
-        const pending =
+        const unassigned =
           deliveries.filter(
-            delivery => {
-              const status =
-                String(
-                  delivery.status || ""
-                ).toUpperCase();
+            delivery =>
+              !delivery.driver_id
+          ).length;
 
-              return ![
-                "DELIVERED",
-                "COMPLETED",
-                "RETURNED",
-                "CANCELLED"
-              ].includes(status);
-            }
+        const transit =
+          deliveries.filter(
+            delivery =>
+              [
+                "IN_TRANSIT",
+                "OUT_FOR_DELIVERY"
+              ].includes(
+                String(
+                  delivery.status ||
+                  ""
+                ).toUpperCase()
+              )
           ).length;
 
         const delivered =
@@ -1508,79 +2183,104 @@
             delivery =>
               [
                 "DELIVERED",
-                "COMPLETED",
-                "RETURNED"
+                "COMPLETED"
               ].includes(
                 String(
-                  delivery.status || ""
+                  delivery.status ||
+                  ""
                 ).toUpperCase()
               )
           ).length;
 
-        document.getElementById(
-          "stat-stops"
-        ).textContent =
+        const returnsDue =
+          deliveries.filter(
+            delivery => {
+              const status =
+                String(
+                  delivery.status ||
+                  ""
+                ).toUpperCase();
+
+              return (
+                ![
+                  "RETURNED",
+                  "CANCELLED"
+                ].includes(status) &&
+                (
+                  delivery.pickup_time ||
+                  delivery.return_time ||
+                  delivery.event_end_time
+                )
+              );
+            }
+          ).length;
+
+        const checklistItems =
+          state.checklist.filter(
+            item =>
+              deliveries.some(
+                delivery =>
+                  delivery.id ===
+                  item.delivery_assignment_id
+              )
+          );
+
+        const totalChecks =
+          checklistItems.length * 3;
+
+        const completedChecks =
+          checklistItems.reduce(
+            (total, item) =>
+              total +
+              (item.loaded ? 1 : 0) +
+              (item.delivered ? 1 : 0) +
+              (item.returned ? 1 : 0),
+            0
+          );
+
+        $("stat-stops").textContent =
           String(deliveries.length);
 
-        document.getElementById(
-          "stat-pending"
-        ).textContent =
-          String(pending);
+        $("stat-unassigned").textContent =
+          String(unassigned);
 
-        document.getElementById(
-          "stat-delivered"
-        ).textContent =
+        $("stat-transit").textContent =
+          String(transit);
+
+        $("stat-delivered").textContent =
           String(delivered);
 
-        document.getElementById(
-          "stat-items"
-        ).textContent =
-          String(
-            state.checklistItems.length
-          );
+        $("stat-returns").textContent =
+          String(returnsDue);
+
+        $("stat-checklist").textContent =
+          totalChecks
+            ? `${Math.round(
+                completedChecks /
+                totalChecks *
+                100
+              )}%`
+            : "0%";
       }
 
-      function deliveryCard(delivery, index) {
+      function deliveryCard(
+        delivery,
+        index
+      ) {
         const booking =
-          bookingForDelivery(delivery);
-
-        const customer =
-          customerForBooking(booking);
-
-        const items =
-          itemsForBooking(
-            delivery.booking_id
+          bookingForDelivery(
+            delivery
           );
 
-        const itemNames =
-          items.length
-            ? items
-                .map(item => {
-                  const quantity =
-                    Number(
-                      item.quantity || 1
-                    );
-
-                  return `${quantity}× ${
-                    item.item_name ||
-                    "Rental item"
-                  }`;
-                })
-                .join(", ")
-            : "No rental items listed";
+        const customer =
+          customerForBooking(
+            booking
+          );
 
         const address =
-          fullAddress(booking);
-
-        const windowText =
-          delivery.delivery_window_start ||
-          delivery.delivery_window_end
-            ? `${formatTime(
-                delivery.delivery_window_start
-              )} – ${formatTime(
-                delivery.delivery_window_end
-              )}`
-            : "Window not set";
+          fullAddress(
+            booking
+          );
 
         return `
           <article class="delivery-card">
@@ -1591,7 +2291,7 @@
 
             <div class="delivery-main">
 
-              <div class="delivery-title-row">
+              <div class="delivery-title">
 
                 <h3>
                   ${escapeHtml(
@@ -1613,7 +2313,7 @@
                 >
                   ${escapeHtml(
                     delivery.status ||
-                    "PENDING"
+                    "SCHEDULED"
                   )}
                 </span>
 
@@ -1622,14 +2322,23 @@
               <div class="delivery-meta">
 
                 <span>
-                  <i class="fa-solid fa-truck-ramp-box"></i>
-                  Delivery:
-                  ${escapeHtml(windowText)}
+                  <i class="fa-solid fa-clock"></i>
+                  ${escapeHtml(
+                    formatTime(
+                      delivery.delivery_window_start
+                    )
+                  )}
+                  –
+                  ${escapeHtml(
+                    formatTime(
+                      delivery.delivery_window_end
+                    )
+                  )}
                 </span>
 
                 <span>
                   <i class="fa-solid fa-screwdriver-wrench"></i>
-                  Setup:
+                  Setup
                   ${escapeHtml(
                     formatTime(
                       delivery.setup_time
@@ -1638,12 +2347,21 @@
                 </span>
 
                 <span>
-                  <i class="fa-solid fa-cake-candles"></i>
-                  Event:
+                  <i class="fa-solid fa-user"></i>
+                  ${escapeHtml(
+                    driverName(
+                      delivery.driver_id
+                    )
+                  )}
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-arrow-rotate-left"></i>
+                  Pickup
                   ${escapeHtml(
                     formatTime(
-                      delivery.event_start_time ||
-                      booking?.start_time
+                      delivery.pickup_time ||
+                      delivery.return_time
                     )
                   )}
                 </span>
@@ -1651,15 +2369,22 @@
               </div>
 
               <div class="delivery-address">
+
                 <i class="fa-solid fa-location-dot"></i>
+
                 ${escapeHtml(
                   address ||
                   "Address not provided"
                 )}
+
               </div>
 
-              <div class="item-summary">
-                ${escapeHtml(itemNames)}
+              <div class="delivery-items">
+                ${escapeHtml(
+                  itemSummary(
+                    delivery.booking_id
+                  )
+                )}
               </div>
 
             </div>
@@ -1681,12 +2406,23 @@
               <button
                 type="button"
                 class="row-button"
-                data-delivery-id="${escapeHtml(
+                data-open-delivery="${escapeHtml(
                   delivery.id
                 )}"
               >
                 <i class="fa-solid fa-list-check"></i>
-                Checklist
+                Manage
+              </button>
+
+              <button
+                type="button"
+                class="row-button"
+                data-edit-assignment="${escapeHtml(
+                  delivery.id
+                )}"
+              >
+                <i class="fa-solid fa-user-gear"></i>
+                Assign
               </button>
 
             </div>
@@ -1695,67 +2431,228 @@
         `;
       }
 
-      function renderDeliveries() {
+      function renderSidebar() {
+        const attention = [];
+
+        for (
+          const delivery of
+          visibleDeliveries()
+        ) {
+          const booking =
+            bookingForDelivery(
+              delivery
+            );
+
+          const customer =
+            customerForBooking(
+              booking
+            );
+
+          const name =
+            customerName(
+              customer
+            );
+
+          if (!delivery.driver_id) {
+            attention.push(
+              `${name} — unassigned driver`
+            );
+          }
+
+          if (
+            !checklistForDelivery(
+              delivery.id
+            ).length
+          ) {
+            attention.push(
+              `${name} — no checklist`
+            );
+          }
+
+          if (!fullAddress(booking)) {
+            attention.push(
+              `${name} — missing address`
+            );
+          }
+        }
+
+        $("attention-list").innerHTML =
+          attention.length
+            ? attention
+                .slice(0, 8)
+                .map(item => `
+                  <div class="side-item">
+                    <strong>
+                      ${escapeHtml(item)}
+                    </strong>
+                  </div>
+                `)
+                .join("")
+            : `
+              <div class="side-item">
+                <strong>
+                  No urgent delivery issues.
+                </strong>
+              </div>
+            `;
+
+        const counts =
+          new Map();
+
+        for (
+          const delivery of
+          visibleDeliveries()
+        ) {
+          const driverId =
+            delivery.driver_id ||
+            "UNASSIGNED";
+
+          counts.set(
+            driverId,
+            (
+              counts.get(
+                driverId
+              ) ||
+              0
+            ) + 1
+          );
+        }
+
+        $("driver-summary").innerHTML =
+          counts.size
+            ? [...counts.entries()]
+                .map(
+                  ([driverId, count]) => `
+                    <div class="side-item">
+
+                      <strong>
+                        ${escapeHtml(
+                          driverId ===
+                            "UNASSIGNED"
+                            ? "Unassigned"
+                            : driverName(
+                                driverId
+                              )
+                        )}
+                      </strong>
+
+                      <small>
+                        ${count}
+                        ${count === 1
+                          ? "stop"
+                          : "stops"}
+                      </small>
+
+                    </div>
+                  `
+                )
+                .join("")
+            : `
+              <div class="side-item">
+                <strong>
+                  No drivers scheduled.
+                </strong>
+              </div>
+            `;
+      }
+
+      function renderPage() {
         const deliveries =
-          sortedDeliveries();
+          visibleDeliveries();
 
-        elements.loading.hidden = true;
+        $("loading").hidden =
+          true;
 
-        elements.list.hidden =
+        $("delivery-list").hidden =
           deliveries.length === 0;
 
-        elements.empty.hidden =
+        $("empty").hidden =
           deliveries.length > 0;
 
-        elements.list.innerHTML =
+        $("delivery-list").innerHTML =
           deliveries
             .map(deliveryCard)
             .join("");
 
-        const dateLabel =
-          formatDate(
+        $("route-title").textContent =
+          `Delivery Route — ${formatDate(
             state.selectedDate
-          );
+          )}`;
 
-        elements.routeTitle.textContent =
-          `Delivery Route — ${dateLabel}`;
-
-        elements.description.textContent =
+        $("schedule-description").textContent =
           `${deliveries.length} ${
             deliveries.length === 1
-              ? "delivery"
-              : "deliveries"
-          } scheduled for ${dateLabel}.`;
+              ? "stop"
+              : "stops"
+          } scheduled for ${formatDate(
+            state.selectedDate
+          )}.`;
 
-        elements.fullRoute.href =
-          fullRouteLink(deliveries);
+        $("full-route-link").href =
+          fullRouteUrl(
+            deliveries
+          );
+
+        $("start-address").textContent =
+          startAddress();
 
         renderStats();
+        renderSidebar();
       }
 
-      function renderChecklist(delivery) {
-        const checklist =
+      function detailHtml(
+        label,
+        value,
+        full = false
+      ) {
+        return `
+          <div class="detail-item ${
+            full ? "full" : ""
+          }">
+
+            <span>
+              ${escapeHtml(label)}
+            </span>
+
+            <strong>
+              ${escapeHtml(
+                value ||
+                "Not provided"
+              )}
+            </strong>
+
+          </div>
+        `;
+      }
+
+      function renderChecklist(
+        delivery
+      ) {
+        const items =
           checklistForDelivery(
             delivery.id
           );
 
-        if (!checklist.length) {
-          elements.modalChecklist.innerHTML = `
-            <div class="empty" style="padding:30px 15px">
-              <i class="fa-solid fa-list-check"></i>
-              No delivery checklist items were found.
+        if (!items.length) {
+          $("checklist").innerHTML = `
+            <div
+              class="empty"
+              style="padding: 24px;"
+            >
+              No checklist items found.
             </div>
           `;
 
           return;
         }
 
-        elements.modalChecklist.innerHTML =
-          checklist
+        $("checklist").innerHTML =
+          items
             .map(item => `
               <div class="checklist-row">
 
                 <div class="checklist-name">
+
                   <strong>
                     ${escapeHtml(
                       item.item_name ||
@@ -1768,20 +2665,22 @@
                       item.item_type ||
                       "ITEM"
                     )}
-                    • Quantity:
+                    · Quantity
                     ${Number(
-                      item.quantity || 1
+                      item.quantity ||
+                      1
                     )}
                   </small>
+
                 </div>
 
                 <label class="check-control">
                   <input
                     type="checkbox"
-                    data-checklist-id="${escapeHtml(
+                    data-check-id="${escapeHtml(
                       item.id
                     )}"
-                    data-checklist-field="loaded"
+                    data-check-field="loaded"
                     ${
                       item.loaded
                         ? "checked"
@@ -1794,10 +2693,10 @@
                 <label class="check-control">
                   <input
                     type="checkbox"
-                    data-checklist-id="${escapeHtml(
+                    data-check-id="${escapeHtml(
                       item.id
                     )}"
-                    data-checklist-field="delivered"
+                    data-check-field="delivered"
                     ${
                       item.delivered
                         ? "checked"
@@ -1810,10 +2709,10 @@
                 <label class="check-control">
                   <input
                     type="checkbox"
-                    data-checklist-id="${escapeHtml(
+                    data-check-id="${escapeHtml(
                       item.id
                     )}"
-                    data-checklist-field="returned"
+                    data-check-field="returned"
                     ${
                       item.returned
                         ? "checked"
@@ -1828,15 +2727,100 @@
             .join("");
       }
 
-      function openDeliveryModal(deliveryId) {
+      function renderPhotos(
+        deliveryId
+      ) {
+        const photos =
+          photosForDelivery(
+            deliveryId
+          );
+
+        if (!photos.length) {
+          $("photo-grid").innerHTML = `
+            <div
+              class="empty"
+              style="
+                grid-column: 1 / -1;
+                padding: 20px;
+              "
+            >
+              No delivery photos yet.
+            </div>
+          `;
+
+          return;
+        }
+
+        $("photo-grid").innerHTML =
+          photos
+            .map(photo => {
+              const url =
+                photo.public_url ||
+                photo.url ||
+                photo.image_url ||
+                "";
+
+              return `
+                <div class="photo-card">
+                  <img
+                    src="${escapeHtml(url)}"
+                    alt="Delivery photo"
+                    loading="lazy"
+                  >
+                </div>
+              `;
+            })
+            .join("");
+      }
+
+      function openModal(id) {
+        $(id).classList.add(
+          "visible"
+        );
+
+        $(id).setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        document.body.classList.add(
+          "modal-open"
+        );
+      }
+
+      function closeModal(id) {
+        $(id).classList.remove(
+          "visible"
+        );
+
+        $(id).setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        if (
+          !document.querySelector(
+            ".modal-backdrop.visible"
+          )
+        ) {
+          document.body.classList.remove(
+            "modal-open"
+          );
+        }
+      }
+
+      function openDelivery(
+        deliveryId
+      ) {
         hideAlert(
-          elements.modalAlert
+          $("modal-alert")
         );
 
         const delivery =
           state.deliveries.find(
             item =>
-              item.id === deliveryId
+              item.id ===
+              deliveryId
           );
 
         if (!delivery) {
@@ -1847,22 +2831,34 @@
           deliveryId;
 
         const booking =
-          bookingForDelivery(delivery);
+          bookingForDelivery(
+            delivery
+          );
 
         const customer =
-          customerForBooking(booking);
+          customerForBooking(
+            booking
+          );
 
         const address =
-          fullAddress(booking);
+          fullAddress(
+            booking
+          );
 
-        elements.modalTitle.textContent =
-          customerName(customer);
+        const phone =
+          customer?.phone ||
+          "";
 
-        elements.modalSubtitle.textContent =
+        $("delivery-modal-title").textContent =
+          customerName(
+            customer
+          );
+
+        $("delivery-modal-subtitle").textContent =
           booking?.booking_number ||
           delivery.booking_id;
 
-        elements.modalDetails.innerHTML =
+        $("delivery-details").innerHTML =
           [
             detailHtml(
               "Delivery Date",
@@ -1874,7 +2870,7 @@
             detailHtml(
               "Status",
               delivery.status ||
-              "PENDING"
+              "SCHEDULED"
             ),
 
             detailHtml(
@@ -1905,56 +2901,539 @@
             ),
 
             detailHtml(
-              "Phone",
-              customer?.phone
+              "Pickup Time",
+              formatTime(
+                delivery.pickup_time ||
+                delivery.return_time
+              )
             ),
 
             detailHtml(
-              "Delivery Address",
+              "Driver",
+              driverName(
+                delivery.driver_id
+              )
+            ),
+
+            detailHtml(
+              "Phone",
+              phone ||
+              "Not provided"
+            ),
+
+            detailHtml(
+              "Address",
               address,
               true
             )
           ].join("");
 
-        elements.modalMap.href =
-          mapLink(address);
+        $("delivery-status-edit").value =
+          delivery.status ||
+          "SCHEDULED";
 
-        elements.modalBooking.href =
+        $("delivery-driver-edit").value =
+          delivery.driver_id ||
+          "";
+
+        $("driver-notes").value =
+          delivery.driver_notes ||
+          "";
+
+        $("navigate-link").href =
+          mapLink(
+            address
+          );
+
+        $("call-link").hidden =
+          !phone;
+
+        $("call-link").href =
+          phone
+            ? `tel:${phone.replace(
+                /[^\d+]/g,
+                ""
+              )}`
+            : "#";
+
+        $("text-link").hidden =
+          !phone;
+
+        $("text-link").href =
+          phone
+            ? `sms:${phone.replace(
+                /[^\d+]/g,
+                ""
+              )}`
+            : "#";
+
+        $("booking-link").href =
           `./admin-booking.html?id=${encodeURIComponent(
             delivery.booking_id
           )}`;
 
-        renderChecklist(delivery);
-
-        elements.modalBackdrop.classList.add(
-          "visible"
+        renderChecklist(
+          delivery
         );
 
-        elements.modalBackdrop.setAttribute(
-          "aria-hidden",
-          "false"
+        renderPhotos(
+          deliveryId
         );
 
-        document.body.classList.add(
-          "modal-open"
+        openModal(
+          "delivery-modal"
         );
       }
 
-      function closeDeliveryModal() {
-        elements.modalBackdrop.classList.remove(
-          "visible"
+      function openAssignment(
+        assignmentId = ""
+      ) {
+        hideAlert(
+          $("assignment-alert")
         );
 
-        elements.modalBackdrop.setAttribute(
-          "aria-hidden",
-          "true"
+        state.editingAssignmentId =
+          assignmentId ||
+          null;
+
+        const delivery =
+          assignmentId
+            ? state.deliveries.find(
+                item =>
+                  item.id ===
+                  assignmentId
+              )
+            : null;
+
+        $("assignment-modal-title").textContent =
+          delivery
+            ? "Edit Delivery Assignment"
+            : "New Delivery Assignment";
+
+        $("assignment-booking").disabled =
+          Boolean(delivery);
+
+        $("assignment-booking").value =
+          delivery?.booking_id ||
+          "";
+
+        $("assignment-driver").value =
+          delivery?.driver_id ||
+          "";
+
+        $("assignment-status").value =
+          delivery?.status ||
+          "SCHEDULED";
+
+        $("assignment-date").value =
+          delivery?.delivery_date ||
+          state.selectedDate;
+
+        $("assignment-window-start").value =
+          delivery?.delivery_window_start ||
+          "";
+
+        $("assignment-window-end").value =
+          delivery?.delivery_window_end ||
+          "";
+
+        $("assignment-setup-time").value =
+          delivery?.setup_time ||
+          "";
+
+        $("assignment-event-start").value =
+          delivery?.event_start_time ||
+          "";
+
+        $("assignment-event-end").value =
+          delivery?.event_end_time ||
+          "";
+
+        $("assignment-pickup-time").value =
+          delivery?.pickup_time ||
+          delivery?.return_time ||
+          "";
+
+        $("assignment-notes").value =
+          delivery?.driver_notes ||
+          "";
+
+        $("delete-assignment-button").hidden =
+          !delivery;
+
+        openModal(
+          "assignment-modal"
+        );
+      }
+
+      function assignmentPayload() {
+        return {
+          booking_id:
+            $("assignment-booking").value,
+
+          driver_id:
+            $("assignment-driver").value ||
+            null,
+
+          status:
+            $("assignment-status").value,
+
+          delivery_date:
+            $("assignment-date").value,
+
+          delivery_window_start:
+            $("assignment-window-start").value ||
+            null,
+
+          delivery_window_end:
+            $("assignment-window-end").value ||
+            null,
+
+          setup_time:
+            $("assignment-setup-time").value ||
+            null,
+
+          event_start_time:
+            $("assignment-event-start").value ||
+            null,
+
+          event_end_time:
+            $("assignment-event-end").value ||
+            null,
+
+          pickup_time:
+            $("assignment-pickup-time").value ||
+            null,
+
+          driver_notes:
+            $("assignment-notes").value
+              .trim() ||
+            null,
+
+          updated_at:
+            new Date()
+              .toISOString()
+        };
+      }
+
+      async function saveAssignment(
+        event
+      ) {
+        event.preventDefault();
+
+        if (state.saving) {
+          return;
+        }
+
+        hideAlert(
+          $("assignment-alert")
         );
 
-        document.body.classList.remove(
-          "modal-open"
+        const payload =
+          assignmentPayload();
+
+        if (!payload.booking_id) {
+          showAlert(
+            $("assignment-alert"),
+            "Select a booking."
+          );
+
+          return;
+        }
+
+        if (!payload.delivery_date) {
+          showAlert(
+            $("assignment-alert"),
+            "Select a delivery date."
+          );
+
+          return;
+        }
+
+        state.saving =
+          true;
+
+        $("save-assignment-button").disabled =
+          true;
+
+        try {
+          let result;
+
+          if (
+            state.editingAssignmentId
+          ) {
+            result =
+              await db
+                .from(
+                  "delivery_assignments"
+                )
+                .update(
+                  payload
+                )
+                .eq(
+                  "id",
+                  state.editingAssignmentId
+                )
+                .select()
+                .single();
+          } else {
+            result =
+              await db
+                .from(
+                  "delivery_assignments"
+                )
+                .insert(
+                  payload
+                )
+                .select()
+                .single();
+          }
+
+          if (result.error) {
+            throw result.error;
+          }
+
+          showAlert(
+            $("assignment-alert"),
+            "Assignment saved successfully.",
+            "success"
+          );
+
+          window.setTimeout(
+            async () => {
+              closeModal(
+                "assignment-modal"
+              );
+
+              await loadData();
+            },
+            450
+          );
+
+        } catch (error) {
+          showAlert(
+            $("assignment-alert"),
+            `Assignment could not be saved: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.saving =
+            false;
+
+          $("save-assignment-button").disabled =
+            false;
+        }
+      }
+
+      function statusTimestampUpdate(
+        status
+      ) {
+        const now =
+          new Date()
+            .toISOString();
+
+        const normalized =
+          String(status)
+            .toUpperCase();
+
+        if (
+          normalized ===
+          "IN_TRANSIT"
+        ) {
+          return {
+            departed_at: now
+          };
+        }
+
+        if (
+          normalized ===
+          "DELIVERED"
+        ) {
+          return {
+            delivered_at: now
+          };
+        }
+
+        if (
+          normalized ===
+          "RETURNED"
+        ) {
+          return {
+            returned_at: now
+          };
+        }
+
+        return {};
+      }
+
+      async function saveDelivery() {
+        if (
+          !state.selectedDeliveryId ||
+          state.saving
+        ) {
+          return;
+        }
+
+        hideAlert(
+          $("modal-alert")
         );
 
-        state.selectedDeliveryId = null;
+        state.saving =
+          true;
+
+        $("save-delivery-button").disabled =
+          true;
+
+        const status =
+          $("delivery-status-edit").value;
+
+        const updateData = {
+          status,
+
+          driver_id:
+            $("delivery-driver-edit").value ||
+            null,
+
+          driver_notes:
+            $("driver-notes").value
+              .trim() ||
+            null,
+
+          updated_at:
+            new Date()
+              .toISOString(),
+
+          ...statusTimestampUpdate(
+            status
+          )
+        };
+
+        try {
+          const {
+            data,
+            error
+          } =
+            await db
+              .from(
+                "delivery_assignments"
+              )
+              .update(
+                updateData
+              )
+              .eq(
+                "id",
+                state.selectedDeliveryId
+              )
+              .select()
+              .single();
+
+          if (error) {
+            throw error;
+          }
+
+          const delivery =
+            state.deliveries.find(
+              item =>
+                item.id ===
+                state.selectedDeliveryId
+            );
+
+          if (delivery) {
+            Object.assign(
+              delivery,
+              data
+            );
+          }
+
+          showAlert(
+            $("modal-alert"),
+            "Delivery changes saved.",
+            "success"
+          );
+
+          renderPage();
+
+        } catch (error) {
+          showAlert(
+            $("modal-alert"),
+            `Changes could not be saved: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.saving =
+            false;
+
+          $("save-delivery-button").disabled =
+            false;
+        }
+      }
+
+      async function deleteAssignment() {
+        if (
+          !state.editingAssignmentId ||
+          state.saving
+        ) {
+          return;
+        }
+
+        const confirmed =
+          window.confirm(
+            "Delete this delivery assignment? This cannot be undone."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        state.saving =
+          true;
+
+        $("delete-assignment-button").disabled =
+          true;
+
+        try {
+          const {
+            error
+          } =
+            await db
+              .from(
+                "delivery_assignments"
+              )
+              .delete()
+              .eq(
+                "id",
+                state.editingAssignmentId
+              );
+
+          if (error) {
+            throw error;
+          }
+
+          closeModal(
+            "assignment-modal"
+          );
+
+          await loadData();
+
+        } catch (error) {
+          showAlert(
+            $("assignment-alert"),
+            `Assignment could not be deleted: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.saving =
+            false;
+
+          $("delete-assignment-button").disabled =
+            false;
+        }
       }
 
       async function updateChecklist(
@@ -1962,237 +3441,653 @@
         field,
         checked
       ) {
-        hideAlert(
-          elements.modalAlert
-        );
+        const allowed =
+          [
+            "loaded",
+            "delivered",
+            "returned"
+          ];
 
-        const allowedFields = [
-          "loaded",
-          "delivered",
-          "returned"
-        ];
-
-        if (
-          !allowedFields.includes(field)
-        ) {
-          return;
+        if (!allowed.includes(field)) {
+          throw new Error(
+            "Invalid checklist field."
+          );
         }
 
         const {
           error
         } =
-          await senSupabase
+          await db
             .from(
               "delivery_checklist_items"
             )
             .update({
               [field]: checked,
               updated_at:
-                new Date().toISOString()
+                new Date()
+                  .toISOString()
             })
-            .eq("id", itemId);
+            .eq(
+              "id",
+              itemId
+            );
 
         if (error) {
-          showAlert(
-            elements.modalAlert,
-            `Checklist could not be updated: ${error.message}`
-          );
-
           throw error;
         }
 
         const item =
-          state.checklistItems.find(
+          state.checklist.find(
             checklistItem =>
-              checklistItem.id === itemId
+              checklistItem.id ===
+              itemId
           );
 
         if (item) {
-          item[field] = checked;
+          item[field] =
+            checked;
         }
 
+        renderStats();
+      }
+
+      async function uploadPhoto(file) {
+        if (
+          !file ||
+          !state.selectedDeliveryId
+        ) {
+          return;
+        }
+
+        hideAlert(
+          $("modal-alert")
+        );
+
+        try {
+          const extension =
+            (
+              file.name
+                .split(".")
+                .pop() ||
+              "jpg"
+            ).toLowerCase();
+
+          const path =
+            `${state.selectedDeliveryId}/` +
+            `${Date.now()}-` +
+            `${crypto.randomUUID()}.` +
+            extension;
+
+          const upload =
+            await db.storage
+              .from(
+                PHOTO_BUCKET
+              )
+              .upload(
+                path,
+                file,
+                {
+                  cacheControl:
+                    "3600",
+
+                  upsert:
+                    false
+                }
+              );
+
+          if (upload.error) {
+            throw upload.error;
+          }
+
+          const publicUrl =
+            db.storage
+              .from(
+                PHOTO_BUCKET
+              )
+              .getPublicUrl(
+                path
+              )
+              .data
+              .publicUrl;
+
+          const record =
+            await db
+              .from(
+                "delivery_photos"
+              )
+              .insert({
+                delivery_assignment_id:
+                  state.selectedDeliveryId,
+
+                storage_path:
+                  path,
+
+                public_url:
+                  publicUrl,
+
+                uploaded_by:
+                  state.admin?.id ||
+                  null
+              })
+              .select()
+              .single();
+
+          if (record.error) {
+            throw record.error;
+          }
+
+          state.photos.push(
+            record.data
+          );
+
+          renderPhotos(
+            state.selectedDeliveryId
+          );
+
+          showAlert(
+            $("modal-alert"),
+            "Photo uploaded successfully.",
+            "success"
+          );
+
+        } catch (error) {
+          showAlert(
+            $("modal-alert"),
+            `Photo upload failed: ${errorMessage(
+              error
+            )}`
+          );
+        }
+      }
+
+      function optimizeRoute() {
+        state.deliveries.sort(
+          (first, second) =>
+            String(
+              first.delivery_window_start ||
+              first.setup_time ||
+              "23:59"
+            ).localeCompare(
+              String(
+                second.delivery_window_start ||
+                second.setup_time ||
+                "23:59"
+              )
+            )
+        );
+
+        renderPage();
+
         showAlert(
-          elements.modalAlert,
-          "Checklist updated.",
+          $("page-alert"),
+          "The route was ordered by delivery window. This order is temporary until route ordering is saved in the database.",
           "success"
         );
       }
 
+      function exportCsv() {
+        const rows = [
+          [
+            "Route",
+            "Booking",
+            "Customer",
+            "Phone",
+            "Address",
+            "Driver",
+            "Status",
+            "Window Start",
+            "Window End",
+            "Setup",
+            "Event Start",
+            "Event End",
+            "Pickup",
+            "Items",
+            "Driver Notes"
+          ]
+        ];
+
+        visibleDeliveries()
+          .forEach(
+            (
+              delivery,
+              index
+            ) => {
+              const booking =
+                bookingForDelivery(
+                  delivery
+                );
+
+              const customer =
+                customerForBooking(
+                  booking
+                );
+
+              rows.push([
+                index + 1,
+                booking?.booking_number ||
+                  delivery.booking_id,
+                customerName(
+                  customer
+                ),
+                customer?.phone ||
+                  "",
+                fullAddress(
+                  booking
+                ),
+                driverName(
+                  delivery.driver_id
+                ),
+                delivery.status ||
+                  "",
+                delivery.delivery_window_start ||
+                  "",
+                delivery.delivery_window_end ||
+                  "",
+                delivery.setup_time ||
+                  "",
+                delivery.event_start_time ||
+                  "",
+                delivery.event_end_time ||
+                  "",
+                delivery.pickup_time ||
+                  delivery.return_time ||
+                  "",
+                itemSummary(
+                  delivery.booking_id
+                ),
+                delivery.driver_notes ||
+                  ""
+              ]);
+            }
+          );
+
+        const csv =
+          rows
+            .map(row =>
+              row
+                .map(value =>
+                  `"${String(
+                    value ?? ""
+                  ).replaceAll(
+                    '"',
+                    '""'
+                  )}"`
+                )
+                .join(",")
+            )
+            .join("\n");
+
+        const blob =
+          new Blob(
+            [csv],
+            {
+              type:
+                "text/csv;charset=utf-8"
+            }
+          );
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+        const link =
+          document.createElement(
+            "a"
+          );
+
+        link.href =
+          url;
+
+        link.download =
+          `sen-deliveries-${state.selectedDate}.csv`;
+
+        link.click();
+
+        URL.revokeObjectURL(
+          url
+        );
+      }
+
+      function populateDriverOptions() {
+        const options =
+          [...state.drivers.values()]
+            .map(driver => `
+              <option value="${escapeHtml(
+                driver.id
+              )}">
+                ${escapeHtml(
+                  driverLabel(
+                    driver
+                  )
+                )}
+              </option>
+            `)
+            .join("");
+
+        $("driver-filter").innerHTML = `
+          <option value="ALL">
+            All drivers
+          </option>
+
+          <option value="UNASSIGNED">
+            Unassigned
+          </option>
+
+          ${options}
+        `;
+
+        $("assignment-driver").innerHTML = `
+          <option value="">
+            Unassigned
+          </option>
+
+          ${options}
+        `;
+
+        $("delivery-driver-edit").innerHTML = `
+          <option value="">
+            Unassigned
+          </option>
+
+          ${options}
+        `;
+      }
+
+      function populateBookingOptions() {
+        const bookings =
+          [...state.bookings.values()]
+            .filter(booking =>
+              String(
+                booking.event_date ||
+                ""
+              ).slice(0, 10) ===
+              state.selectedDate
+            )
+            .sort(
+              (first, second) =>
+                String(
+                  first.start_time ||
+                  ""
+                ).localeCompare(
+                  String(
+                    second.start_time ||
+                    ""
+                  )
+                )
+            );
+
+        $("assignment-booking").innerHTML = `
+          <option value="">
+            Select booking
+          </option>
+
+          ${bookings
+            .map(booking => {
+              const customer =
+                customerForBooking(
+                  booking
+                );
+
+              return `
+                <option value="${escapeHtml(
+                  booking.id
+                )}">
+                  ${escapeHtml(
+                    booking.booking_number ||
+                    booking.id
+                  )}
+                  —
+                  ${escapeHtml(
+                    customerName(
+                      customer
+                    )
+                  )}
+                </option>
+              `;
+            })
+            .join("")}
+        `;
+      }
+
+      function populateForms() {
+        populateDriverOptions();
+        populateBookingOptions();
+      }
+
       async function requireAdmin() {
         const {
-          data: sessionData,
-          error: sessionError
+          data,
+          error
         } =
-          await senSupabase
-            .auth
+          await db.auth
             .getSession();
 
-        if (sessionError) {
-          throw sessionError;
+        if (error) {
+          throw error;
         }
 
         const session =
-          sessionData.session;
+          data.session;
 
         if (!session) {
           window.location.replace(
             "./admin-login.html"
           );
 
-          return null;
+          return false;
         }
 
-        const {
-          data: admin,
-          error: adminError
-        } =
-          await senSupabase
-            .from("admin_users")
+        const adminResult =
+          await db
+            .from(
+              "admin_users"
+            )
             .select("*")
             .eq(
               "user_id",
               session.user.id
             )
-            .eq("active", true)
+            .eq(
+              "active",
+              true
+            )
             .maybeSingle();
 
         if (
-          adminError ||
-          !admin
+          adminResult.error ||
+          !adminResult.data
         ) {
-          await senSupabase
-            .auth
+          await db.auth
             .signOut();
 
           window.location.replace(
             "./admin-login.html"
           );
 
-          return null;
+          return false;
         }
 
-        return {
-          session,
-          admin
-        };
+        state.admin =
+          adminResult.data;
+
+        return true;
       }
 
-      async function loadDeliveries() {
+      async function optionalQuery(
+        table
+      ) {
+        const {
+          data,
+          error
+        } =
+          await db
+            .from(table)
+            .select("*");
+
+        if (error) {
+          console.warn(
+            `${table} could not be loaded:`,
+            error
+          );
+
+          return [];
+        }
+
+        return data ||
+          [];
+      }
+
+      async function loadData() {
         if (state.loading) {
           return;
         }
 
-        state.loading = true;
+        state.loading =
+          true;
 
         hideAlert(
-          elements.pageAlert
+          $("page-alert")
         );
 
-        elements.refresh.disabled = true;
+        $("refresh-button").disabled =
+          true;
 
-        elements.refresh.classList.add(
+        $("refresh-button").classList.add(
           "loading"
         );
 
-        elements.loading.hidden = false;
-        elements.list.hidden = true;
-        elements.empty.hidden = true;
+        $("loading").hidden =
+          false;
+
+        $("delivery-list").hidden =
+          true;
+
+        $("empty").hidden =
+          true;
 
         try {
           const [
             deliveriesResult,
             bookingsResult,
             customersResult,
-            bookingItemsResult
+            driversResult,
+            bookingItems,
+            checklistItems,
+            photos,
+            settings
           ] =
             await Promise.all([
-              senSupabase
+              db
                 .from(
                   "delivery_assignments"
                 )
-                .select(`
-                  id,
-                  booking_id,
-                  driver_id,
-                  status,
-                  delivery_date,
-                  delivery_window_start,
-                  delivery_window_end,
-                  setup_time,
-                  event_start_time,
-                  event_end_time
-                `)
+                .select("*")
                 .eq(
                   "delivery_date",
                   state.selectedDate
                 ),
 
-              senSupabase
-                .from("bookings")
-                .select(`
-                  id,
-                  booking_number,
-                  customer_id,
-                  event_date,
-                  start_time,
-                  end_time,
-                  event_address,
-                  event_city,
-                  event_state,
-                  event_zip,
-                  setup_location,
-                  surface_type,
-                  status
-                `),
+              db
+                .from(
+                  "bookings"
+                )
+                .select("*"),
 
-              senSupabase
-                .from("customers")
+              db
+                .from(
+                  "customers"
+                )
+                .select("*"),
+
+              db
+                .from(
+                  "driver_profiles"
+                )
                 .select(`
                   id,
                   first_name,
                   last_name,
                   phone,
-                  email
-                `),
-
-              senSupabase
-                .from("booking_items")
-                .select(`
-                  id,
-                  booking_id,
-                  item_name,
-                  quantity,
-                  unit_price,
-                  line_total
+                  email,
+                  license_number,
+                  vehicle_name,
+                  vehicle_plate,
+                  active,
+                  available,
+                  notes
                 `)
+                .eq(
+                  "active",
+                  true
+                )
+                .order(
+                  "last_name",
+                  {
+                    ascending:
+                      true
+                  }
+                )
+                .order(
+                  "first_name",
+                  {
+                    ascending:
+                      true
+                  }
+                ),
+
+              optionalQuery(
+                "booking_items"
+              ),
+
+              optionalQuery(
+                "delivery_checklist_items"
+              ),
+
+              optionalQuery(
+                "delivery_photos"
+              ),
+
+              optionalQuery(
+                "business_settings"
+              )
             ]);
 
-          if (deliveriesResult.error) {
+          if (
+            deliveriesResult.error
+          ) {
             throw new Error(
               `Deliveries could not be loaded: ${deliveriesResult.error.message}`
             );
           }
 
-          if (bookingsResult.error) {
+          if (
+            bookingsResult.error
+          ) {
             throw new Error(
               `Bookings could not be loaded: ${bookingsResult.error.message}`
             );
           }
 
-          if (customersResult.error) {
+          if (
+            customersResult.error
+          ) {
             throw new Error(
               `Customers could not be loaded: ${customersResult.error.message}`
             );
           }
 
-          if (bookingItemsResult.error) {
+          if (
+            driversResult.error
+          ) {
             throw new Error(
-              `Rental items could not be loaded: ${bookingItemsResult.error.message}`
+              `Drivers could not be loaded: ${driversResult.error.message}`
             );
           }
 
           state.deliveries =
-            deliveriesResult.data || [];
+            deliveriesResult.data ||
+            [];
 
           state.bookings =
             new Map(
@@ -2220,159 +4115,234 @@
               )
             );
 
-          state.bookingItems =
-            bookingItemsResult.data || [];
-
-          const deliveryIds =
-            state.deliveries
-              .map(
-                delivery =>
-                  delivery.id
+          state.drivers =
+            new Map(
+              (
+                driversResult.data ||
+                []
+              ).map(
+                driver => [
+                  driver.id,
+                  driver
+                ]
               )
-              .filter(Boolean);
+            );
 
-          if (deliveryIds.length) {
-            const {
-              data: checklist,
-              error: checklistError
-            } =
-              await senSupabase
-                .from(
-                  "delivery_checklist_items"
-                )
-                .select(`
-                  id,
-                  delivery_assignment_id,
-                  item_type,
-                  item_name,
-                  quantity,
-                  loaded,
-                  delivered,
-                  returned,
-                  notes,
-                  created_at,
-                  updated_at
-                `)
-                .in(
-                  "delivery_assignment_id",
-                  deliveryIds
-                );
+          state.bookingItems =
+            bookingItems;
 
-            if (checklistError) {
-              throw new Error(
-                `Delivery checklist could not be loaded: ${checklistError.message}`
-              );
-            }
+          state.checklist =
+            checklistItems;
 
-            state.checklistItems =
-              checklist || [];
-          } else {
-            state.checklistItems = [];
-          }
+          state.photos =
+            photos;
 
-          renderDeliveries();
+          state.settings =
+            settings[0] ||
+            null;
+
+          populateForms();
+          renderPage();
 
         } catch (error) {
-          console.error(
-            "Delivery page error:",
-            error
-          );
+          $("loading").hidden =
+            true;
 
-          const message =
-            errorMessage(error);
-
-          showAlert(
-            elements.pageAlert,
-            message
-          );
-
-          elements.loading.hidden = true;
-          elements.empty.hidden = false;
-
-          elements.empty.innerHTML = `
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            ${escapeHtml(message)}
-          `;
-
-        } finally {
-          state.loading = false;
-
-          elements.refresh.disabled =
+          $("empty").hidden =
             false;
 
-          elements.refresh.classList.remove(
+          showAlert(
+            $("page-alert"),
+            errorMessage(
+              error
+            )
+          );
+
+        } finally {
+          state.loading =
+            false;
+
+          $("refresh-button").disabled =
+            false;
+
+          $("refresh-button").classList.remove(
             "loading"
           );
         }
       }
 
-      elements.date.addEventListener(
-        "change",
-        async event => {
-          state.selectedDate =
-            event.target.value;
+      $("delivery-date")
+        .addEventListener(
+          "change",
+          async event => {
+            state.selectedDate =
+              event.target.value;
 
-          await loadDeliveries();
-        }
-      );
+            state.driverFilter =
+              "ALL";
 
-      elements.refresh.addEventListener(
-        "click",
-        loadDeliveries
-      );
+            $("driver-filter").value =
+              "ALL";
 
-      elements.printButton.addEventListener(
-        "click",
-        () => window.print()
-      );
-
-      elements.printSecondary.addEventListener(
-        "click",
-        () => window.print()
-      );
-
-      elements.closeModal.addEventListener(
-        "click",
-        closeDeliveryModal
-      );
-
-      elements.modalBackdrop.addEventListener(
-        "click",
-        event => {
-          if (
-            event.target ===
-            elements.modalBackdrop
-          ) {
-            closeDeliveryModal();
+            await loadData();
           }
-        }
-      );
+        );
 
-      document.addEventListener(
-        "keydown",
-        event => {
-          if (
-            event.key === "Escape" &&
-            elements.modalBackdrop.classList
-              .contains("visible")
-          ) {
-            closeDeliveryModal();
+      $("driver-filter")
+        .addEventListener(
+          "change",
+          event => {
+            state.driverFilter =
+              event.target.value;
+
+            renderPage();
           }
-        }
-      );
+        );
 
-      document.addEventListener(
-        "click",
-        event => {
-          const deliveryButton =
-            event.target.closest(
-              "[data-delivery-id]"
+      $("refresh-button")
+        .addEventListener(
+          "click",
+          loadData
+        );
+
+      $("print-button")
+        .addEventListener(
+          "click",
+          () => window.print()
+        );
+
+      $("route-sheet-button")
+        .addEventListener(
+          "click",
+          () => window.print()
+        );
+
+      $("export-button")
+        .addEventListener(
+          "click",
+          exportCsv
+        );
+
+      $("optimize-route-button")
+        .addEventListener(
+          "click",
+          optimizeRoute
+        );
+
+      $("new-assignment-button")
+        .addEventListener(
+          "click",
+          () => openAssignment()
+        );
+
+      $("assignment-form")
+        .addEventListener(
+          "submit",
+          saveAssignment
+        );
+
+      $("save-delivery-button")
+        .addEventListener(
+          "click",
+          saveDelivery
+        );
+
+      $("delete-assignment-button")
+        .addEventListener(
+          "click",
+          deleteAssignment
+        );
+
+      $("upload-photo-button")
+        .addEventListener(
+          "click",
+          () => {
+            $("photo-input").click();
+          }
+        );
+
+      $("photo-input")
+        .addEventListener(
+          "change",
+          event => {
+            const file =
+              event.target.files?.[0];
+
+            uploadPhoto(
+              file
             );
 
-          if (deliveryButton) {
-            openDeliveryModal(
-              deliveryButton.dataset
-                .deliveryId
+            event.target.value =
+              "";
+          }
+        );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const statusButton =
+            event.target.closest(
+              "[data-status-filter]"
+            );
+
+          const openButton =
+            event.target.closest(
+              "[data-open-delivery]"
+            );
+
+          const editButton =
+            event.target.closest(
+              "[data-edit-assignment]"
+            );
+
+          const closeButton =
+            event.target.closest(
+              "[data-close-modal]"
+            );
+
+          if (statusButton) {
+            state.statusFilter =
+              statusButton.dataset
+                .statusFilter;
+
+            document
+              .querySelectorAll(
+                "[data-status-filter]"
+              )
+              .forEach(button => {
+                button.classList.toggle(
+                  "active",
+                  button ===
+                    statusButton
+                );
+              });
+
+            renderPage();
+            return;
+          }
+
+          if (openButton) {
+            openDelivery(
+              openButton.dataset
+                .openDelivery
+            );
+
+            return;
+          }
+
+          if (editButton) {
+            openAssignment(
+              editButton.dataset
+                .editAssignment
+            );
+
+            return;
+          }
+
+          if (closeButton) {
+            closeModal(
+              closeButton.dataset
+                .closeModal
             );
           }
         }
@@ -2383,39 +4353,90 @@
         async event => {
           const checkbox =
             event.target.closest(
-              "[data-checklist-id]"
+              "[data-check-id]"
             );
 
           if (!checkbox) {
             return;
           }
 
-          const itemId =
-            checkbox.dataset
-              .checklistId;
-
-          const field =
-            checkbox.dataset
-              .checklistField;
-
           try {
-            checkbox.disabled = true;
+            checkbox.disabled =
+              true;
 
             await updateChecklist(
-              itemId,
-              field,
+              checkbox.dataset
+                .checkId,
+              checkbox.dataset
+                .checkField,
               checkbox.checked
             );
-          } catch {
+
+            showAlert(
+              $("modal-alert"),
+              "Checklist updated.",
+              "success"
+            );
+
+          } catch (error) {
             checkbox.checked =
               !checkbox.checked;
+
+            showAlert(
+              $("modal-alert"),
+              `Checklist update failed: ${errorMessage(
+                error
+              )}`
+            );
+
           } finally {
-            checkbox.disabled = false;
+            checkbox.disabled =
+              false;
           }
         }
       );
 
-      async function initializePage() {
+      document
+        .querySelectorAll(
+          ".modal-backdrop"
+        )
+        .forEach(modal => {
+          modal.addEventListener(
+            "click",
+            event => {
+              if (
+                event.target ===
+                modal
+              ) {
+                closeModal(
+                  modal.id
+                );
+              }
+            }
+          );
+        });
+
+      document.addEventListener(
+        "keydown",
+        event => {
+          if (
+            event.key ===
+            "Escape"
+          ) {
+            document
+              .querySelectorAll(
+                ".modal-backdrop.visible"
+              )
+              .forEach(modal => {
+                closeModal(
+                  modal.id
+                );
+              });
+          }
+        }
+      );
+
+      (async () => {
         try {
           const admin =
             await requireAdmin();
@@ -2425,27 +4446,27 @@
           }
 
           state.selectedDate =
-            todayValue();
+            localDateValue();
 
-          elements.date.value =
+          $("delivery-date").value =
             state.selectedDate;
 
-          await loadDeliveries();
+          await loadData();
 
         } catch (error) {
+          $("loading").hidden =
+            true;
+
           showAlert(
-            elements.pageAlert,
-            errorMessage(error)
+            $("page-alert"),
+            errorMessage(
+              error
+            )
           );
-
-          elements.loading.hidden = true;
         }
-      }
-
-      initializePage();
+      })();
     })();
   </script>
 
 </body>
-
 </html>

@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Driver Portal | Sen Party Rentals</title>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --background: #f5f6f8;
+      --white: #ffffff;
+      --green: #15803d;
+      --blue: #2563eb;
+      --yellow: #9a6700;
+      --danger: #b42318;
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.1);
+      --gradient:
+        linear-gradient(
+          135deg,
+          #970018,
+          #d90429 58%,
+          #ff6a00
+        );
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--background);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: flex;
+      min-height: 74px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .driver-heading {
+      min-width: 0;
+    }
+
+    .driver-heading h1 {
+      margin: 0;
+      overflow: hidden;
+      font-size: 1.25rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .driver-heading p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--red);
+      background: var(--white);
+    }
+
+    .icon-button.loading i {
+      animation: spin 0.8s linear infinite;
+    }
+
+    .page {
+      width: min(900px, calc(100% - 22px));
+      margin: 0 auto;
+      padding: 18px 0 90px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      line-height: 1.5;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .hero {
+      overflow: hidden;
+      margin-bottom: 18px;
+      padding: 22px;
+      border-radius: 20px;
+      color: var(--white);
+      background:
+        radial-gradient(
+          circle at 88% 15%,
+          rgba(255, 106, 0, 0.35),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #08080a,
+          #241117 58%,
+          #720014
+        );
+      box-shadow: var(--shadow);
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .hero small {
+      display: block;
+      color: #ffbec8;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 7px 0 0;
+      font-size: clamp(1.7rem, 7vw, 2.6rem);
+      line-height: 1;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.55;
+    }
+
+    .availability-badge {
+      display: inline-flex;
+      min-height: 31px;
+      align-items: center;
+      padding: 0 11px;
+      border-radius: 999px;
+      color: #166534;
+      background: #dcfce7;
+      font-size: 0.68rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .availability-badge.unavailable {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .hero-stat {
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-stat span {
+      display: block;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.65rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .hero-stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.35rem;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .date-input {
+      min-width: 0;
+      flex: 1;
+      min-height: 46px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .date-input:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .route-button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--white);
+      background: var(--gradient);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .section-heading {
+      margin: 24px 0 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .assignment-list {
+      display: grid;
+      gap: 15px;
+    }
+
+    .assignment-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .assignment-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stop-number {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--white);
+      background: var(--gradient);
+      font-weight: 900;
+    }
+
+    .assignment-title {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .assignment-title h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .assignment-title small {
+      display: block;
+      margin-top: 4px;
+      color: var(--red);
+      font-weight: 900;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: 0.63rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status-badge.scheduled,
+    .status-badge.assigned {
+      color: #8a5b00;
+      background: #fff4d6;
+    }
+
+    .status-badge.in_transit,
+    .status-badge.out_for_delivery {
+      color: #1d4ed8;
+      background: #dbeafe;
+    }
+
+    .status-badge.delivered,
+    .status-badge.completed,
+    .status-badge.returned {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .status-badge.cancelled {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .assignment-body {
+      padding: 17px;
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .time-box {
+      padding: 10px;
+      border-radius: 11px;
+      background: #f6f7f9;
+    }
+
+    .time-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.63rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .time-box strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.78rem;
+    }
+
+    .address {
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
+    .items {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .assignment-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .action-button {
+      min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--red);
+      background: var(--white);
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 900;
+    }
+
+    .action-button.primary {
+      border-color: transparent;
+      color: var(--white);
+      background: var(--gradient);
+    }
+
+    .loading,
+    .empty {
+      padding: 60px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .loading i,
+    .empty i {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--red);
+      font-size: 2rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 900;
+      inset: 0;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(10, 10, 12, 0.68);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(760px, 100%);
+      max-height: 93vh;
+      overflow-y: auto;
+      border-radius: 24px 24px 0 0;
+      background: var(--white);
+      box-shadow: 0 -20px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .modal-head {
+      position: sticky;
+      z-index: 2;
+      top: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 19px;
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .modal-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .close-button {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    .modal-body {
+      padding: 19px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .detail {
+      padding: 11px;
+      border-radius: 11px;
+      background: #f6f7f9;
+    }
+
+    .detail.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.62rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .detail strong {
+      display: block;
+      margin-top: 5px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .section-title {
+      margin: 23px 0 10px;
+      font-size: 1rem;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 9px;
+    }
+
+    .check-row {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .check-name strong,
+    .check-name small {
+      display: block;
+    }
+
+    .check-name small {
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .check-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .check-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      border-radius: 10px;
+      background: #f6f7f9;
+      font-size: 0.7rem;
+      font-weight: 900;
+    }
+
+    .check-option input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--red);
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.79rem;
+      font-weight: 900;
+    }
+
+    .field textarea {
+      width: 100%;
+      min-height: 105px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .photo-card {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #f3f4f6;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-actions {
+      position: sticky;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      padding: 15px 19px;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .modal-button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      background: var(--white);
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .modal-button.primary {
+      border-color: transparent;
+      color: var(--white);
+      background: var(--gradient);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .assignment-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .time-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail.full {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="driver-heading">
+      <h1 id="driver-name">Driver Portal</h1>
+      <p id="driver-vehicle">Sen Party Rentals</p>
+    </div>
+
+    <div class="topbar-actions">
+
+      <button
+        type="button"
+        class="icon-button"
+        id="refresh-button"
+        aria-label="Refresh assignments"
+      >
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+
+      <button
+        type="button"
+        class="icon-button"
+        id="signout-button"
+        aria-label="Sign out"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+
+    </div>
+
+  </header>
+
+  <main class="page">
+
+    <div
+      class="alert"
+      id="page-alert"
+      role="alert"
+      aria-live="assertive"
+    ></div>
+
+    <section class="hero">
+
+      <div class="hero-top">
+
+        <div>
+          <small>Today’s Route</small>
+          <h2 id="route-date">Loading...</h2>
+          <p id="route-summary">
+            Loading your assigned deliveries.
+          </p>
+        </div>
+
+        <span
+          class="availability-badge"
+          id="availability-badge"
+        >
+          Available
+        </span>
+
+      </div>
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <span>Total Stops</span>
+          <strong id="stat-total">0</strong>
+        </div>
+
+        <div class="hero-stat">
+          <span>Completed</span>
+          <strong id="stat-completed">0</strong>
+        </div>
+
+        <div class="hero-stat">
+          <span>Remaining</span>
+          <strong id="stat-remaining">0</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+    <div class="toolbar">
+
+      <input
+        id="route-date-input"
+        class="date-input"
+        type="date"
+      >
+
+      <a
+        id="full-route-link"
+        class="route-button"
+        href="#"
+        target="_blank"
+        rel="noopener"
+      >
+        <i class="fa-solid fa-route"></i>
+        Full Route
+      </a>
+
+    </div>
+
+    <div class="section-heading">
+      <h2>Your Stops</h2>
+      <p>
+        Open a stop to update status, checklist, notes and photos.
+      </p>
+    </div>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading your route...
+    </div>
+
+    <div
+      class="assignment-list"
+      id="assignment-list"
+      hidden
+    ></div>
+
+    <div
+      class="empty"
+      id="empty"
+      hidden
+    >
+      <i class="fa-solid fa-truck-fast"></i>
+      No deliveries are assigned to you for this date.
+    </div>
+
+  </main>
+
+  <div
+    class="modal-backdrop"
+    id="stop-modal"
+    aria-hidden="true"
+  >
+
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="stop-modal-title"
+    >
+
+      <div class="modal-head">
+
+        <div>
+          <h2 id="stop-modal-title">Delivery Stop</h2>
+          <p id="stop-modal-subtitle"></p>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          id="close-stop-modal"
+          aria-label="Close stop"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div
+          class="alert"
+          id="modal-alert"
+          role="alert"
+          aria-live="assertive"
+        ></div>
+
+        <div
+          class="detail-grid"
+          id="stop-details"
+        ></div>
+
+        <h3 class="section-title">
+          Equipment Checklist
+        </h3>
+
+        <div
+          class="checklist"
+          id="stop-checklist"
+        ></div>
+
+        <h3 class="section-title">
+          Driver Notes
+        </h3>
+
+        <div class="field">
+          <label for="driver-notes">
+            Setup, access, damage or customer notes
+          </label>
+
+          <textarea
+            id="driver-notes"
+            placeholder="Enter notes about this delivery."
+          ></textarea>
+        </div>
+
+        <h3 class="section-title">
+          Delivery Photos
+        </h3>
+
+        <div
+          class="photo-grid"
+          id="stop-photos"
+        ></div>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <a
+          class="modal-button"
+          id="modal-navigate"
+          href="#"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fa-solid fa-diamond-turn-right"></i>
+          Navigate
+        </a>
+
+        <button
+          type="button"
+          class="modal-button"
+          id="upload-photo-button"
+        >
+          <i class="fa-solid fa-camera"></i>
+          Add Photo
+        </button>
+
+        <button
+          type="button"
+          class="modal-button"
+          id="mark-transit-button"
+        >
+          <i class="fa-solid fa-truck-fast"></i>
+          In Transit
+        </button>
+
+        <button
+          type="button"
+          class="modal-button primary"
+          id="mark-delivered-button"
+        >
+          <i class="fa-solid fa-circle-check"></i>
+          Delivered
+        </button>
+
+        <button
+          type="button"
+          class="modal-button"
+          id="mark-returned-button"
+        >
+          <i class="fa-solid fa-arrow-rotate-left"></i>
+          Returned
+        </button>
+
+        <button
+          type="button"
+          class="modal-button primary"
+          id="save-notes-button"
+        >
+          <i class="fa-solid fa-floppy-disk"></i>
+          Save Notes
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <input
+    id="photo-input"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    hidden
+  >
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      const STARTING_ADDRESS =
+        "1 Bradley Forest, Manassas, VA 20112";
+
+      const PHOTO_BUCKET =
+        "delivery-photos";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const db =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY,
+          {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storageKey:
+                "sen-party-rentals-auth"
+            }
+          }
+        );
+
+      const state = {
+        user: null,
+        driver: null,
+        assignments: [],
+        bookings: new Map(),
+        customers: new Map(),
+        bookingItems: [],
+        checklist: [],
+        photos: [],
+        selectedDate: "",
+        selectedAssignmentId: null,
+        loading: false,
+        saving: false
+      };
+
+      const $ =
+        id => document.getElementById(id);
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Unknown error"
+        );
+      }
+
+      function showAlert(
+        element,
+        message,
+        type = "error"
+      ) {
+        element.className =
+          `alert visible ${type}`;
+
+        element.innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>
+            ${escapeHtml(message)}
+          </div>
+        `;
+      }
+
+      function hideAlert(element) {
+        element.className = "alert";
+        element.textContent = "";
+      }
+
+      function localDateValue() {
+        const date = new Date();
+        const offset =
+          date.getTimezoneOffset();
+
+        return new Date(
+          date.getTime() -
+          offset * 60000
+        )
+          .toISOString()
+          .slice(0, 10);
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "Date not set";
+        }
+
+        const date =
+          new Date(
+            `${String(value).slice(0, 10)}T12:00:00`
+          );
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            weekday: "long",
+            month: "long",
+            day: "numeric"
+          }
+        ).format(date);
+      }
+
+      function formatTime(value) {
+        if (!value) {
+          return "Not set";
+        }
+
+        const match =
+          String(value).match(
+            /^(\d{1,2}):(\d{2})/
+          );
+
+        if (!match) {
+          return String(value);
+        }
+
+        const date = new Date();
+
+        date.setHours(
+          Number(match[1]),
+          Number(match[2]),
+          0,
+          0
+        );
+
+        return new Intl.DateTimeFormat(
+          "en-US",
+          {
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        ).format(date);
+      }
+
+      function driverName() {
+        return [
+          state.driver?.first_name,
+          state.driver?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Driver";
+      }
+
+      function bookingFor(assignment) {
+        return (
+          state.bookings.get(
+            assignment?.booking_id
+          ) ||
+          null
+        );
+      }
+
+      function customerFor(booking) {
+        return (
+          state.customers.get(
+            booking?.customer_id
+          ) ||
+          null
+        );
+      }
+
+      function customerName(customer) {
+        return [
+          customer?.first_name,
+          customer?.last_name
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .trim() ||
+          "Customer";
+      }
+
+      function fullAddress(booking) {
+        return [
+          booking?.event_address,
+          booking?.event_city,
+          booking?.event_state,
+          booking?.event_zip
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      function itemsForBooking(bookingId) {
+        return state.bookingItems.filter(
+          item =>
+            item.booking_id ===
+            bookingId
+        );
+      }
+
+      function checklistFor(assignmentId) {
+        return state.checklist.filter(
+          item =>
+            item.delivery_assignment_id ===
+            assignmentId
+        );
+      }
+
+      function photosFor(assignmentId) {
+        return state.photos.filter(
+          photo =>
+            photo.delivery_assignment_id ===
+            assignmentId
+        );
+      }
+
+      function statusClass(value) {
+        return String(
+          value ||
+          "SCHEDULED"
+        )
+          .toLowerCase()
+          .replaceAll(" ", "_");
+      }
+
+      function itemSummary(bookingId) {
+        const items =
+          itemsForBooking(
+            bookingId
+          );
+
+        if (!items.length) {
+          return "No rental items listed.";
+        }
+
+        return items
+          .map(item =>
+            `${Number(item.quantity || 1)}× ${
+              item.item_name ||
+              item.name ||
+              "Rental item"
+            }`
+          )
+          .join(", ");
+      }
+
+      function mapUrl(address) {
+        if (!address) {
+          return "#";
+        }
+
+        return (
+          "https://www.google.com/maps/dir/?api=1" +
+          `&origin=${encodeURIComponent(
+            STARTING_ADDRESS
+          )}` +
+          `&destination=${encodeURIComponent(
+            address
+          )}` +
+          "&travelmode=driving"
+        );
+      }
+
+      function sortedAssignments() {
+        return [...state.assignments]
+          .sort((first, second) => {
+            const firstOrder =
+              Number(
+                first.route_order ??
+                999
+              );
+
+            const secondOrder =
+              Number(
+                second.route_order ??
+                999
+              );
+
+            if (firstOrder !== secondOrder) {
+              return firstOrder - secondOrder;
+            }
+
+            return String(
+              first.delivery_window_start ||
+              first.setup_time ||
+              "23:59"
+            ).localeCompare(
+              String(
+                second.delivery_window_start ||
+                second.setup_time ||
+                "23:59"
+              )
+            );
+          });
+      }
+
+      function fullRouteUrl() {
+        const addresses =
+          sortedAssignments()
+            .map(bookingFor)
+            .map(fullAddress)
+            .filter(Boolean);
+
+        if (!addresses.length) {
+          return "#";
+        }
+
+        const destination =
+          addresses.pop();
+
+        let url =
+          "https://www.google.com/maps/dir/?api=1" +
+          `&origin=${encodeURIComponent(
+            STARTING_ADDRESS
+          )}` +
+          `&destination=${encodeURIComponent(
+            destination
+          )}` +
+          "&travelmode=driving";
+
+        if (addresses.length) {
+          url +=
+            `&waypoints=${encodeURIComponent(
+              addresses.join("|")
+            )}`;
+        }
+
+        return url;
+      }
+
+      function renderDriver() {
+        $("driver-name").textContent =
+          driverName();
+
+        $("driver-vehicle").textContent =
+          [
+            state.driver?.vehicle_name,
+            state.driver?.vehicle_plate
+          ]
+            .filter(Boolean)
+            .join(" · ") ||
+          "Sen Party Rentals";
+
+        const available =
+          Boolean(
+            state.driver?.available
+          );
+
+        $("availability-badge").textContent =
+          available
+            ? "Available"
+            : "Unavailable";
+
+        $("availability-badge").classList.toggle(
+          "unavailable",
+          !available
+        );
+      }
+
+      function renderStats() {
+        const assignments =
+          sortedAssignments();
+
+        const completed =
+          assignments.filter(
+            assignment =>
+              [
+                "DELIVERED",
+                "COMPLETED",
+                "RETURNED"
+              ].includes(
+                String(
+                  assignment.status ||
+                  ""
+                ).toUpperCase()
+              )
+          ).length;
+
+        $("stat-total").textContent =
+          assignments.length;
+
+        $("stat-completed").textContent =
+          completed;
+
+        $("stat-remaining").textContent =
+          Math.max(
+            0,
+            assignments.length -
+            completed
+          );
+
+        $("route-date").textContent =
+          formatDate(
+            state.selectedDate
+          );
+
+        $("route-summary").textContent =
+          `${assignments.length} ${
+            assignments.length === 1
+              ? "delivery stop"
+              : "delivery stops"
+          } assigned.`;
+
+        $("full-route-link").href =
+          fullRouteUrl();
+      }
+
+      function assignmentCard(
+        assignment,
+        index
+      ) {
+        const booking =
+          bookingFor(
+            assignment
+          );
+
+        const customer =
+          customerFor(
+            booking
+          );
+
+        const address =
+          fullAddress(
+            booking
+          );
+
+        const phone =
+          customer?.phone ||
+          "";
+
+        return `
+          <article class="assignment-card">
+
+            <div class="assignment-head">
+
+              <div class="stop-number">
+                ${index + 1}
+              </div>
+
+              <div class="assignment-title">
+
+                <h3>
+                  ${escapeHtml(
+                    customerName(customer)
+                  )}
+                </h3>
+
+                <small>
+                  ${escapeHtml(
+                    booking?.booking_number ||
+                    assignment.booking_id
+                  )}
+                </small>
+
+              </div>
+
+              <span
+                class="status-badge ${statusClass(
+                  assignment.status
+                )}"
+              >
+                ${escapeHtml(
+                  assignment.status ||
+                  "SCHEDULED"
+                )}
+              </span>
+
+            </div>
+
+            <div class="assignment-body">
+
+              <div class="time-grid">
+
+                <div class="time-box">
+                  <span>Window</span>
+                  <strong>
+                    ${escapeHtml(
+                      formatTime(
+                        assignment.delivery_window_start
+                      )
+                    )}
+                  </strong>
+                </div>
+
+                <div class="time-box">
+                  <span>Setup</span>
+                  <strong>
+                    ${escapeHtml(
+                      formatTime(
+                        assignment.setup_time
+                      )
+                    )}
+                  </strong>
+                </div>
+
+                <div class="time-box">
+                  <span>Pickup</span>
+                  <strong>
+                    ${escapeHtml(
+                      formatTime(
+                        assignment.pickup_time
+                      )
+                    )}
+                  </strong>
+                </div>
+
+              </div>
+
+              <div class="address">
+                <i class="fa-solid fa-location-dot"></i>
+                ${escapeHtml(
+                  address ||
+                  "Address not provided"
+                )}
+              </div>
+
+              <div class="items">
+                ${escapeHtml(
+                  itemSummary(
+                    assignment.booking_id
+                  )
+                )}
+              </div>
+
+              <div class="assignment-actions">
+
+                <a
+                  class="action-button"
+                  href="${escapeHtml(
+                    mapUrl(address)
+                  )}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <i class="fa-solid fa-route"></i>
+                  Navigate
+                </a>
+
+                <a
+                  class="action-button"
+                  href="${
+                    phone
+                      ? `tel:${escapeHtml(
+                          phone.replace(
+                            /[^\d+]/g,
+                            ""
+                          )
+                        )}`
+                      : "#"
+                  }"
+                >
+                  <i class="fa-solid fa-phone"></i>
+                  Call
+                </a>
+
+                <a
+                  class="action-button"
+                  href="${
+                    phone
+                      ? `sms:${escapeHtml(
+                          phone.replace(
+                            /[^\d+]/g,
+                            ""
+                          )
+                        )}`
+                      : "#"
+                  }"
+                >
+                  <i class="fa-solid fa-comment-sms"></i>
+                  Text
+                </a>
+
+                <button
+                  type="button"
+                  class="action-button primary"
+                  data-open-stop="${escapeHtml(
+                    assignment.id
+                  )}"
+                >
+                  <i class="fa-solid fa-list-check"></i>
+                  Open
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+        `;
+      }
+
+      function renderAssignments() {
+        const assignments =
+          sortedAssignments();
+
+        $("loading").hidden =
+          true;
+
+        $("assignment-list").hidden =
+          assignments.length === 0;
+
+        $("empty").hidden =
+          assignments.length > 0;
+
+        $("assignment-list").innerHTML =
+          assignments
+            .map(assignmentCard)
+            .join("");
+
+        renderStats();
+      }
+
+      function detailHtml(
+        label,
+        value,
+        full = false
+      ) {
+        return `
+          <div class="detail ${
+            full ? "full" : ""
+          }">
+
+            <span>
+              ${escapeHtml(label)}
+            </span>
+
+            <strong>
+              ${escapeHtml(
+                value ||
+                "Not provided"
+              )}
+            </strong>
+
+          </div>
+        `;
+      }
+
+      function renderChecklist(
+        assignment
+      ) {
+        const checklist =
+          checklistFor(
+            assignment.id
+          );
+
+        if (!checklist.length) {
+          $("stop-checklist").innerHTML = `
+            <div class="empty" style="padding:25px 10px">
+              No checklist items found.
+            </div>
+          `;
+
+          return;
+        }
+
+        $("stop-checklist").innerHTML =
+          checklist
+            .map(item => `
+              <div class="check-row">
+
+                <div class="check-name">
+
+                  <strong>
+                    ${escapeHtml(
+                      item.item_name ||
+                      "Checklist item"
+                    )}
+                  </strong>
+
+                  <small>
+                    Quantity:
+                    ${Number(
+                      item.quantity ||
+                      1
+                    )}
+                  </small>
+
+                </div>
+
+                <div class="check-options">
+
+                  <label class="check-option">
+                    <input
+                      type="checkbox"
+                      data-check-id="${escapeHtml(
+                        item.id
+                      )}"
+                      data-check-field="loaded"
+                      ${
+                        item.loaded
+                          ? "checked"
+                          : ""
+                      }
+                    >
+                    Loaded
+                  </label>
+
+                  <label class="check-option">
+                    <input
+                      type="checkbox"
+                      data-check-id="${escapeHtml(
+                        item.id
+                      )}"
+                      data-check-field="delivered"
+                      ${
+                        item.delivered
+                          ? "checked"
+                          : ""
+                      }
+                    >
+                    Delivered
+                  </label>
+
+                  <label class="check-option">
+                    <input
+                      type="checkbox"
+                      data-check-id="${escapeHtml(
+                        item.id
+                      )}"
+                      data-check-field="returned"
+                      ${
+                        item.returned
+                          ? "checked"
+                          : ""
+                      }
+                    >
+                    Returned
+                  </label>
+
+                </div>
+
+              </div>
+            `)
+            .join("");
+      }
+
+      function renderPhotos(
+        assignmentId
+      ) {
+        const photos =
+          photosFor(
+            assignmentId
+          );
+
+        if (!photos.length) {
+          $("stop-photos").innerHTML = `
+            <div class="empty" style="grid-column:1/-1;padding:20px">
+              No photos uploaded.
+            </div>
+          `;
+
+          return;
+        }
+
+        $("stop-photos").innerHTML =
+          photos
+            .map(photo => `
+              <div class="photo-card">
+
+                <img
+                  src="${escapeHtml(
+                    photo.public_url ||
+                    photo.url ||
+                    photo.image_url ||
+                    ""
+                  )}"
+                  alt="Delivery photo"
+                  loading="lazy"
+                >
+
+              </div>
+            `)
+            .join("");
+      }
+
+      function openStop(
+        assignmentId
+      ) {
+        hideAlert(
+          $("modal-alert")
+        );
+
+        const assignment =
+          state.assignments.find(
+            item =>
+              item.id ===
+              assignmentId
+          );
+
+        if (!assignment) {
+          return;
+        }
+
+        state.selectedAssignmentId =
+          assignmentId;
+
+        const booking =
+          bookingFor(
+            assignment
+          );
+
+        const customer =
+          customerFor(
+            booking
+          );
+
+        const address =
+          fullAddress(
+            booking
+          );
+
+        $("stop-modal-title").textContent =
+          customerName(
+            customer
+          );
+
+        $("stop-modal-subtitle").textContent =
+          booking?.booking_number ||
+          assignment.booking_id;
+
+        $("stop-details").innerHTML =
+          [
+            detailHtml(
+              "Status",
+              assignment.status ||
+              "SCHEDULED"
+            ),
+
+            detailHtml(
+              "Delivery Window",
+              `${formatTime(
+                assignment.delivery_window_start
+              )} – ${formatTime(
+                assignment.delivery_window_end
+              )}`
+            ),
+
+            detailHtml(
+              "Setup Time",
+              formatTime(
+                assignment.setup_time
+              )
+            ),
+
+            detailHtml(
+              "Pickup Time",
+              formatTime(
+                assignment.pickup_time
+              )
+            ),
+
+            detailHtml(
+              "Customer Phone",
+              customer?.phone
+            ),
+
+            detailHtml(
+              "Address",
+              address,
+              true
+            ),
+
+            detailHtml(
+              "Rental Items",
+              itemSummary(
+                assignment.booking_id
+              ),
+              true
+            )
+          ].join("");
+
+        $("driver-notes").value =
+          assignment.driver_notes ||
+          "";
+
+        $("modal-navigate").href =
+          mapUrl(
+            address
+          );
+
+        renderChecklist(
+          assignment
+        );
+
+        renderPhotos(
+          assignmentId
+        );
+
+        $("stop-modal").classList.add(
+          "visible"
+        );
+
+        $("stop-modal").setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        document.body.classList.add(
+          "modal-open"
+        );
+      }
+
+      function closeStop() {
+        $("stop-modal").classList.remove(
+          "visible"
+        );
+
+        $("stop-modal").setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        document.body.classList.remove(
+          "modal-open"
+        );
+
+        state.selectedAssignmentId =
+          null;
+      }
+
+      async function requireDriver() {
+        const sessionResult =
+          await db.auth.getSession();
+
+        if (sessionResult.error) {
+          throw sessionResult.error;
+        }
+
+        const session =
+          sessionResult.data.session;
+
+        if (!session) {
+          location.replace(
+            "./driver-login.html"
+          );
+
+          return false;
+        }
+
+        const profileResult =
+          await db
+            .from(
+              "driver_profiles"
+            )
+            .select("*")
+            .eq(
+              "id",
+              session.user.id
+            )
+            .maybeSingle();
+
+        if (
+          profileResult.error ||
+          !profileResult.data
+        ) {
+          await db.auth.signOut();
+
+          location.replace(
+            "./driver-login.html"
+          );
+
+          return false;
+        }
+
+        if (
+          !profileResult.data.active
+        ) {
+          throw new Error(
+            "This driver account is inactive."
+          );
+        }
+
+        state.user =
+          session.user;
+
+        state.driver =
+          profileResult.data;
+
+        renderDriver();
+
+        return true;
+      }
+
+      async function optionalQuery(
+        table,
+        queryBuilder
+      ) {
+        const result =
+          queryBuilder
+            ? await queryBuilder(
+                db.from(table)
+              )
+            : await db
+                .from(table)
+                .select("*");
+
+        if (result.error) {
+          console.warn(
+            `${table} could not be loaded:`,
+            result.error
+          );
+
+          return [];
+        }
+
+        return result.data ||
+          [];
+      }
+
+      async function loadAssignments() {
+        if (state.loading) {
+          return;
+        }
+
+        state.loading =
+          true;
+
+        hideAlert(
+          $("page-alert")
+        );
+
+        $("refresh-button").disabled =
+          true;
+
+        $("refresh-button").classList.add(
+          "loading"
+        );
+
+        $("loading").hidden =
+          false;
+
+        $("assignment-list").hidden =
+          true;
+
+        $("empty").hidden =
+          true;
+
+        try {
+          const assignmentsResult =
+            await db
+              .from(
+                "delivery_assignments"
+              )
+              .select("*")
+              .eq(
+                "driver_id",
+                state.user.id
+              )
+              .eq(
+                "delivery_date",
+                state.selectedDate
+              );
+
+          if (
+            assignmentsResult.error
+          ) {
+            throw assignmentsResult.error;
+          }
+
+          state.assignments =
+            assignmentsResult.data ||
+            [];
+
+          const bookingIds =
+            [
+              ...new Set(
+                state.assignments
+                  .map(
+                    assignment =>
+                      assignment.booking_id
+                  )
+                  .filter(Boolean)
+              )
+            ];
+
+          if (!bookingIds.length) {
+            state.bookings =
+              new Map();
+
+            state.customers =
+              new Map();
+
+            state.bookingItems =
+              [];
+
+            state.checklist =
+              [];
+
+            state.photos =
+              [];
+
+            renderAssignments();
+
+            return;
+          }
+
+          const [
+            bookingsResult,
+            items,
+            checklist,
+            photos
+          ] =
+            await Promise.all([
+              db
+                .from("bookings")
+                .select("*")
+                .in(
+                  "id",
+                  bookingIds
+                ),
+
+              optionalQuery(
+                "booking_items",
+                query =>
+                  query
+                    .select("*")
+                    .in(
+                      "booking_id",
+                      bookingIds
+                    )
+              ),
+
+              optionalQuery(
+                "delivery_checklist_items",
+                query =>
+                  query
+                    .select("*")
+                    .in(
+                      "delivery_assignment_id",
+                      state.assignments.map(
+                        assignment =>
+                          assignment.id
+                      )
+                    )
+              ),
+
+              optionalQuery(
+                "delivery_photos",
+                query =>
+                  query
+                    .select("*")
+                    .in(
+                      "delivery_assignment_id",
+                      state.assignments.map(
+                        assignment =>
+                          assignment.id
+                      )
+                    )
+              )
+            ]);
+
+          if (
+            bookingsResult.error
+          ) {
+            throw bookingsResult.error;
+          }
+
+          const bookings =
+            bookingsResult.data ||
+            [];
+
+          const customerIds =
+            [
+              ...new Set(
+                bookings
+                  .map(
+                    booking =>
+                      booking.customer_id
+                  )
+                  .filter(Boolean)
+              )
+            ];
+
+          let customers =
+            [];
+
+          if (
+            customerIds.length
+          ) {
+            const customerResult =
+              await db
+                .from(
+                  "customers"
+                )
+                .select("*")
+                .in(
+                  "id",
+                  customerIds
+                );
+
+            if (
+              customerResult.error
+            ) {
+              throw customerResult.error;
+            }
+
+            customers =
+              customerResult.data ||
+              [];
+          }
+
+          state.bookings =
+            new Map(
+              bookings.map(
+                booking => [
+                  booking.id,
+                  booking
+                ]
+              )
+            );
+
+          state.customers =
+            new Map(
+              customers.map(
+                customer => [
+                  customer.id,
+                  customer
+                ]
+              )
+            );
+
+          state.bookingItems =
+            items;
+
+          state.checklist =
+            checklist;
+
+          state.photos =
+            photos;
+
+          renderAssignments();
+
+        } catch (error) {
+          $("loading").hidden =
+            true;
+
+          $("empty").hidden =
+            false;
+
+          showAlert(
+            $("page-alert"),
+            errorMessage(
+              error
+            )
+          );
+
+        } finally {
+          state.loading =
+            false;
+
+          $("refresh-button").disabled =
+            false;
+
+          $("refresh-button").classList.remove(
+            "loading"
+          );
+        }
+      }
+
+      async function updateStatus(
+        status
+      ) {
+        if (
+          !state.selectedAssignmentId ||
+          state.saving
+        ) {
+          return;
+        }
+
+        hideAlert(
+          $("modal-alert")
+        );
+
+        state.saving =
+          true;
+
+        try {
+          const result =
+            await db
+              .from(
+                "delivery_assignments"
+              )
+              .update({
+                status,
+                updated_at:
+                  new Date()
+                    .toISOString()
+              })
+              .eq(
+                "id",
+                state.selectedAssignmentId
+              )
+              .eq(
+                "driver_id",
+                state.user.id
+              )
+              .select()
+              .single();
+
+          if (result.error) {
+            throw result.error;
+          }
+
+          const assignment =
+            state.assignments.find(
+              item =>
+                item.id ===
+                state.selectedAssignmentId
+            );
+
+          if (assignment) {
+            Object.assign(
+              assignment,
+              result.data
+            );
+          }
+
+          showAlert(
+            $("modal-alert"),
+            `Status updated to ${status}.`,
+            "success"
+          );
+
+          renderAssignments();
+
+        } catch (error) {
+          showAlert(
+            $("modal-alert"),
+            `Status could not be updated: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.saving =
+            false;
+        }
+      }
+
+      async function saveNotes() {
+        if (
+          !state.selectedAssignmentId ||
+          state.saving
+        ) {
+          return;
+        }
+
+        hideAlert(
+          $("modal-alert")
+        );
+
+        state.saving =
+          true;
+
+        try {
+          const result =
+            await db
+              .from(
+                "delivery_assignments"
+              )
+              .update({
+                driver_notes:
+                  $("driver-notes").value
+                    .trim() ||
+                  null,
+
+                updated_at:
+                  new Date()
+                    .toISOString()
+              })
+              .eq(
+                "id",
+                state.selectedAssignmentId
+              )
+              .eq(
+                "driver_id",
+                state.user.id
+              )
+              .select()
+              .single();
+
+          if (result.error) {
+            throw result.error;
+          }
+
+          const assignment =
+            state.assignments.find(
+              item =>
+                item.id ===
+                state.selectedAssignmentId
+            );
+
+          if (assignment) {
+            Object.assign(
+              assignment,
+              result.data
+            );
+          }
+
+          showAlert(
+            $("modal-alert"),
+            "Driver notes saved.",
+            "success"
+          );
+
+        } catch (error) {
+          showAlert(
+            $("modal-alert"),
+            `Notes could not be saved: ${errorMessage(
+              error
+            )}`
+          );
+
+        } finally {
+          state.saving =
+            false;
+        }
+      }
+
+      async function updateChecklist(
+        itemId,
+        field,
+        checked
+      ) {
+        const allowed =
+          [
+            "loaded",
+            "delivered",
+            "returned"
+          ];
+
+        if (
+          !allowed.includes(field)
+        ) {
+          return;
+        }
+
+        const result =
+          await db
+            .from(
+              "delivery_checklist_items"
+            )
+            .update({
+              [field]:
+                checked,
+
+              updated_at:
+                new Date()
+                  .toISOString()
+            })
+            .eq(
+              "id",
+              itemId
+            );
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        const item =
+          state.checklist.find(
+            checklistItem =>
+              checklistItem.id ===
+              itemId
+          );
+
+        if (item) {
+          item[field] =
+            checked;
+        }
+      }
+
+      async function uploadPhoto(
+        file
+      ) {
+        if (
+          !file ||
+          !state.selectedAssignmentId
+        ) {
+          return;
+        }
+
+        hideAlert(
+          $("modal-alert")
+        );
+
+        try {
+          const extension =
+            (
+              file.name
+                .split(".")
+                .pop() ||
+              "jpg"
+            ).toLowerCase();
+
+          const path =
+            `${state.selectedAssignmentId}/` +
+            `${Date.now()}-` +
+            `${crypto.randomUUID()}.` +
+            `${extension}`;
+
+          const upload =
+            await db.storage
+              .from(
+                PHOTO_BUCKET
+              )
+              .upload(
+                path,
+                file,
+                {
+                  cacheControl:
+                    "3600",
+
+                  upsert:
+                    false
+                }
+              );
+
+          if (upload.error) {
+            throw upload.error;
+          }
+
+          const publicUrl =
+            db.storage
+              .from(
+                PHOTO_BUCKET
+              )
+              .getPublicUrl(
+                path
+              )
+              .data
+              .publicUrl;
+
+          const record =
+            await db
+              .from(
+                "delivery_photos"
+              )
+              .insert({
+                delivery_assignment_id:
+                  state.selectedAssignmentId,
+
+                storage_path:
+                  path,
+
+                public_url:
+                  publicUrl,
+
+                uploaded_by:
+                  state.user.id
+              })
+              .select()
+              .single();
+
+          if (record.error) {
+            throw record.error;
+          }
+
+          state.photos.push(
+            record.data
+          );
+
+          renderPhotos(
+            state.selectedAssignmentId
+          );
+
+          showAlert(
+            $("modal-alert"),
+            "Photo uploaded.",
+            "success"
+          );
+
+        } catch (error) {
+          showAlert(
+            $("modal-alert"),
+            `Photo could not be uploaded: ${errorMessage(
+              error
+            )}`
+          );
+        }
+      }
+
+      $("route-date-input")
+        .addEventListener(
+          "change",
+          async event => {
+            state.selectedDate =
+              event.target.value;
+
+            await loadAssignments();
+          }
+        );
+
+      $("refresh-button")
+        .addEventListener(
+          "click",
+          loadAssignments
+        );
+
+      $("signout-button")
+        .addEventListener(
+          "click",
+          async () => {
+            try {
+              await db.auth.signOut();
+            } finally {
+              location.replace(
+                "./driver-login.html"
+              );
+            }
+          }
+        );
+
+      $("close-stop-modal")
+        .addEventListener(
+          "click",
+          closeStop
+        );
+
+      $("stop-modal")
+        .addEventListener(
+          "click",
+          event => {
+            if (
+              event.target ===
+              $("stop-modal")
+            ) {
+              closeStop();
+            }
+          }
+        );
+
+      $("mark-transit-button")
+        .addEventListener(
+          "click",
+          () =>
+            updateStatus(
+              "IN_TRANSIT"
+            )
+        );
+
+      $("mark-delivered-button")
+        .addEventListener(
+          "click",
+          () =>
+            updateStatus(
+              "DELIVERED"
+            )
+        );
+
+      $("mark-returned-button")
+        .addEventListener(
+          "click",
+          () =>
+            updateStatus(
+              "RETURNED"
+            )
+        );
+
+      $("save-notes-button")
+        .addEventListener(
+          "click",
+          saveNotes
+        );
+
+      $("upload-photo-button")
+        .addEventListener(
+          "click",
+          () =>
+            $("photo-input").click()
+        );
+
+      $("photo-input")
+        .addEventListener(
+          "change",
+          event => {
+            const file =
+              event.target.files?.[0];
+
+            uploadPhoto(
+              file
+            );
+
+            event.target.value =
+              "";
+          }
+        );
+
+      document.addEventListener(
+        "click",
+        event => {
+          const button =
+            event.target.closest(
+              "[data-open-stop]"
+            );
+
+          if (button) {
+            openStop(
+              button.dataset
+                .openStop
+            );
+          }
+        }
+      );
+
+      document.addEventListener(
+        "change",
+        async event => {
+          const checkbox =
+            event.target.closest(
+              "[data-check-id]"
+            );
+
+          if (!checkbox) {
+            return;
+          }
+
+          try {
+            checkbox.disabled =
+              true;
+
+            await updateChecklist(
+              checkbox.dataset
+                .checkId,
+
+              checkbox.dataset
+                .checkField,
+
+              checkbox.checked
+            );
+
+            showAlert(
+              $("modal-alert"),
+              "Checklist updated.",
+              "success"
+            );
+
+          } catch (error) {
+            checkbox.checked =
+              !checkbox.checked;
+
+            showAlert(
+              $("modal-alert"),
+              `Checklist could not be updated: ${errorMessage(
+                error
+              )}`
+            );
+
+          } finally {
+            checkbox.disabled =
+              false;
+          }
+        }
+      );
+
+      document.addEventListener(
+        "keydown",
+        event => {
+          if (
+            event.key ===
+            "Escape" &&
+            $("stop-modal").classList
+              .contains("visible")
+          ) {
+            closeStop();
+          }
+        }
+      );
+
+      (async () => {
+        try {
+          if (
+            await requireDriver()
+          ) {
+            state.selectedDate =
+              localDateValue();
+
+            $("route-date-input").value =
+              state.selectedDate;
+
+            await loadAssignments();
+          }
+        } catch (error) {
+          $("loading").hidden =
+            true;
+
+          showAlert(
+            $("page-alert"),
+            errorMessage(
+              error
+            )
+          );
+        }
+      })();
+    })();
+  </script>
+
+</body>
+</html>

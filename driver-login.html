@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Driver Login | Sen Party Rentals</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#d90429">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <style>
+    :root {
+      --red: #d90429;
+      --red-dark: #970018;
+      --orange: #ff6a00;
+      --text: #202329;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --white: #ffffff;
+      --background: #f5f6f8;
+      --gradient: linear-gradient(
+        135deg,
+        #970018,
+        #d90429 58%,
+        #ff6a00
+      );
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 24px;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(217, 4, 41, 0.34),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 90% 85%,
+          rgba(255, 106, 0, 0.18),
+          transparent 32%
+        ),
+        linear-gradient(
+          135deg,
+          #09090b,
+          #18181c 58%,
+          #240008
+        );
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      overflow: hidden;
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .login-header {
+      padding: 34px 30px 28px;
+      color: var(--white);
+      background: var(--gradient);
+      text-align: center;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      place-items: center;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      font-size: 1.8rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .login-header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .login-header p {
+      margin: 9px 0 0;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+
+    .login-body {
+      padding: 30px;
+    }
+
+    .alert {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      line-height: 1.45;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert.error {
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      background: #fff1f2;
+    }
+
+    .alert.success {
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.84rem;
+      font-weight: 900;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 45px 0 43px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px rgba(217, 4, 41, 0.08);
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 9px;
+      color: var(--muted);
+      background: transparent;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .login-button {
+      width: 100%;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 0;
+      border-radius: 13px;
+      color: var(--white);
+      background: var(--gradient);
+      box-shadow: 0 14px 30px rgba(217, 4, 41, 0.24);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .login-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    .login-links {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+    }
+
+    .login-links a {
+      color: var(--red-dark);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .help-box {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 12px;
+      color: var(--muted);
+      background: var(--background);
+      font-size: 0.8rem;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .help-box a {
+      color: var(--red-dark);
+      font-weight: 900;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login-card">
+
+    <section class="login-header">
+      <div class="logo-mark">
+        <i class="fa-solid fa-truck-fast"></i>
+      </div>
+
+      <h1>Driver Portal</h1>
+
+      <p>
+        Sign in to view your assigned deliveries and route.
+      </p>
+    </section>
+
+    <section class="login-body">
+
+      <div
+        class="alert"
+        id="login-alert"
+        role="alert"
+        aria-live="assertive"
+      ></div>
+
+      <form id="driver-login-form">
+
+        <div class="field">
+          <label for="driver-email">Email Address</label>
+
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+
+            <input
+              id="driver-email"
+              type="email"
+              autocomplete="email"
+              placeholder="driver@example.com"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="driver-password">Password</label>
+
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+
+            <input
+              id="driver-password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              id="password-toggle"
+              aria-label="Show password"
+            >
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="login-button"
+          id="login-button"
+        >
+          <span id="login-button-text">Sign In</span>
+          <i
+            id="login-button-icon"
+            class="fa-solid fa-right-to-bracket"
+          ></i>
+        </button>
+
+      </form>
+
+      <div class="login-links">
+        <a href="./index.html">Return to website</a>
+        <a href="tel:+15717199575">Need help?</a>
+      </div>
+
+      <div class="help-box">
+        Driver access is provided by Sen Party Rentals.
+        For login assistance, call or text
+        <a href="tel:+15717199575">(571) 719-9575</a>.
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SUPABASE_URL =
+        "https://tuttkwpnicgfcyeptrkv.supabase.co";
+
+      const SUPABASE_KEY =
+        "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+
+      if (!window.supabase) {
+        throw new Error(
+          "Supabase JavaScript library did not load."
+        );
+      }
+
+      const db = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            storageKey: "sen-party-rentals-auth"
+          }
+        }
+      );
+
+      const state = {
+        signingIn: false
+      };
+
+      const $ = id =>
+        document.getElementById(id);
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function errorMessage(error) {
+        return (
+          error?.message ||
+          error?.details ||
+          error?.hint ||
+          "Sign in failed."
+        );
+      }
+
+      function showAlert(
+        message,
+        type = "error"
+      ) {
+        $("login-alert").className =
+          `alert visible ${type}`;
+
+        $("login-alert").innerHTML = `
+          <i class="fa-solid ${
+            type === "success"
+              ? "fa-circle-check"
+              : "fa-triangle-exclamation"
+          }"></i>
+
+          <div>${escapeHtml(message)}</div>
+        `;
+      }
+
+      function hideAlert() {
+        $("login-alert").className =
+          "alert";
+
+        $("login-alert").textContent =
+          "";
+      }
+
+      function setSigningIn(value) {
+        state.signingIn = value;
+
+        $("login-button").disabled =
+          value;
+
+        $("login-button-text").textContent =
+          value
+            ? "Signing In..."
+            : "Sign In";
+
+        $("login-button-icon").className =
+          value
+            ? "fa-solid fa-spinner fa-spin"
+            : "fa-solid fa-right-to-bracket";
+      }
+
+      async function verifyDriver(userId) {
+        const {
+          data,
+          error
+        } = await db
+          .from("driver_profiles")
+          .select("id, active")
+          .eq("id", userId)
+          .maybeSingle();
+
+        if (error) {
+          throw error;
+        }
+
+        if (!data) {
+          throw new Error(
+            "This account does not have a driver profile."
+          );
+        }
+
+        if (!data.active) {
+          throw new Error(
+            "This driver account is inactive. Contact your manager."
+          );
+        }
+
+        return data;
+      }
+
+      async function signIn(event) {
+        event.preventDefault();
+
+        if (state.signingIn) {
+          return;
+        }
+
+        hideAlert();
+        setSigningIn(true);
+
+        try {
+          const email =
+            $("driver-email").value.trim();
+
+          const password =
+            $("driver-password").value;
+
+          const {
+            data,
+            error
+          } = await db.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) {
+            throw error;
+          }
+
+          if (!data.user) {
+            throw new Error(
+              "The driver account could not be loaded."
+            );
+          }
+
+          await verifyDriver(
+            data.user.id
+          );
+
+          showAlert(
+            "Login successful. Opening your route...",
+            "success"
+          );
+
+          window.setTimeout(() => {
+            window.location.replace(
+              "./driver.html"
+            );
+          }, 450);
+
+        } catch (error) {
+          console.error(
+            "Driver login error:",
+            error
+          );
+
+          try {
+            await db.auth.signOut();
+          } catch {}
+
+          showAlert(
+            errorMessage(error)
+          );
+
+        } finally {
+          setSigningIn(false);
+        }
+      }
+
+      $("driver-login-form")
+        .addEventListener(
+          "submit",
+          signIn
+        );
+
+      $("password-toggle")
+        .addEventListener(
+          "click",
+          () => {
+            const input =
+              $("driver-password");
+
+            const showing =
+              input.type === "text";
+
+            input.type =
+              showing
+                ? "password"
+                : "text";
+
+            $("password-toggle").innerHTML =
+              `<i class="fa-solid ${
+                showing
+                  ? "fa-eye"
+                  : "fa-eye-slash"
+              }"></i>`;
+
+            $("password-toggle").setAttribute(
+              "aria-label",
+              showing
+                ? "Show password"
+                : "Hide password"
+            );
+          }
+        );
+
+      (async () => {
+        const {
+          data
+        } = await db.auth.getSession();
+
+        const session =
+          data.session;
+
+        if (!session) {
+          return;
+        }
+
+        try {
+          await verifyDriver(
+            session.user.id
+          );
+
+          window.location.replace(
+            "./driver.html"
+          );
+        } catch {
+          await db.auth.signOut();
+        }
+      })();
+    })();
+  </script>
+
+</body>
+</html>
