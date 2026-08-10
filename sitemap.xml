@@ -1,197 +1,253 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://www.sitemaps.org/schemas/sitemap/0.9
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
->
-
-  <!-- MAIN PAGES -->
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.senmoonbounce.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>1.0</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/inventory.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.9</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/booking.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.95</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.9</priority>
   </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/gallery.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/reviews.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/service-areas.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/about.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.65</priority>
-  </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/contact.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <!-- RENTAL CATEGORIES -->
-
   <url>
     <loc>https://www.senmoonbounce.com/bounce-houses.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/water-slides.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/obstacle-courses.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/dunk-tanks.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
-  <url>
-    <loc>https://www.senmoonbounce.com/tents.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/tables-chairs.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
     <loc>https://www.senmoonbounce.com/concessions.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/generators.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <loc>https://www.senmoonbounce.com/modular-moonbounce-rental.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
-  <!-- EVENT PAGES -->
-
   <url>
-    <loc>https://www.senmoonbounce.com/birthday-parties.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
+    <loc>https://www.senmoonbounce.com/sponge-bop-moonbounce-rental.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/school-church-events.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
+    <loc>https://www.senmoonbounce.com/giant-flip-flop-water-slide-rental.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/corporate-events.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://www.senmoonbounce.com/castle-combo-rental.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/park-rentals.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-manassas-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/event-packages.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.95</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-manassas-park-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
-  <!-- RENTAL INFORMATION -->
-
   <url>
-    <loc>https://www.senmoonbounce.com/delivery-setup.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-woodbridge-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/safety-rules.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.70</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-dale-city-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/cancellation-weather.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.70</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-lake-ridge-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/faq.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-dumfries-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
-  <!-- POLICIES -->
-
   <url>
-    <loc>https://www.senmoonbounce.com/policies.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.60</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-montclair-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/privacy-policy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.40</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-triangle-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.senmoonbounce.com/terms-and-conditions.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.40</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-nokesville-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
-  <!-- WEBSITE DIRECTORY -->
-
   <url>
-    <loc>https://www.senmoonbounce.com/sitemap.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <loc>https://www.senmoonbounce.com/party-rentals-bristow-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
   </url>
-
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-gainesville-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-haymarket-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-warrenton-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-centreville-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-chantilly-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-fairfax-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-fairfax-station-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-burke-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-springfield-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-lorton-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-annandale-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-vienna-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-oakton-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-reston-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-herndon-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-sterling-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-ashburn-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-leesburg-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-aldie-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-south-riding-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-alexandria-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-arlington-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-falls-church-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-mclean-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-stafford-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-fredericksburg-va.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.senmoonbounce.com/party-rentals-washington-dc.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>
