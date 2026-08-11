@@ -5745,3 +5745,22 @@ footer a {
     transition: none;
   }
 }
+/* =========================================================
+   INVENTORY — FULL PHOTO FINAL OVERRIDE
+========================================================= */
+
+.inventory-rental-media {
+  height: 330px !important;
+  min-height: 330px !important;
+  background: #e9ebee !important;
+}
+
+.inventory-rental-media img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+}
