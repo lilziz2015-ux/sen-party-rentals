@@ -1,242 +1,798 @@
+/* =========================================================
+   SEN PARTY RENTALS — SERVICE WORKER
+   File: /service-worker.js
+   Version: 46
+========================================================= */
+
 "use strict";
 
-const CACHE_VERSION = "sen-party-rentals-v1";
 
-const STATIC_CACHE = `${CACHE_VERSION}-static`;
-const PAGE_CACHE = `${CACHE_VERSION}-pages`;
-const IMAGE_CACHE = `${CACHE_VERSION}-images`;
+/* =========================================================
+   CACHE SETTINGS
+========================================================= */
 
-const OFFLINE_PAGE = "/offline.html";
+const SW_VERSION =
+  "46";
+
+const CACHE_PREFIX =
+  "sen-party-rentals";
+
+const STATIC_CACHE =
+  `${CACHE_PREFIX}-static-v${SW_VERSION}`;
+
+const RUNTIME_CACHE =
+  `${CACHE_PREFIX}-runtime-v${SW_VERSION}`;
+
+const IMAGE_CACHE =
+  `${CACHE_PREFIX}-images-v${SW_VERSION}`;
+
+
+/* =========================================================
+   CORE WEBSITE FILES
+========================================================= */
 
 const CORE_ASSETS = [
-  "/",
-  "/index.html",
-  "/inventory.html",
-  "/booking.html",
-  "/contact.html",
-  "/water-slides.html",
-  "/bounce-houses.html",
-  "/obstacle-courses.html",
-  "/offline.html",
-  "/site.webmanifest",
-  "/assets/style.css?v=20",
-  "/assets/header.css?v=20",
-  "/assets/rental.css?v=20",
-  "/assets/script.js?v=20",
-  "/assets/images/logo.png",
-  "/assets/icons/icon-192x192.png",
-  "/assets/icons/icon-512x512.png"
+  "./",
+  "./index.html",
+
+  "./assets/style.css",
+  "./assets/header.css",
+  "./assets/footer.css",
+  "./assets/rental.css",
+  "./assets/script.js",
+
+  "./header.html",
+  "./footer.html",
+
+  "./favicon.ico"
 ];
 
-/* =========================================================
-   INSTALL
-========================================================= */
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(STATIC_CACHE)
-      .then((cache) => cache.addAll(CORE_ASSETS))
-      .then(() => self.skipWaiting())
-      .catch((error) => {
-        console.error("Service worker installation failed:", error);
-      })
-  );
-});
 
 /* =========================================================
-   ACTIVATE
+   NEVER CACHE THESE SERVICES
 ========================================================= */
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames
-            .filter((cacheName) => {
-              return (
-                cacheName !== STATIC_CACHE &&
-                cacheName !== PAGE_CACHE &&
-                cacheName !== IMAGE_CACHE
-              );
-            })
-            .map((cacheName) => caches.delete(cacheName))
-        );
-      })
-      .then(() => self.clients.claim())
-  );
-});
+const NETWORK_ONLY_HOSTS =
+  new Set([
+    "tuttkwpnicgfcyeptrkv.supabase.co",
+    "www.googletagmanager.com",
+    "www.google-analytics.com",
+    "region1.google-analytics.com",
+    "script.google.com",
+    "script.googleusercontent.com"
+  ]);
+
 
 /* =========================================================
-   FETCH
+   FILE TYPES
 ========================================================= */
 
-self.addEventListener("fetch", (event) => {
-  const request = event.request;
+const STATIC_FILE_PATTERN =
+  /\.(?:css|js|mjs|woff|woff2|ttf|otf)$/i;
 
-  if (request.method !== "GET") {
-    return;
-  }
+const IMAGE_FILE_PATTERN =
+  /\.(?:png|jpe?g|gif|webp|avif|svg|ico)$/i;
 
-  const requestUrl = new URL(request.url);
-
-  if (requestUrl.origin !== self.location.origin) {
-    return;
-  }
-
-  if (request.mode === "navigate") {
-    event.respondWith(networkFirstPage(request));
-    return;
-  }
-
-  if (request.destination === "image") {
-    event.respondWith(cacheFirstImage(request));
-    return;
-  }
-
-  if (
-    request.destination === "style" ||
-    request.destination === "script" ||
-    request.destination === "font"
-  ) {
-    event.respondWith(staleWhileRevalidate(request));
-    return;
-  }
-
-  event.respondWith(cacheFirst(request));
-});
 
 /* =========================================================
-   NETWORK-FIRST FOR HTML PAGES
+   HELPERS
 ========================================================= */
 
-async function networkFirstPage(request) {
+function isHttpRequest(
+  request
+) {
   try {
-    const networkResponse = await fetch(request);
+    const url =
+      new URL(
+        request.url
+      );
 
-    if (networkResponse && networkResponse.ok) {
-      const cache = await caches.open(PAGE_CACHE);
-      cache.put(request, networkResponse.clone());
+    return (
+      url.protocol ===
+        "http:" ||
+      url.protocol ===
+        "https:"
+    );
+
+  } catch {
+    return false;
+  }
+}
+
+
+function isSameOrigin(
+  request
+) {
+  try {
+    const url =
+      new URL(
+        request.url
+      );
+
+    return (
+      url.origin ===
+      self.location.origin
+    );
+
+  } catch {
+    return false;
+  }
+}
+
+
+function isNavigationRequest(
+  request
+) {
+  return (
+    request.mode ===
+      "navigate" ||
+    request.destination ===
+      "document"
+  );
+}
+
+
+function shouldUseNetworkOnly(
+  request
+) {
+  try {
+    const url =
+      new URL(
+        request.url
+      );
+
+
+    if (
+      NETWORK_ONLY_HOSTS.has(
+        url.hostname
+      )
+    ) {
+      return true;
     }
 
-    return networkResponse;
-  } catch (error) {
-    const cachedResponse = await caches.match(request);
 
-    if (cachedResponse) {
+    /*
+     * Never cache any Supabase
+     * REST, auth, storage or
+     * realtime request.
+     */
+    if (
+      url.hostname.endsWith(
+        ".supabase.co"
+      )
+    ) {
+      return true;
+    }
+
+
+    return false;
+
+  } catch {
+    return true;
+  }
+}
+
+
+function requestCanBeCached(
+  request
+) {
+  return (
+    request.method ===
+      "GET" &&
+    isHttpRequest(
+      request
+    ) &&
+    !shouldUseNetworkOnly(
+      request
+    )
+  );
+}
+
+
+function responseCanBeCached(
+  response
+) {
+  return Boolean(
+    response &&
+    response.status >=
+      200 &&
+    response.status <
+      300
+  );
+}
+
+
+/* =========================================================
+   INSTALL SERVICE WORKER
+========================================================= */
+
+self.addEventListener(
+  "install",
+  event => {
+
+    event.waitUntil(
+      (async () => {
+
+        const cache =
+          await caches.open(
+            STATIC_CACHE
+          );
+
+
+        /*
+         * Cache each file separately.
+         * If one file is missing,
+         * installation still continues.
+         */
+        await Promise.allSettled(
+          CORE_ASSETS.map(
+            async asset => {
+
+              try {
+
+                const request =
+                  new Request(
+                    asset,
+                    {
+                      cache:
+                        "reload"
+                    }
+                  );
+
+
+                const response =
+                  await fetch(
+                    request
+                  );
+
+
+                if (
+                  responseCanBeCached(
+                    response
+                  )
+                ) {
+
+                  await cache.put(
+                    request,
+                    response.clone()
+                  );
+                }
+
+              } catch (
+                error
+              ) {
+
+                console.warn(
+                  "[Service Worker] Could not cache:",
+                  asset,
+                  error
+                );
+              }
+            }
+          )
+        );
+
+
+        /*
+         * Activate updated
+         * service worker immediately.
+         */
+        await self.skipWaiting();
+
+      })()
+    );
+  }
+);
+
+
+/* =========================================================
+   ACTIVATE SERVICE WORKER
+========================================================= */
+
+self.addEventListener(
+  "activate",
+  event => {
+
+    event.waitUntil(
+      (async () => {
+
+        const validCaches =
+          new Set([
+            STATIC_CACHE,
+            RUNTIME_CACHE,
+            IMAGE_CACHE
+          ]);
+
+
+        const cacheNames =
+          await caches.keys();
+
+
+        /*
+         * Delete old Sen Party
+         * Rentals caches.
+         */
+        await Promise.all(
+          cacheNames.map(
+            cacheName => {
+
+              if (
+                cacheName.startsWith(
+                  CACHE_PREFIX
+                ) &&
+                !validCaches.has(
+                  cacheName
+                )
+              ) {
+
+                return caches.delete(
+                  cacheName
+                );
+              }
+
+
+              return Promise.resolve(
+                false
+              );
+            }
+          )
+        );
+
+
+        /*
+         * Control open website
+         * tabs immediately.
+         */
+        await self.clients.claim();
+
+      })()
+    );
+  }
+);
+
+
+/* =========================================================
+   NETWORK FIRST
+   HTML / PAGES
+========================================================= */
+
+async function networkFirst(
+  request
+) {
+
+  const cache =
+    await caches.open(
+      RUNTIME_CACHE
+    );
+
+
+  try {
+
+    /*
+     * Always try the newest
+     * page from the internet.
+     */
+    const networkResponse =
+      await fetch(
+        request,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      responseCanBeCached(
+        networkResponse
+      )
+    ) {
+
+      await cache.put(
+        request,
+        networkResponse.clone()
+      );
+    }
+
+
+    return networkResponse;
+
+  } catch (
+    error
+  ) {
+
+    /*
+     * If offline, use the
+     * last working copy.
+     */
+    const cachedResponse =
+      await cache.match(
+        request
+      );
+
+
+    if (
+      cachedResponse
+    ) {
       return cachedResponse;
     }
 
-    const offlineResponse = await caches.match(OFFLINE_PAGE);
 
-    if (offlineResponse) {
-      return offlineResponse;
+    /*
+     * If the requested page
+     * isn't cached, show the
+     * cached homepage.
+     */
+    if (
+      isNavigationRequest(
+        request
+      )
+    ) {
+
+      const homepage =
+        (
+          await caches.match(
+            "./index.html"
+          )
+        ) ||
+        (
+          await caches.match(
+            "./"
+          )
+        );
+
+
+      if (
+        homepage
+      ) {
+        return homepage;
+      }
     }
 
-    return new Response(
-      `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Offline | Sen Party Rentals</title>
-        </head>
-        <body>
-          <main>
-            <h1>You Are Offline</h1>
-            <p>Please reconnect to the internet and try again.</p>
-          </main>
-        </body>
-      </html>
-      `,
+
+    throw error;
+  }
+}
+
+
+/* =========================================================
+   STATIC FILE CACHE
+   CSS / JS / FONTS
+========================================================= */
+
+async function cacheFirstWithRefresh(
+  request
+) {
+
+  const cache =
+    await caches.open(
+      STATIC_CACHE
+    );
+
+
+  /*
+   * Ignore ?v=45, ?v=46 etc.
+   * when looking for an existing
+   * cached copy.
+   */
+  const cached =
+    await cache.match(
+      request,
       {
-        status: 503,
-        headers: {
-          "Content-Type": "text/html; charset=UTF-8"
-        }
+        ignoreSearch:
+          true
       }
     );
+
+
+  /*
+   * Also try downloading the
+   * latest file in background.
+   */
+  const refreshPromise =
+    fetch(
+      request,
+      {
+        cache:
+          "no-cache"
+      }
+    )
+      .then(
+        async response => {
+
+          if (
+            responseCanBeCached(
+              response
+            )
+          ) {
+
+            await cache.put(
+              request,
+              response.clone()
+            );
+          }
+
+
+          return response;
+        }
+      )
+      .catch(
+        () => null
+      );
+
+
+  /*
+   * Cached file loads immediately.
+   */
+  if (
+    cached
+  ) {
+
+    void refreshPromise;
+
+    return cached;
   }
+
+
+  /*
+   * No cached copy,
+   * use network.
+   */
+  const refreshed =
+    await refreshPromise;
+
+
+  if (
+    refreshed
+  ) {
+    return refreshed;
+  }
+
+
+  throw new Error(
+    "Static asset unavailable"
+  );
 }
 
+
 /* =========================================================
-   CACHE-FIRST FOR IMAGES
+   IMAGE CACHE
 ========================================================= */
 
-async function cacheFirstImage(request) {
-  const cachedResponse = await caches.match(request);
+async function imageCacheFirst(
+  request
+) {
 
-  if (cachedResponse) {
-    return cachedResponse;
+  const cache =
+    await caches.open(
+      IMAGE_CACHE
+    );
+
+
+  const cached =
+    await cache.match(
+      request
+    );
+
+
+  if (
+    cached
+  ) {
+    return cached;
   }
 
-  try {
-    const networkResponse = await fetch(request);
 
-    if (networkResponse && networkResponse.ok) {
-      const cache = await caches.open(IMAGE_CACHE);
-      cache.put(request, networkResponse.clone());
+  const response =
+    await fetch(
+      request
+    );
+
+
+  if (
+    responseCanBeCached(
+      response
+    )
+  ) {
+
+    await cache.put(
+      request,
+      response.clone()
+    );
+  }
+
+
+  return response;
+}
+
+
+/* =========================================================
+   FETCH REQUEST ROUTER
+========================================================= */
+
+self.addEventListener(
+  "fetch",
+  event => {
+
+    const request =
+      event.request;
+
+
+    /*
+     * Skip POST, Supabase,
+     * Analytics, etc.
+     */
+    if (
+      !requestCanBeCached(
+        request
+      )
+    ) {
+      return;
     }
 
-    return networkResponse;
-  } catch (error) {
-    return new Response("", {
-      status: 504,
-      statusText: "Image unavailable while offline"
-    });
-  }
-}
 
-/* =========================================================
-   STALE-WHILE-REVALIDATE
-========================================================= */
+    const url =
+      new URL(
+        request.url
+      );
 
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(STATIC_CACHE);
-  const cachedResponse = await cache.match(request);
 
-  const networkPromise = fetch(request)
-    .then((networkResponse) => {
-      if (networkResponse && networkResponse.ok) {
-        cache.put(request, networkResponse.clone());
-      }
+    /* =====================================================
+       SUPABASE / ANALYTICS
+       NETWORK ONLY
+    ===================================================== */
 
-      return networkResponse;
-    })
-    .catch(() => null);
-
-  return cachedResponse || networkPromise;
-}
-
-/* =========================================================
-   CACHE-FIRST
-========================================================= */
-
-async function cacheFirst(request) {
-  const cachedResponse = await caches.match(request);
-
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  try {
-    const networkResponse = await fetch(request);
-
-    if (networkResponse && networkResponse.ok) {
-      const cache = await caches.open(STATIC_CACHE);
-      cache.put(request, networkResponse.clone());
+    if (
+      shouldUseNetworkOnly(
+        request
+      )
+    ) {
+      return;
     }
 
-    return networkResponse;
-  } catch (error) {
-    return new Response("Resource unavailable while offline.", {
-      status: 503,
-      headers: {
-        "Content-Type": "text/plain; charset=UTF-8"
-      }
-    });
+
+    /* =====================================================
+       HTML
+       NETWORK FIRST
+    ===================================================== */
+
+    if (
+      isNavigationRequest(
+        request
+      ) ||
+      (
+        isSameOrigin(
+          request
+        ) &&
+        url.pathname.endsWith(
+          ".html"
+        )
+      )
+    ) {
+
+      event.respondWith(
+        networkFirst(
+          request
+        )
+      );
+
+      return;
+    }
+
+
+    /* =====================================================
+       CSS / JS / FONTS
+    ===================================================== */
+
+    if (
+      isSameOrigin(
+        request
+      ) &&
+      STATIC_FILE_PATTERN.test(
+        url.pathname
+      )
+    ) {
+
+      event.respondWith(
+        cacheFirstWithRefresh(
+          request
+        )
+      );
+
+      return;
+    }
+
+
+    /* =====================================================
+       IMAGES
+    ===================================================== */
+
+    if (
+      isSameOrigin(
+        request
+      ) &&
+      IMAGE_FILE_PATTERN.test(
+        url.pathname
+      )
+    ) {
+
+      event.respondWith(
+        imageCacheFirst(
+          request
+        )
+      );
+
+      return;
+    }
+
+
+    /*
+     * Everything else uses
+     * normal browser networking.
+     */
   }
-}
+);
+
+
+/* =========================================================
+   SERVICE WORKER COMMANDS
+========================================================= */
+
+self.addEventListener(
+  "message",
+  event => {
+
+    const data =
+      event.data || {};
+
+
+    /*
+     * Activate newest worker.
+     */
+    if (
+      data.type ===
+      "SKIP_WAITING"
+    ) {
+
+      self.skipWaiting();
+
+      return;
+    }
+
+
+    /*
+     * Clear website caches
+     * manually if needed.
+     */
+    if (
+      data.type ===
+      "CLEAR_SITE_CACHES"
+    ) {
+
+      event.waitUntil(
+        (async () => {
+
+          const names =
+            await caches.keys();
+
+
+          await Promise.all(
+            names
+              .filter(
+                name =>
+                  name.startsWith(
+                    CACHE_PREFIX
+                  )
+              )
+              .map(
+                name =>
+                  caches.delete(
+                    name
+                  )
+              )
+          );
+
+        })()
+      );
+    }
+  }
+);
