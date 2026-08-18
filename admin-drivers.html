@@ -692,7 +692,7 @@
         id="open-driver-modal"
       >
         <i class="fa-solid fa-plus"></i>
-        Add Driver
+        Add Worker
       </button>
     </div>
   </header>
@@ -827,8 +827,8 @@
     >
       <div class="modal-head">
         <div>
-          <h2 id="driver-modal-title">Add Driver</h2>
-          <p>Enter the driver profile information.</p>
+          <h2 id="driver-modal-title">Add Worker</h2>
+          <p>Create a worker login and driver profile.</p>
         </div>
 
         <button
@@ -888,6 +888,17 @@
                 id="driver-email"
                 type="email"
               >
+            </div>
+
+            <div class="field" id="driver-password-field">
+              <label for="driver-password">Temporary Password</label>
+              <input
+                id="driver-password"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+              >
+              <small>At least 8 characters. Give this password to the worker securely.</small>
             </div>
 
             <div class="field">
@@ -1373,6 +1384,9 @@
         $("driver-email").value =
           driver?.email || "";
 
+        $("driver-password").value = "";
+        $("driver-password-field").hidden = Boolean(driver);
+
         $("driver-license").value =
           driver?.license_number || "";
 
@@ -1393,8 +1407,8 @@
 
         $("driver-modal-title").textContent =
           driver
-            ? "Edit Driver"
-            : "Add Driver";
+            ? "Edit Worker"
+            : "Add Worker";
 
         $("driver-modal").classList.add("visible");
         $("driver-modal").setAttribute(
@@ -1472,6 +1486,9 @@
             new Date().toISOString()
         };
 
+        const temporaryPassword =
+          $("driver-password").value;
+
         if (
           !driverData.first_name ||
           !driverData.last_name
@@ -1484,25 +1501,58 @@
           return;
         }
 
+        if (!id && !driverData.email) {
+          showAlert(
+            $("modal-alert"),
+            "Enter the worker's email address."
+          );
+
+          return;
+        }
+
+        if (!id && temporaryPassword.length < 8) {
+          showAlert(
+            $("modal-alert"),
+            "Enter a temporary password with at least 8 characters."
+          );
+
+          return;
+        }
+
         state.saving = true;
         $("save-driver").disabled = true;
         $("save-driver").textContent =
           "Saving Driver...";
 
         try {
-          if (!id) {
-            throw new Error(
-              "New drivers must first be created in Supabase Authentication. Then paste their Auth User ID into the driver profile."
-            );
-          }
+          let error;
 
-          const {
-            error
-          } =
-            await db
-              .from("driver_profiles")
-              .update(driverData)
-              .eq("id", id);
+          if (!id) {
+            const result =
+              await db.functions.invoke(
+                "create-worker",
+                {
+                  body: {
+                    ...driverData,
+                    temporary_password: temporaryPassword
+                  }
+                }
+              );
+
+            error = result.error;
+
+            if (!error && result.data?.error) {
+              error = new Error(result.data.error);
+            }
+          } else {
+            const result =
+              await db
+                .from("driver_profiles")
+                .update(driverData)
+                .eq("id", id);
+
+            error = result.error;
+          }
 
           if (error) {
             throw error;
