@@ -1141,13 +1141,15 @@ header {
   z-index: 6;
   max-width: 270px;
   padding: 17px 19px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 0;
   border-radius: 16px;
   color: #ffffff;
-  background: rgba(8, 8, 10, 0.34);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.24);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
 }
 
 .home-hero-badge strong {
@@ -1159,7 +1161,7 @@ header {
 
 .home-hero-badge span {
   display: block;
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.78rem;
   line-height: 1.5;
 }
