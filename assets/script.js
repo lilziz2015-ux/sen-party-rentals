@@ -357,15 +357,6 @@ function initializeSharedHeader() {
     button.addEventListener(
       "click",
       event => {
-        /*
-         * Desktop dropdown is controlled
-         * by hover and keyboard focus CSS.
-         */
-
-        if (!isMobileNavigation()) {
-          return;
-        }
-
         event.preventDefault();
         event.stopPropagation();
 
@@ -406,6 +397,13 @@ function initializeSharedHeader() {
           "aria-expanded",
           String(willOpen)
         );
+
+        if (
+          !willOpen &&
+          !isMobileNavigation()
+        ) {
+          button.blur();
+        }
       }
     );
   });
