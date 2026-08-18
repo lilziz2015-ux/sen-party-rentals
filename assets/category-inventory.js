@@ -92,6 +92,7 @@
     const style = document.createElement("style");
     style.textContent = `
       .sen-live-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;width:100%}
+      .sen-live-groups{display:grid;gap:46px;width:100%}.sen-live-group{display:grid;gap:20px}.sen-live-group-head{margin:0;padding-bottom:12px;border-bottom:3px solid #d90429;font-size:1.5rem}
       .sen-live-card{overflow:hidden;border:1px solid #e5e7eb;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(17,24,39,.09)}
       .sen-live-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#f3f4f6}
       .sen-live-media img{width:100%;height:100%;display:block;object-fit:cover}
@@ -138,10 +139,31 @@
     if (!items.length) return;
 
     installStyles();
-    target.className = "sen-live-grid";
-    target.innerHTML = items
-      .map(item => card(item, categoryMap.get(String(item.category_id)) || "Rental"))
-      .join("");
+    if (categories.length > 1) {
+      target.className = "sen-live-groups";
+      target.innerHTML = categorySlugs
+        .map(slug => categories.find(category => category.slug === slug))
+        .filter(Boolean)
+        .map(category => {
+          const categoryItems = items.filter(
+            item => String(item.category_id) === String(category.id)
+          );
+          if (!categoryItems.length) return "";
+          return `
+            <section class="sen-live-group" aria-labelledby="sen-${escapeHtml(category.slug)}-title">
+              <h2 class="sen-live-group-head" id="sen-${escapeHtml(category.slug)}-title">${escapeHtml(category.name)}</h2>
+              <div class="sen-live-grid">
+                ${categoryItems.map(item => card(item, category.name)).join("")}
+              </div>
+            </section>`;
+        })
+        .join("");
+    } else {
+      target.className = "sen-live-grid";
+      target.innerHTML = items
+        .map(item => card(item, categoryMap.get(String(item.category_id)) || "Rental"))
+        .join("");
+    }
 
     grids.slice(1).forEach(grid => {
       const section = grid.closest("section");
