@@ -10,6 +10,7 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.senmoonbounce.com/booking.html">
   <link rel="manifest" href="./site.webmanifest">
+  <link rel="icon" href="./logo.jpeg" type="image/jpeg">
 
   <link rel="stylesheet" href="./assets/style.css?v=53">
   <link rel="stylesheet" href="./assets/header.css?v=53">
@@ -1473,6 +1474,8 @@
   );
 </script>
 
+  <script src="./assets/script.js?v=54"></script>
+
   <script>
     (() => {
       "use strict";
@@ -1645,32 +1648,6 @@
       function hideAlert() {
         elements.alert.className = "booking-alert";
         elements.alert.textContent = "";
-      }
-
-      async function loadSharedLayout() {
-        const sharedFiles = [
-          ["header", "./header.html"],
-          ["footer", "./footer.html"]
-        ];
-
-        await Promise.all(
-          sharedFiles.map(async ([elementId, filePath]) => {
-            const target = document.getElementById(elementId);
-            if (!target) return;
-
-            try {
-              const response = await fetch(filePath);
-
-              if (!response.ok) {
-                throw new Error(`${filePath} returned ${response.status}`);
-              }
-
-              target.innerHTML = await response.text();
-            } catch (error) {
-              console.warn(`Could not load ${filePath}:`, error);
-            }
-          })
-        );
       }
 
       async function loadInventory() {
@@ -2921,7 +2898,7 @@
       });
 
       async function initializeBookingPage() {
-        await loadSharedLayout();
+        await startWebsite();
 
         setMinimumDate();
         restoreDraft();
