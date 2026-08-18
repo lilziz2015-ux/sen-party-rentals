@@ -63,16 +63,47 @@
     return detailPages.has(path) ? `./${path}` : "";
   }
 
-  function card(item, categoryName) {
+  function optimizedImage(value, width) {
+    const source = safeImage(value);
+    if (!source) return "";
+
+    try {
+      const parsed = new URL(source);
+      const storagePath = "/storage/v1/object/public/";
+      if (
+        parsed.hostname !== "tuttkwpnicgfcyeptrkv.supabase.co" ||
+        !parsed.pathname.startsWith(storagePath)
+      ) {
+        return source;
+      }
+
+      parsed.pathname = parsed.pathname.replace(
+        storagePath,
+        "/storage/v1/render/image/public/"
+      );
+      parsed.searchParams.set("width", String(width));
+      parsed.searchParams.set("quality", "72");
+      parsed.searchParams.set("resize", "contain");
+      return parsed.href;
+    } catch {
+      return source;
+    }
+  }
+
+  function card(item, categoryName, imageIndex = 1) {
     const name = item.name || "Party Rental";
     const image = safeImage(item.image_url);
+    const image480 = optimizedImage(image, 480);
+    const image720 = optimizedImage(image, 720);
+    const image1080 = optimizedImage(image, 1080);
     const detail = safeDetail(item.product_page_url);
     const price = Number(item.price || 0);
+    const priority = imageIndex === 0;
     return `
       <article class="sen-live-card">
         <div class="sen-live-media">
           ${image
-            ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" loading="lazy" decoding="async">`
+            ? `<img src="${escapeHtml(image720)}" srcset="${escapeHtml(image480)} 480w, ${escapeHtml(image720)} 720w, ${escapeHtml(image1080)} 1080w" sizes="(max-width:620px) calc(100vw - 32px), (max-width:900px) 50vw, 33vw" data-original-src="${escapeHtml(image)}" alt="${escapeHtml(name)}" width="800" height="600" loading="${priority ? "eager" : "lazy"}" fetchpriority="${priority ? "high" : "low"}" decoding="async">`
             : `<div class="sen-live-placeholder" aria-hidden="true"><i class="fa-solid fa-image"></i></div>`}
           <span>${escapeHtml(categoryName)}</span>
         </div>
@@ -94,8 +125,8 @@
       .sen-live-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;width:100%}
       .sen-live-groups{display:grid;gap:46px;width:100%}.sen-live-group{display:grid;gap:20px}.sen-live-group-head{margin:0;padding-bottom:12px;border-bottom:3px solid #d90429;font-size:1.5rem}
       .sen-live-card{overflow:hidden;border:1px solid #e5e7eb;border-radius:20px;background:#fff;box-shadow:0 16px 40px rgba(17,24,39,.09)}
-      .sen-live-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#f3f4f6}
-      .sen-live-media img{width:100%;height:100%;display:block;object-fit:cover}
+      .sen-live-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#fff}
+      .sen-live-media img{width:100%;height:100%;display:block;object-fit:contain;padding:8px;box-sizing:border-box}
       .sen-live-media span{position:absolute;left:14px;bottom:14px;padding:7px 10px;border-radius:999px;color:#fff;background:#d90429;font-size:.72rem;font-weight:900}
       .sen-live-placeholder{height:100%;display:grid;place-items:center;color:#d90429;font-size:2rem}
       .sen-live-body{padding:20px}.sen-live-body h3{margin:0 0 10px;font-size:1.15rem}.sen-live-body p{min-height:3.2em;margin:0 0 14px;color:#6b7280;line-height:1.55}
@@ -153,7 +184,7 @@
             <section class="sen-live-group" aria-labelledby="sen-${escapeHtml(category.slug)}-title">
               <h2 class="sen-live-group-head" id="sen-${escapeHtml(category.slug)}-title">${escapeHtml(category.name)}</h2>
               <div class="sen-live-grid">
-                ${categoryItems.map(item => card(item, category.name)).join("")}
+                ${categoryItems.map((item, index) => card(item, category.name, index)).join("")}
               </div>
             </section>`;
         })
@@ -161,9 +192,19 @@
     } else {
       target.className = "sen-live-grid";
       target.innerHTML = items
-        .map(item => card(item, categoryMap.get(String(item.category_id)) || "Rental"))
+        .map((item, index) => card(item, categoryMap.get(String(item.category_id)) || "Rental", index))
         .join("");
     }
+
+    target.querySelectorAll("img[data-original-src]").forEach(image => {
+      image.addEventListener("error", () => {
+        const original = image.dataset.originalSrc;
+        if (!original || image.src === original) return;
+        image.removeAttribute("srcset");
+        image.removeAttribute("sizes");
+        image.src = original;
+      }, { once: true });
+    });
 
     grids.slice(1).forEach(grid => {
       const section = grid.closest("section");
