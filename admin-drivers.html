@@ -1593,11 +1593,7 @@
       $("open-driver-modal").addEventListener(
         "click",
         () => {
-          showAlert(
-            $("page-alert"),
-            "Create the driver's login in Supabase Authentication first, then create the matching driver profile.",
-            "success"
-          );
+          openDriverModal();
         }
       );
 
