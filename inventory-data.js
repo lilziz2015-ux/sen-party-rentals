@@ -300,7 +300,7 @@ window.SEN_RENTALS = [
     images: [
       "./BAB0FD26-8E6F-4086-AFBF-A89119699969.PNG"
     ],
-    detailPage: "./castle-combo-rental.html",
+    detailPage: "./castle-combo-bounce-house-rental.html",
     description:
       "A castle inflatable combining a bounce area and slide.",
     quick: ["Bounce + slide", "Wet", "30 ft long"],

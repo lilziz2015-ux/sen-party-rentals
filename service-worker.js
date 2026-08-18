@@ -38,13 +38,13 @@ const CORE_ASSETS = [
   "./assets/style.css",
   "./assets/header.css",
   "./assets/footer.css",
-  "./assets/rental.css",
+  "./assets/style.css",
   "./assets/script.js",
 
   "./header.html",
   "./footer.html",
 
-  "./favicon.ico"
+  "./logo.jpeg"
 ];
 
 

@@ -535,7 +535,7 @@ function createRentalCard(rental, selectedDate) {
           loading="lazy"
           onerror="
             this.onerror=null;
-            this.src='./images/sen-party-rentals-placeholder.jpg';
+            this.src='./logo.jpeg';
           "
         >
 
