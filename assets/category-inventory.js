@@ -69,6 +69,10 @@
 
     try {
       const parsed = new URL(source);
+      if (parsed.pathname.toLowerCase().endsWith("/castleh1.png")) {
+        return new URL("./castleh1-optimized.jpg", window.location.href).href;
+      }
+
       const storagePath = "/storage/v1/object/public/";
       if (
         parsed.hostname !== "tuttkwpnicgfcyeptrkv.supabase.co" ||
