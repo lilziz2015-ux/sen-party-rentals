@@ -10,10 +10,11 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.senmoonbounce.com/booking.html">
   <link rel="manifest" href="./site.webmanifest">
+  <link rel="icon" href="./logo.jpeg" type="image/jpeg">
 
-  <link rel="stylesheet" href="./assets/style.css?v=53">
-  <link rel="stylesheet" href="./assets/header.css?v=53">
-  <link rel="stylesheet" href="./assets/footer.css?v=53">
+  <link rel="stylesheet" href="./assets/style.css?v=54">
+  <link rel="stylesheet" href="./assets/header.css?v=54">
+  <link rel="stylesheet" href="./assets/footer.css?v=54">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -1323,7 +1324,7 @@
                   I confirm that the information is correct. I understand this is a booking request,
                   not a confirmed reservation. I agree that Sen Party Rentals may contact me by
                   phone, text message or email. View the
-                  <a href="./rental-agreement.html" target="_blank" rel="noopener">rental agreement</a>
+                  <a href="./terms-and-conditions.html" target="_blank" rel="noopener">rental agreement</a>
                   and
                   <a href="./privacy-policy.html" target="_blank" rel="noopener">privacy policy</a>.
                 </label>
@@ -1473,6 +1474,8 @@
   );
 </script>
 
+  <script src="./assets/script.js?v=54"></script>
+
   <script>
     (() => {
       "use strict";
@@ -1481,6 +1484,9 @@
         style: "currency",
         currency: "USD"
       });
+
+      const bookingParameters = new URLSearchParams(window.location.search);
+      const requestedAddon = bookingParameters.get("addon") || "";
 
       const state = {
         step: 1,
@@ -1491,7 +1497,16 @@
         availability: new Map(),
         submitting: false,
         pendingDraftSelection: [],
-        pendingSlug: new URLSearchParams(window.location.search).get("add") || ""
+        pendingSlug:
+          bookingParameters.get("add") ||
+          bookingParameters.get("item") ||
+          bookingParameters.get("id") ||
+          (requestedAddon === "generator" ? requestedAddon : "") ||
+          "",
+        pendingCategory:
+          bookingParameters.get("category") ||
+          (requestedAddon !== "generator" ? requestedAddon : ""),
+        pendingPackage: bookingParameters.get("package") || ""
       };
 
       const $ = selector => document.querySelector(selector);
@@ -1645,32 +1660,6 @@
       function hideAlert() {
         elements.alert.className = "booking-alert";
         elements.alert.textContent = "";
-      }
-
-      async function loadSharedLayout() {
-        const sharedFiles = [
-          ["header", "./header.html"],
-          ["footer", "./footer.html"]
-        ];
-
-        await Promise.all(
-          sharedFiles.map(async ([elementId, filePath]) => {
-            const target = document.getElementById(elementId);
-            if (!target) return;
-
-            try {
-              const response = await fetch(filePath);
-
-              if (!response.ok) {
-                throw new Error(`${filePath} returned ${response.status}`);
-              }
-
-              target.innerHTML = await response.text();
-            } catch (error) {
-              console.warn(`Could not load ${filePath}:`, error);
-            }
-          })
-        );
       }
 
       async function loadInventory() {
@@ -2764,14 +2753,31 @@
       }
 
       function selectRentalFromUrl() {
-        const requestedValue = normalizeSlug(state.pendingSlug);
+        const rentalAliases = {
+          "60ft-backyard-extreme": "backyard-extreme",
+          "black-opps": "black-ops",
+          "black-opps-60ft": "black-ops",
+          "big-wave-water-slide": "big-wave",
+          "giant-flip-flop-water-slide": "giant-flip-flop",
+          "modular-moon-bounce": "modular-moonbounce",
+          "popcorn-machine": "popcorn",
+          "snow-cone-machine": "snow-cone",
+          "sponge-bop": "sponge-bop-moonbounce",
+          "spongebob-bounce-house": "sponge-bop-moonbounce",
+          "tropical-thunder-water-slide": "tropical-thunder",
+          "wild-rapid-water-slide": "wild-rapid"
+        };
+
+        const normalizedRequest = normalizeSlug(state.pendingSlug);
+        const requestedValue =
+          rentalAliases[normalizedRequest] || normalizedRequest;
         if (!requestedValue) return;
 
         const requestedItem = state.inventory.find(
           item =>
             item.slug === requestedValue ||
             normalizeSlug(item.name) === requestedValue ||
-            item.id === state.pendingSlug
+            normalizeSlug(item.id) === requestedValue
         );
 
         if (!requestedItem) {
@@ -2791,6 +2797,51 @@
         renderInventory();
         updateSummary();
         saveDraft();
+      }
+
+      function selectCategoryFromUrl() {
+        const requestedCategory = normalizeSlug(state.pendingCategory);
+        if (!requestedCategory) return;
+
+        const categoryAliases = {
+          "bounce-house": ["bounce-house", "bounce-houses"],
+          "concessions": ["concession", "concessions", "concession-machines"],
+          "obstacle-course": ["obstacle-course", "obstacle-courses"],
+          "tables-chairs": ["tables-chairs", "tables-and-chairs"],
+          "tent": ["tent", "tents"],
+          "water-slide": ["water-slide", "water-slides"]
+        };
+
+        const acceptedCategories =
+          categoryAliases[requestedCategory] || [requestedCategory];
+
+        const category = Array.from(
+          new Set(state.inventory.map(item => item.category))
+        ).find(value => acceptedCategories.includes(normalizeSlug(value)));
+
+        if (!category) return;
+
+        state.category = category;
+        renderFilters();
+        renderInventory();
+      }
+
+      function showPackageFromUrl() {
+        const packageLabels = {
+          "backyard-festival": "Backyard Festival Package",
+          "basic-birthday": "Basic Birthday Package",
+          "large-event": "Large Event Package",
+          "ultimate-party": "Ultimate Party Package",
+          "water-fun": "Water Fun Package"
+        };
+
+        const packageLabel = packageLabels[normalizeSlug(state.pendingPackage)];
+        if (!packageLabel) return;
+
+        showAlert(
+          `${packageLabel} selected. Choose your preferred rentals, then include the package name in the event notes.`,
+          "success"
+        );
       }
 
       function setMinimumDate() {
@@ -2921,7 +2972,7 @@
       });
 
       async function initializeBookingPage() {
-        await loadSharedLayout();
+        await startWebsite();
 
         setMinimumDate();
         restoreDraft();
@@ -2931,7 +2982,9 @@
         await loadInventory();
 
         restoreSelectedAfterInventory();
+        selectCategoryFromUrl();
         selectRentalFromUrl();
+        showPackageFromUrl();
 
         if (elements.date.value) {
           await refreshAvailability();

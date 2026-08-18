@@ -1148,6 +1148,17 @@ async function initializeWebsite() {
   logWebsiteVisit();
 }
 
+let websiteInitializationPromise = null;
+
+function startWebsite() {
+  if (!websiteInitializationPromise) {
+    websiteInitializationPromise =
+      initializeWebsite();
+  }
+
+  return websiteInitializationPromise;
+}
+
 
 /* =========================================================
    START WEBSITE
@@ -1159,13 +1170,13 @@ if (
 ) {
   document.addEventListener(
     "DOMContentLoaded",
-    initializeWebsite,
+    startWebsite,
     {
       once: true
     }
   );
 } else {
-  initializeWebsite();
+  startWebsite();
 }
 
 registerServiceWorker();

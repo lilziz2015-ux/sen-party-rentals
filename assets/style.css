@@ -203,8 +203,7 @@ body::before {
     linear-gradient(
       rgba(255, 255, 255, 0.92),
       rgba(255, 255, 255, 0.92)
-    ),
-    url("party-bg.jpg") center / cover no-repeat;
+    );
 }
 
 body::after {
@@ -2815,8 +2814,7 @@ header {
       rgba(5, 5, 6, 0.96) 0%,
       rgba(12, 12, 15, 0.90) 45%,
       rgba(120, 0, 17, 0.68) 100%
-    ),
-    url("home-hero.jpg") center / cover no-repeat;
+    );
 
   box-shadow:
     0 28px 70px rgba(35, 12, 8, 0.24);
@@ -4610,8 +4608,7 @@ footer a {
       135deg,
       rgba(0, 0, 0, 0.94),
       rgba(90, 0, 0, 0.88)
-    ),
-    url("../images/party-rentals-background.jpg") center / cover no-repeat;
+    );
 }
 
 .calendar-hero-content {
