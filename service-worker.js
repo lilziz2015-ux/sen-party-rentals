@@ -1,7 +1,7 @@
 /* =========================================================
    SEN PARTY RENTALS — SERVICE WORKER
    File: /service-worker.js
-   Version: 48
+   Version: 49
 ========================================================= */
 
 "use strict";
@@ -12,7 +12,7 @@
 ========================================================= */
 
 const SW_VERSION =
-  "48";
+  "49";
 
 const CACHE_PREFIX =
   "sen-party-rentals";
