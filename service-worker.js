@@ -1,7 +1,7 @@
 /* =========================================================
    SEN PARTY RENTALS — SERVICE WORKER
    File: /service-worker.js
-   Version: 49
+   Version: 55
 ========================================================= */
 
 "use strict";
@@ -12,7 +12,7 @@
 ========================================================= */
 
 const SW_VERSION =
-  "49";
+  "55";
 
 const CACHE_PREFIX =
   "sen-party-rentals";
@@ -472,18 +472,9 @@ async function cacheFirstWithRefresh(
     );
 
 
-  /*
-   * Ignore ?v=45, ?v=46 etc.
-   * when looking for an existing
-   * cached copy.
-   */
   const cached =
     await cache.match(
-      request,
-      {
-        ignoreSearch:
-          true
-      }
+      request
     );
 
 
