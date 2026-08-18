@@ -692,10 +692,10 @@
       </div>
     </section>
 
-    <section class="home-section home-alt">
+    <section class="home-section home-alt" id="featured-rentals-section">
       <div class="home-container">
         <div class="home-section-head"><span class="home-kicker">Popular choices</span><h2>Featured party rentals</h2><p>Customer favorites for birthdays, school events and summer celebrations.</p></div>
-        <div class="home-grid home-grid-four">
+        <div class="home-grid home-grid-four" id="featured-rentals-grid">
           <article class="home-card"><div class="home-rental-image"><img src="./castleh1.PNG" alt="Modular Moon Bounce rental" loading="lazy" decoding="async" data-image-fallback></div><div class="home-rental-body"><span class="home-rental-badge">Bounce House</span><h3>Modular Moon Bounce</h3><p>A classic bounce house for birthdays, family gatherings and younger children.</p><div class="home-rental-price">$200 per day</div><div class="home-rental-actions"><a href="./modular-moon-bounce-rental.html" class="home-button home-button-outline">Details</a><a href="./booking.html?add=modular-moonbounce" class="home-button home-button-primary">Book</a></div></div></article>
           <article class="home-card"><div class="home-rental-image"><img src="./spongebob1.PNG" alt="SpongeBob Moon Bounce rental" loading="lazy" decoding="async" data-image-fallback></div><div class="home-rental-body"><span class="home-rental-badge">Kids Favorite</span><h3>SpongeBob Moon Bounce</h3><p>A bright themed inflatable for children’s birthday parties.</p><div class="home-rental-price">$200 per day</div><div class="home-rental-actions"><a href="./spongebob-bounce-house-rental.html" class="home-button home-button-outline">Details</a><a href="./booking.html?add=sponge-bop-moonbounce" class="home-button home-button-primary">Book</a></div></div></article>
           <article class="home-card"><div class="home-rental-image"><img src="./Giant Flip-Flop Slide.PNG" alt="Giant Flip-Flop Water Slide rental" loading="lazy" decoding="async" data-image-fallback></div><div class="home-rental-body"><span class="home-rental-badge">Water Slide</span><h3>Giant Flip-Flop Slide</h3><p>A tall tropical water slide for unforgettable outdoor celebrations.</p><div class="home-rental-price">$450 per day</div><div class="home-rental-actions"><a href="./giant-flip-flop-water-slide-rental.html" class="home-button home-button-outline">Details</a><a href="./booking.html?add=giant-flip-flop" class="home-button home-button-primary">Book</a></div></div></article>
@@ -823,6 +823,8 @@
 
   <script src="./assets/script.js?v=54" defer></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+
   <script>
     (() => {
       "use strict";
@@ -917,10 +919,102 @@
         }, true);
       }
 
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function publicImageUrl(value) {
+        const imageValue = String(value || "").trim();
+        if (!imageValue) return "";
+        if (/^(https?:\/\/|\.?\.?\/)/i.test(imageValue)) return imageValue;
+
+        const safePath = imageValue
+          .split("/")
+          .filter(Boolean)
+          .map(part => encodeURIComponent(part))
+          .join("/");
+
+        return `https://tuttkwpnicgfcyeptrkv.supabase.co/storage/v1/object/public/rental-images/${safePath}`;
+      }
+
+      function featuredRentalCard(item, categoryName) {
+        const name = String(item.name || "Rental Item");
+        const imageUrl = publicImageUrl(item.image_url || item.image_path || "");
+        const knownProductPages = {
+          "wild-rapid": "./wild-rapid-water-slide-rental.html",
+          "tropical-thunder": "./tropical-thunder-water-slide-rental.html",
+          "castle-combo": "./castle-combo-bounce-house-rental.html",
+          "black-opps": "./black-opps-60ft-obstacle-course-rental.html",
+          "dunk-tank": "./dunk-tank-rental.html"
+        };
+        const slug = String(item.slug || "").trim();
+        const detailsUrl = knownProductPages[slug] || "./inventory.html";
+        const bookingId = String(item.id || slug || name);
+        const price = Number(item.price || 0);
+        const priceLabel = price > 0
+          ? `${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(price)} per day`
+          : "Call for price";
+        const imageMarkup = imageUrl
+          ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(name)} rental" loading="lazy" decoding="async" data-image-fallback>`
+          : `<div class="home-image-placeholder"><i class="fa-solid fa-image" aria-hidden="true"></i></div>`;
+
+        return `<article class="home-card"><div class="home-rental-image">${imageMarkup}</div><div class="home-rental-body"><span class="home-rental-badge">${escapeHtml(categoryName || "Featured Rental")}</span><h3>${escapeHtml(name)}</h3><p>${escapeHtml(item.description || "A featured party rental for your next celebration.")}</p><div class="home-rental-price">${escapeHtml(priceLabel)}</div><div class="home-rental-actions"><a href="${escapeHtml(detailsUrl)}" class="home-button home-button-outline">Details</a><a href="./booking.html?add=${encodeURIComponent(bookingId)}" class="home-button home-button-primary">Book</a></div></div></article>`;
+      }
+
+      async function loadFeaturedRentals() {
+        const grid = document.getElementById("featured-rentals-grid");
+        const section = document.getElementById("featured-rentals-section");
+        if (!grid || !section || !window.supabase) return;
+
+        const client = window.supabase.createClient(
+          "https://tuttkwpnicgfcyeptrkv.supabase.co",
+          "sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1",
+          { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }
+        );
+
+        try {
+          const [itemsResult, categoriesResult] = await Promise.all([
+            client
+              .from("rental_items")
+              .select("id, category_id, name, slug, description, price, image_url, product_page_url, sort_order")
+              .eq("active", true)
+              .eq("featured", true)
+              .order("sort_order", { ascending: true })
+              .order("name", { ascending: true })
+              .limit(4),
+            client.from("rental_categories").select("id, name")
+          ]);
+
+          if (itemsResult.error) throw itemsResult.error;
+
+          const categories = new Map(
+            (categoriesResult.data || []).map(category => [String(category.id), category.name])
+          );
+          const items = itemsResult.data || [];
+
+          if (!items.length) {
+            section.hidden = true;
+            return;
+          }
+
+          grid.innerHTML = items
+            .map(item => featuredRentalCard(item, categories.get(String(item.category_id))))
+            .join("");
+        } catch (error) {
+          console.error("Featured rentals could not be loaded:", error);
+        }
+      }
+
       function initializeHomepage() {
         initializeImageFallbacks();
         initializeHeroSlider();
         initializeFaq();
+        loadFeaturedRentals();
       }
 
       if (document.readyState === "loading") {
