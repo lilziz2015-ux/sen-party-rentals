@@ -16,11 +16,11 @@ window.SEN_RENTALS = [
     name: "Modular Moon Bounce",
     category: "bounce-house",
     categoryLabel: "Bounce House",
-    price: 250,
+    price: 200,
     featured: true,
     mainImage: "./castleh1.PNG",
     images: ["./castleh1.PNG"],
-    detailPage: "./modular-moonbounce-rental.html",
+    detailPage: "./modular-moon-bounce-rental.html",
     description:
       "A classic modular bounce house for birthdays, family celebrations and younger children.",
     quick: ["13 × 13 ft", "Dry", "1 outlet"],
@@ -36,14 +36,14 @@ window.SEN_RENTALS = [
 
   {
     id: "sponge-bop-moonbounce",
-    name: "Sponge Bop Moon Bounce",
+    name: "SpongeBob Moon Bounce",
     category: "bounce-house",
     categoryLabel: "Bounce House",
-    price: 250,
+    price: 200,
     featured: true,
     mainImage: "./spongebob1.PNG",
     images: ["./spongebob1.PNG"],
-    detailPage: "./sponge-bop-moonbounce-rental.html",
+    detailPage: "./spongebob-bounce-house-rental.html",
     description:
       "A colorful themed moon bounce for birthday parties and family events.",
     quick: ["15 × 15 ft", "Dry", "Kids favorite"],
@@ -62,11 +62,11 @@ window.SEN_RENTALS = [
     name: "Castle Fun House",
     category: "bounce-house",
     categoryLabel: "Bounce House",
-    price: 250,
+    price: 200,
     featured: false,
     mainImage: "./CastleFunHouse.PNG",
     images: ["./CastleFunHouse.PNG"],
-    detailPage: "./castle-fun-house-rental.html",
+    detailPage: "./castle-fun-house-bounce-house-rental.html",
     description:
       "A spacious castle-style bounce house for birthday parties and community events.",
     quick: ["15 × 15 ft", "Castle theme", "1 outlet"],
@@ -89,7 +89,7 @@ window.SEN_RENTALS = [
     featured: false,
     mainImage: "./castleh1.PNG",
     images: ["./castleh1.PNG"],
-    detailPage: "./magic-castle-hoop-rental.html",
+    detailPage: "./bounce-houses.html",
     description:
       "A castle bounce house with a built-in basketball hoop for extra active fun.",
     quick: ["13 × 13 ft", "Basketball hoop", "Dry"],
@@ -108,11 +108,11 @@ window.SEN_RENTALS = [
     name: "Princess Castle Moon Bounce",
     category: "bounce-house",
     categoryLabel: "Bounce House",
-    price: 250,
+    price: 200,
     featured: false,
     mainImage: "./IMG_0565.PNG",
     images: ["./IMG_0565.PNG"],
-    detailPage: "./princess-castle-moonbounce-rental.html",
+    detailPage: "./princess-castle-bounce-house-rental.html",
     description:
       "A princess-themed castle moon bounce for birthdays, school events and themed celebrations.",
     quick: ["13 × 13 ft", "Princess theme", "Dry"],
@@ -160,7 +160,7 @@ window.SEN_RENTALS = [
     images: [
       "./7BD6EB13-C585-4DA8-9EA4-68F2B8FF0669.PNG"
     ],
-    detailPage: "./castle-splash-combo-rental.html",
+    detailPage: "./water-slides.html",
     description:
       "A castle-themed inflatable with a bounce area and slide. Wet or dry setup is available.",
     quick: ["Bounce + slide", "Wet or dry", "30 ft long"],
@@ -248,7 +248,7 @@ window.SEN_RENTALS = [
     name: "Tropical Thunder",
     category: "water-slide",
     categoryLabel: "Wet or Dry Slide",
-    price: 450,
+    price: 480,
     featured: false,
     mainImage: "./tropica1.jpeg",
     images: ["./tropica1.jpeg"],
@@ -344,7 +344,7 @@ window.SEN_RENTALS = [
     name: "Jurassic Combo",
     category: "combo",
     categoryLabel: "Bounce and Slide Combo",
-    price: 300,
+    price: 350,
     featured: false,
     mainImage: "./jerrasic1.PNG",
     images: ["./jerrasic1.PNG"],
@@ -367,7 +367,7 @@ window.SEN_RENTALS = [
     name: "Toxic Revenge Obstacle Course",
     category: "obstacle-course",
     categoryLabel: "Obstacle Course",
-    price: 600,
+    price: 900,
     featured: false,
     mainImage: "./Toxic Revenge Obstacle Course1.PNG",
     images: [
@@ -396,12 +396,12 @@ window.SEN_RENTALS = [
     name: "Black Ops 60-Foot Obstacle Course",
     category: "obstacle-course",
     categoryLabel: "Obstacle Course",
-    price: 750,
+    price: 900,
     featured: false,
     mainImage: "./blkops1.PNG",
     images: ["./blkops1.PNG"],
     detailPage:
-      "./black-ops-60ft-obstacle-course-rental.html",
+      "./black-opps-60ft-obstacle-course-rental.html",
     description:
       "A 60-foot military-style obstacle course for teens, adults, festivals and large events.",
     quick: ["60 ft long", "Military theme", "Large events"],
@@ -471,7 +471,7 @@ window.SEN_RENTALS = [
     featured: false,
     mainImage: "./table.PNG",
     images: ["./table.PNG"],
-    detailPage: "./6ft-banquet-table-rental.html",
+    detailPage: "./tables-chairs.html",
     description:
       "A sturdy six-foot banquet table for food service, gifts, registration and guest seating.",
     quick: ["6 ft", "Folding", "6–8 guests"],
@@ -494,7 +494,7 @@ window.SEN_RENTALS = [
     featured: false,
     mainImage: "./chair1.PNG",
     images: ["./chair1.PNG"],
-    detailPage: "./banquet-chair-rental.html",
+    detailPage: "./tables-chairs.html",
     description:
       "A durable folding chair for birthdays, family events, ceremonies and community gatherings.",
     quick: ["Folding", "Indoor or outdoor", "$2 each"],

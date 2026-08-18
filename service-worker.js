@@ -1,7 +1,7 @@
 /* =========================================================
    SEN PARTY RENTALS — SERVICE WORKER
    File: /service-worker.js
-   Version: 46
+   Version: 47
 ========================================================= */
 
 "use strict";
@@ -12,7 +12,7 @@
 ========================================================= */
 
 const SW_VERSION =
-  "46";
+  "47";
 
 const CACHE_PREFIX =
   "sen-party-rentals";
@@ -38,13 +38,15 @@ const CORE_ASSETS = [
   "./assets/style.css",
   "./assets/header.css",
   "./assets/footer.css",
-  "./assets/style.css",
   "./assets/script.js",
 
   "./header.html",
   "./footer.html",
 
-  "./logo.jpeg"
+  "./logo.jpeg",
+  "./site.webmanifest",
+  "./assets/icons/icon-192x192.png",
+  "./assets/icons/icon-512x512.png"
 ];
 
 
