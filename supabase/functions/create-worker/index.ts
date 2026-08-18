@@ -94,6 +94,20 @@ Deno.serve(async (request: Request) => {
     return reply(request, { error: "Temporary password must contain at least 8 characters." }, 400);
   }
 
+  const { data: existingWorker } = await admin
+    .from("driver_profiles")
+    .select("id, first_name, last_name, email")
+    .ilike("email", email)
+    .maybeSingle();
+
+  if (existingWorker) {
+    return reply(request, {
+      success: true,
+      already_exists: true,
+      worker: existingWorker,
+    });
+  }
+
   const { data: created, error: createError } =
     await admin.auth.admin.createUser({
       email,
