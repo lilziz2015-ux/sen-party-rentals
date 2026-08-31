@@ -36,6 +36,7 @@
     .timeline{display:grid;gap:12px}.timeline-item{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}.timeline-icon{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;color:#fff;background:var(--gradient)}.timeline-item strong,.timeline-item small{display:block}.timeline-item small{margin-top:4px;color:var(--muted);line-height:1.45}
     @media(max-width:980px){.booking-layout{grid-template-columns:1fr}}@media(max-width:700px){.topbar{align-items:flex-start;flex-direction:column;padding:14px 16px}.topbar-actions{width:100%;flex-wrap:wrap}.topbar-actions .action-button{flex:1}.page-content{width:min(100% - 22px,1280px)}.booking-banner-content{flex-direction:column}.status-badges{justify-content:flex-start}.detail-grid{grid-template-columns:1fr}.detail-item.full{grid-column:auto}}@media print{body{background:#fff}.topbar,.side-column,.alert{display:none!important}.page-content{width:100%;padding:0}.booking-layout{display:block}.booking-banner,.card{margin-bottom:18px;box-shadow:none}.booking-banner{color:#000;background:#fff;border:2px solid #000}.booking-banner p,.booking-banner small{color:#333}}
   </style>
+  <link rel="stylesheet" href="./assets/admin-shell.css">
 </head>
 <body>
   <header class="topbar">
@@ -102,7 +103,7 @@
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
   <script>
   (() => {
     "use strict";
@@ -348,5 +349,6 @@
     })();
   })();
   </script>
+  <script src="./assets/admin-shell.js"></script>
 </body>
 </html>

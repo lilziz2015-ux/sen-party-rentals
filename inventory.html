@@ -1600,6 +1600,9 @@
           <img
             id="mainImage"
             alt=""
+            width="1200"
+            height="900"
+            decoding="async"
           >
 
           <div
@@ -1813,7 +1816,7 @@
   </a>
 
   <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
 
   <script>
     (() => {
@@ -1923,6 +1926,156 @@
           .replaceAll("\\", "\\\\")
           .replaceAll('"', '\\"')
           .replaceAll("\n", "");
+      }
+
+      function safeImageUrl(value) {
+        const source =
+          String(value ?? "").trim();
+
+        if (!source) {
+          return "";
+        }
+
+        try {
+          const parsed =
+            new URL(
+              source,
+              window.location.href
+            );
+
+          return ["http:", "https:"]
+            .includes(parsed.protocol)
+              ? parsed.href
+              : "";
+        } catch {
+          return "";
+        }
+      }
+
+      function optimizedImageUrl(
+        value,
+        width
+      ) {
+        const source =
+          safeImageUrl(value);
+
+        if (!source) {
+          return "";
+        }
+
+        try {
+          const parsed =
+            new URL(source);
+
+          if (
+            parsed.pathname
+              .toLowerCase()
+              .endsWith(
+                "/castleh1.png"
+              )
+          ) {
+            return new URL(
+              "./castleh1-optimized.jpg",
+              window.location.href
+            ).href;
+          }
+
+          const storagePath =
+            "/storage/v1/object/public/";
+
+          if (
+            parsed.hostname !==
+              new URL(
+                SUPABASE_URL
+              ).hostname ||
+            !parsed.pathname.startsWith(
+              storagePath
+            )
+          ) {
+            return source;
+          }
+
+          parsed.pathname =
+            parsed.pathname.replace(
+              storagePath,
+              "/storage/v1/render/image/public/"
+            );
+
+          parsed.searchParams.set(
+            "width",
+            String(width)
+          );
+          parsed.searchParams.set(
+            "quality",
+            "72"
+          );
+          parsed.searchParams.set(
+            "resize",
+            "contain"
+          );
+
+          return parsed.href;
+        } catch {
+          return source;
+        }
+      }
+
+      function responsiveImageSet(
+        value,
+        widths
+      ) {
+        const candidates = [];
+
+        widths.forEach(width => {
+          const url =
+            optimizedImageUrl(
+              value,
+              width
+            );
+
+          if (
+            url &&
+            !candidates.some(
+              candidate =>
+                candidate.url === url
+            )
+          ) {
+            candidates.push({
+              url,
+              width
+            });
+          }
+        });
+
+        return candidates;
+      }
+
+      function tryOriginalImage(
+        image
+      ) {
+        const original =
+          image.dataset.originalSrc;
+
+        if (
+          !original ||
+          image.dataset.fallbackUsed ===
+            "true" ||
+          image.src === original
+        ) {
+          return false;
+        }
+
+        image.dataset.fallbackUsed =
+          "true";
+        image.removeAttribute(
+          "srcset"
+        );
+        image.removeAttribute(
+          "sizes"
+        );
+        image.src = original;
+
+        return true;
       }
 
       function pick(
@@ -2760,7 +2913,8 @@
       }
 
       function createRentalCard(
-        rental
+        rental,
+        imageIndex = 0
       ) {
         const article =
           document.createElement(
@@ -2771,26 +2925,67 @@
           "inventory-rental-card";
 
         const mainImage =
-          rental.images[0];
+          safeImageUrl(
+            rental.images[0]
+          );
 
-        const mediaStyle =
-          mainImage
-            ? `--inventory-bg-image:url("${escapeCssUrl(
-                mainImage
-              )}")`
-            : "";
+        const imageCandidates =
+          responsiveImageSet(
+            mainImage,
+            [480, 720, 1080]
+          );
+
+        const cardImage =
+          imageCandidates.find(
+            candidate =>
+              candidate.width === 720
+          )?.url ||
+          imageCandidates[0]?.url ||
+          mainImage;
+
+        const cardSrcset =
+          imageCandidates
+            .map(
+              candidate =>
+                `${candidate.url} ${candidate.width}w`
+            )
+            .join(", ");
+
+        const priority =
+          imageIndex === 0;
 
         const imageMarkup =
           mainImage
             ? `
               <img
                 src="${escapeHtml(
+                  cardImage
+                )}"
+                ${
+                  imageCandidates.length > 1
+                    ? `srcset="${escapeHtml(
+                        cardSrcset
+                      )}" sizes="(max-width: 620px) calc(100vw - 22px), (max-width: 1100px) 50vw, 33vw"`
+                    : ""
+                }
+                data-original-src="${escapeHtml(
                   mainImage
                 )}"
                 alt="${escapeHtml(
                   rental.name
                 )} party rental"
-                loading="lazy"
+                width="800"
+                height="600"
+                loading="${
+                  priority
+                    ? "eager"
+                    : "lazy"
+                }"
+                fetchpriority="${
+                  priority
+                    ? "high"
+                    : "low"
+                }"
                 decoding="async"
               >
             `
@@ -2832,9 +3027,6 @@
           <button
             class="inventory-rental-media"
             type="button"
-            style="${escapeHtml(
-              mediaStyle
-            )}"
             data-details="${escapeHtml(
               rental.id
             )}"
@@ -2935,14 +3127,62 @@
           </div>
         `;
 
-        const cardImage =
+        const cardImageElement =
           article.querySelector(
             ".inventory-rental-media img"
           );
 
-        cardImage?.addEventListener(
+        const cardMedia =
+          article.querySelector(
+            ".inventory-rental-media"
+          );
+
+        const updateCardBackground =
+          () => {
+            if (
+              !cardImageElement ||
+              !cardMedia
+            ) {
+              return;
+            }
+
+            const loadedImage =
+              cardImageElement.currentSrc ||
+              cardImageElement.src;
+
+            if (loadedImage) {
+              cardMedia.style.setProperty(
+                "--inventory-bg-image",
+                `url("${escapeCssUrl(
+                  loadedImage
+                )}")`
+              );
+            }
+          };
+
+        cardImageElement?.addEventListener(
+          "load",
+          updateCardBackground
+        );
+
+        if (
+          cardImageElement?.complete &&
+          cardImageElement.naturalWidth
+        ) {
+          updateCardBackground();
+        }
+
+        cardImageElement?.addEventListener(
           "error",
           event => {
+            if (
+              tryOriginalImage(
+                event.target
+              )
+            ) {
+              return;
+            }
+
             const replacement =
               document.createElement(
                 "div"
@@ -2957,9 +3197,6 @@
             event.target.replaceWith(
               replacement
             );
-          },
-          {
-            once: true
           }
         );
 
@@ -2977,10 +3214,14 @@
           document.createDocumentFragment();
 
         rentals.forEach(
-          rental => {
+          (
+            rental,
+            index
+          ) => {
             fragment.appendChild(
               createRentalCard(
-                rental
+                rental,
+                index
               )
             );
           }
@@ -3035,34 +3276,31 @@
           }
 
           let categoryData = [];
+          let galleryData = [];
 
           try {
-            const categoryResponse =
-              await supabaseClient
-                .from(
-                  "rental_categories"
-                )
-                .select("*");
+            const [categoryResponse, galleryResponse] = await Promise.all([
+              supabaseClient.from("rental_categories").select("*"),
+              supabaseClient
+                .from("rental_item_images")
+                .select("rental_item_id,image_url,alt_text,sort_order,is_primary")
+                .order("is_primary", { ascending: false })
+                .order("sort_order", { ascending: true })
+            ]);
 
-            if (
-              categoryResponse.error
-            ) {
-              console.warn(
-                "rental_categories could not be loaded:",
-                categoryResponse.error
-              );
+            if (categoryResponse.error) {
+              console.warn("rental_categories could not be loaded:", categoryResponse.error);
             } else {
-              categoryData =
-                categoryResponse.data ||
-                [];
+              categoryData = categoryResponse.data || [];
             }
-          } catch (
-            categoryError
-          ) {
-            console.warn(
-              "Category loading failed:",
-              categoryError
-            );
+
+            if (galleryResponse.error) {
+              console.warn("Rental gallery photos could not be loaded:", galleryResponse.error);
+            } else {
+              galleryData = galleryResponse.data || [];
+            }
+          } catch (relatedDataError) {
+            console.warn("Inventory category or gallery loading failed:", relatedDataError);
           }
 
           state.categories =
@@ -3087,6 +3325,13 @@
               )
             );
 
+          const galleryMap = new Map();
+          galleryData.forEach(image => {
+            const key = String(image.rental_item_id || "");
+            if (!galleryMap.has(key)) galleryMap.set(key, []);
+            if (image.image_url) galleryMap.get(key).push(image.image_url);
+          });
+
           state.rentals =
             (
               rentalResponse.data ||
@@ -3098,7 +3343,10 @@
                   index
                 ) =>
                   normalizeRental(
-                    record,
+                    {
+                      ...record,
+                      gallery_images: galleryMap.get(String(record.id)) || []
+                    },
                     index,
                     categoryMap
                   )
@@ -3141,15 +3389,59 @@
             state.activeImageIndex
           ] || "";
 
-        if (imageUrl) {
+        const originalImage =
+          safeImageUrl(imageUrl);
+
+        if (originalImage) {
+          const imageCandidates =
+            responsiveImageSet(
+              originalImage,
+              [720, 1080, 1600]
+            );
+
+          const displayImage =
+            imageCandidates.find(
+              candidate =>
+                candidate.width === 1080
+            )?.url ||
+            imageCandidates[0]?.url ||
+            originalImage;
+
           elements.mainImage.hidden =
             false;
 
           elements.mainImagePlaceholder.hidden =
             true;
 
+          elements.mainImage.dataset.originalSrc =
+            originalImage;
+
+          delete elements.mainImage.dataset.fallbackUsed;
+
+          if (
+            imageCandidates.length > 1
+          ) {
+            elements.mainImage.srcset =
+              imageCandidates
+                .map(
+                  candidate =>
+                    `${candidate.url} ${candidate.width}w`
+                )
+                .join(", ");
+
+            elements.mainImage.sizes =
+              "(max-width: 760px) calc(100vw - 20px), 55vw";
+          } else {
+            elements.mainImage.removeAttribute(
+              "srcset"
+            );
+            elements.mainImage.removeAttribute(
+              "sizes"
+            );
+          }
+
           elements.mainImage.src =
-            imageUrl;
+            displayImage;
 
           elements.mainImage.alt =
             `${state.activeRental.name} photo ${
@@ -3159,6 +3451,14 @@
           elements.mainImage.removeAttribute(
             "src"
           );
+          elements.mainImage.removeAttribute(
+            "srcset"
+          );
+          elements.mainImage.removeAttribute(
+            "sizes"
+          );
+          delete elements.mainImage.dataset.originalSrc;
+          delete elements.mainImage.dataset.fallbackUsed;
 
           elements.mainImage.hidden =
             true;
@@ -3311,42 +3611,91 @@
               (
                 url,
                 index
-              ) => `
-                <button
-                  class="inventory-thumb ${
-                    index === 0
-                      ? "active"
-                      : ""
-                  }"
-                  type="button"
-                  data-image="${index}"
-                  aria-label="Show photo ${
-                    index + 1
-                  }"
-                >
-                  ${
-                    url
-                      ? `
-                        <img
-                          src="${escapeHtml(
-                            url
-                          )}"
-                          alt="${escapeHtml(
-                            rental.name
-                          )} thumbnail"
-                          loading="lazy"
-                        >
-                      `
-                      : `
-                        <span class="inventory-image-placeholder">
-                          <i class="fa-solid fa-image"></i>
-                        </span>
-                      `
-                  }
-                </button>
-              `
+              ) => {
+                const originalImage =
+                  safeImageUrl(url);
+
+                const thumbnailImage =
+                  optimizedImageUrl(
+                    originalImage,
+                    240
+                  );
+
+                return `
+                  <button
+                    class="inventory-thumb ${
+                      index === 0
+                        ? "active"
+                        : ""
+                    }"
+                    type="button"
+                    data-image="${index}"
+                    aria-label="Show photo ${
+                      index + 1
+                    }"
+                  >
+                    ${
+                      originalImage
+                        ? `
+                          <img
+                            src="${escapeHtml(
+                              thumbnailImage
+                            )}"
+                            data-original-src="${escapeHtml(
+                              originalImage
+                            )}"
+                            alt="${escapeHtml(
+                              rental.name
+                            )} thumbnail"
+                            width="240"
+                            height="180"
+                            loading="lazy"
+                            decoding="async"
+                          >
+                        `
+                        : `
+                          <span class="inventory-image-placeholder">
+                            <i class="fa-solid fa-image"></i>
+                          </span>
+                        `
+                    }
+                  </button>
+                `;
+              }
             )
             .join("");
+
+        elements.thumbnailGrid
+          .querySelectorAll("img")
+          .forEach(image => {
+            image.addEventListener(
+              "error",
+              event => {
+                if (
+                  tryOriginalImage(
+                    event.target
+                  )
+                ) {
+                  return;
+                }
+
+                const replacement =
+                  document.createElement(
+                    "span"
+                  );
+
+                replacement.className =
+                  "inventory-image-placeholder";
+
+                replacement.innerHTML =
+                  '<i class="fa-solid fa-image"></i>';
+
+                event.target.replaceWith(
+                  replacement
+                );
+              }
+            );
+          });
 
         updateModalImage();
 
@@ -3953,7 +4302,15 @@
 
       elements.mainImage.addEventListener(
         "error",
-        () => {
+        event => {
+          if (
+            tryOriginalImage(
+              event.target
+            )
+          ) {
+            return;
+          }
+
           elements.mainImage.hidden =
             true;
 

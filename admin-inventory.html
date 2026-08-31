@@ -369,6 +369,83 @@
       font-weight: 900;
     }
 
+    .gallery-upload {
+      padding: 14px;
+      border: 1px dashed #d1d5db;
+      border-radius: 13px;
+      background: #fafafa;
+    }
+
+    .gallery-upload input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .gallery-upload small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .gallery-manager {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .gallery-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .gallery-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      display: block;
+      object-fit: contain;
+      background: #f3f4f6;
+    }
+
+    .gallery-card-badge {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(151, 0, 24, 0.9);
+      font-size: 0.62rem;
+      font-weight: 900;
+    }
+
+    .gallery-card-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      padding: 7px;
+    }
+
+    .gallery-card-actions button {
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--red);
+      background: #fff;
+    }
+
+    .gallery-card-actions button.danger {
+      color: #991b1b;
+    }
+
     .row-button.danger {
       color: var(--danger);
     }
@@ -591,6 +668,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="./assets/admin-shell.css">
 </head>
 
 <body>
@@ -920,6 +998,15 @@
             </div>
 
             <div class="field full">
+              <label for="item-gallery">Rental Photo Gallery</label>
+              <div class="gallery-upload">
+                <input id="item-gallery" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                <small>Choose up to 10 JPG, PNG or WebP photos. Each photo can be up to 8 MB. The primary photo is shown throughout the website.</small>
+              </div>
+              <div class="gallery-manager" id="gallery-manager"></div>
+            </div>
+
+            <div class="field full">
               <label for="item-page">Public Product Page URL</label>
 
               <input
@@ -997,7 +1084,7 @@
   </div>
 
   <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
 
   <script>
@@ -1037,6 +1124,8 @@
       const state = {
         items: [],
         categories: [],
+        images: [],
+        pendingImages: [],
         search: "",
         category: "ALL",
         editingId: null,
@@ -1131,6 +1220,12 @@
 
         image:
           document.getElementById("item-image"),
+
+        gallery:
+          document.getElementById("item-gallery"),
+
+        galleryManager:
+          document.getElementById("gallery-manager"),
 
         page:
           document.getElementById("item-page"),
@@ -1543,7 +1638,8 @@
         try {
           const [
             itemsResult,
-            categoriesResult
+            categoriesResult,
+            imagesResult
           ] =
             await Promise.all([
               senSupabase
@@ -1561,7 +1657,13 @@
                 .select("*")
                 .order("sort_order", {
                   ascending: true
-                })
+                }),
+
+              senSupabase
+                .from("rental_item_images")
+                .select("*")
+                .order("sort_order", { ascending: true })
+                .order("created_at", { ascending: true })
             ]);
 
           if (itemsResult.error) {
@@ -1572,8 +1674,17 @@
             throw categoriesResult.error;
           }
 
+          if (imagesResult.error) {
+            throw imagesResult.error;
+          }
+
+          state.images = imagesResult.data || [];
+
           state.items =
-            itemsResult.data || [];
+            (itemsResult.data || []).map(item => ({
+              ...item,
+              gallery_images: state.images.filter(image => image.rental_item_id === item.id)
+            }));
 
           state.categories =
             categoriesResult.data || [];
@@ -1596,10 +1707,250 @@
         }
       }
 
+      function currentGalleryImages() {
+        if (!state.editingId) return [];
+        return state.images
+          .filter(image => image.rental_item_id === state.editingId)
+          .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+      }
+
+      function renderGalleryManager() {
+        const existing = currentGalleryImages();
+        const existingCards = existing.map((image, index) => `
+          <article class="gallery-card">
+            ${image.is_primary ? '<span class="gallery-card-badge">Primary</span>' : ""}
+            <img src="${escapeHtml(image.image_url)}" alt="${escapeHtml(image.alt_text || "Rental photo")}" loading="lazy">
+            <div class="gallery-card-actions">
+              <button type="button" data-gallery-up="${escapeHtml(image.id)}" aria-label="Move photo earlier" ${index === 0 ? "disabled" : ""}><i class="fa-solid fa-arrow-left"></i></button>
+              <button type="button" data-gallery-primary="${escapeHtml(image.id)}" aria-label="Set as primary photo" ${image.is_primary ? "disabled" : ""}><i class="fa-solid fa-star"></i></button>
+              <button type="button" class="danger" data-gallery-delete="${escapeHtml(image.id)}" aria-label="Delete photo"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </article>
+        `).join("");
+
+        const pendingCards = state.pendingImages.map((entry, index) => `
+          <article class="gallery-card">
+            <span class="gallery-card-badge">Ready to upload</span>
+            <img src="${escapeHtml(entry.previewUrl)}" alt="${escapeHtml(entry.file.name)}">
+            <div class="gallery-card-actions">
+              <button type="button" disabled><i class="fa-solid fa-arrow-left"></i></button>
+              <button type="button" disabled><i class="fa-solid fa-clock"></i></button>
+              <button type="button" class="danger" data-remove-pending="${index}" aria-label="Remove selected photo"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </article>
+        `).join("");
+
+        elements.galleryManager.innerHTML = existingCards + pendingCards ||
+          '<div style="grid-column:1/-1;color:var(--muted);font-size:.8rem">No gallery photos yet.</div>';
+      }
+
+      function addPendingImages(event) {
+        hideAlert(elements.modalAlert);
+        const existingCount = currentGalleryImages().length;
+        const availableSlots = Math.max(0, 10 - existingCount - state.pendingImages.length);
+        const selected = Array.from(event.target.files || []).slice(0, availableSlots);
+        const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+        const rejected = [];
+
+        selected.forEach(file => {
+          if (!allowedTypes.has(file.type)) {
+            rejected.push(`${file.name}: use JPG, PNG or WebP`);
+            return;
+          }
+          if (file.size > 8 * 1024 * 1024) {
+            rejected.push(`${file.name}: larger than 8 MB`);
+            return;
+          }
+          state.pendingImages.push({ file, previewUrl: URL.createObjectURL(file) });
+        });
+
+        if ((event.target.files?.length || 0) > availableSlots) {
+          rejected.push("Only 10 gallery photos are allowed per rental.");
+        }
+        if (rejected.length) showAlert(elements.modalAlert, rejected.join(" "));
+        event.target.value = "";
+        renderGalleryManager();
+      }
+
+      function safeFileName(name) {
+        return String(name || "rental-photo")
+          .toLowerCase()
+          .replace(/[^a-z0-9.]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(-90) || "rental-photo";
+      }
+
+      async function uploadPendingImages(itemId, itemName) {
+        if (!state.pendingImages.length) return;
+        const existing = state.images.filter(image => image.rental_item_id === itemId);
+        const shouldSetPrimary = !existing.some(image => image.is_primary);
+        const firstSortOrder = existing.reduce((max, image) => Math.max(max, Number(image.sort_order || 0)), -1) + 1;
+        const uploadedPaths = [];
+        const rows = [];
+        let rowsInserted = false;
+
+        try {
+          for (let index = 0; index < state.pendingImages.length; index += 1) {
+            const entry = state.pendingImages[index];
+            const unique = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}`;
+            const path = `${itemId}/${unique}-${safeFileName(entry.file.name)}`;
+            const { error: uploadError } = await senSupabase.storage
+              .from("rental-images")
+              .upload(path, entry.file, {
+                cacheControl: "31536000",
+                contentType: entry.file.type,
+                upsert: false
+              });
+            if (uploadError) throw uploadError;
+            uploadedPaths.push(path);
+            const { data } = senSupabase.storage.from("rental-images").getPublicUrl(path);
+            rows.push({
+              rental_item_id: itemId,
+              image_url: data.publicUrl,
+              alt_text: itemName,
+              sort_order: firstSortOrder + index,
+              is_primary: shouldSetPrimary && index === 0
+            });
+          }
+
+          const { error: imageError } = await senSupabase
+            .from("rental_item_images")
+            .insert(rows);
+          if (imageError) throw imageError;
+          rowsInserted = true;
+
+          const primary = rows.find(row => row.is_primary);
+          if (primary) {
+            const { error: primaryError } = await senSupabase
+              .from("rental_items")
+              .update({ image_url: primary.image_url, updated_at: new Date().toISOString() })
+              .eq("id", itemId);
+            if (primaryError) throw primaryError;
+          }
+        } catch (error) {
+          if (rowsInserted) {
+            await senSupabase
+              .from("rental_item_images")
+              .delete()
+              .in("image_url", rows.map(row => row.image_url));
+          }
+          if (uploadedPaths.length) {
+            await senSupabase.storage.from("rental-images").remove(uploadedPaths);
+          }
+          throw error;
+        }
+
+        state.pendingImages.forEach(image => URL.revokeObjectURL(image.previewUrl));
+        state.pendingImages = [];
+      }
+
+      async function setPrimaryImage(imageId) {
+        const image = state.images.find(value => value.id === imageId);
+        if (!image) return;
+        hideAlert(elements.modalAlert);
+
+        const clearResult = await senSupabase
+          .from("rental_item_images")
+          .update({ is_primary: false })
+          .eq("rental_item_id", image.rental_item_id);
+        if (clearResult.error) {
+          showAlert(elements.modalAlert, errorMessage(clearResult.error));
+          return;
+        }
+
+        const primaryResult = await senSupabase
+          .from("rental_item_images")
+          .update({ is_primary: true })
+          .eq("id", image.id);
+        if (primaryResult.error) {
+          showAlert(elements.modalAlert, errorMessage(primaryResult.error));
+          return;
+        }
+
+        const itemResult = await senSupabase
+          .from("rental_items")
+          .update({ image_url: image.image_url, updated_at: new Date().toISOString() })
+          .eq("id", image.rental_item_id);
+        if (itemResult.error) {
+          showAlert(elements.modalAlert, errorMessage(itemResult.error));
+          return;
+        }
+
+        state.images.forEach(value => {
+          if (value.rental_item_id === image.rental_item_id) value.is_primary = value.id === image.id;
+        });
+        elements.image.value = image.image_url;
+        renderGalleryManager();
+        showAlert(elements.modalAlert, "Primary website photo updated.", "success");
+      }
+
+      async function moveGalleryImage(imageId, direction) {
+        const images = currentGalleryImages();
+        const index = images.findIndex(image => image.id === imageId);
+        const targetIndex = index + direction;
+        if (index < 0 || targetIndex < 0 || targetIndex >= images.length) return;
+        const current = images[index];
+        const target = images[targetIndex];
+        const currentOrder = Number(current.sort_order || index);
+        const targetOrder = Number(target.sort_order || targetIndex);
+        const [first, second] = await Promise.all([
+          senSupabase.from("rental_item_images").update({ sort_order: targetOrder }).eq("id", current.id),
+          senSupabase.from("rental_item_images").update({ sort_order: currentOrder }).eq("id", target.id)
+        ]);
+        if (first.error || second.error) {
+          showAlert(elements.modalAlert, errorMessage(first.error || second.error));
+          return;
+        }
+        current.sort_order = targetOrder;
+        target.sort_order = currentOrder;
+        renderGalleryManager();
+      }
+
+      function storagePathFromUrl(value) {
+        try {
+          const marker = "/storage/v1/object/public/rental-images/";
+          const pathname = new URL(value).pathname;
+          const start = pathname.indexOf(marker);
+          return start >= 0 ? decodeURIComponent(pathname.slice(start + marker.length)) : "";
+        } catch {
+          return "";
+        }
+      }
+
+      async function deleteGalleryImage(imageId) {
+        const image = state.images.find(value => value.id === imageId);
+        if (!image || !window.confirm("Delete this rental photo?")) return;
+        const { error } = await senSupabase.from("rental_item_images").delete().eq("id", image.id);
+        if (error) {
+          showAlert(elements.modalAlert, errorMessage(error));
+          return;
+        }
+
+        const storagePath = storagePathFromUrl(image.image_url);
+        if (storagePath) await senSupabase.storage.from("rental-images").remove([storagePath]);
+        state.images = state.images.filter(value => value.id !== image.id);
+        const remaining = currentGalleryImages();
+        if (image.is_primary) {
+          if (remaining.length) {
+            await setPrimaryImage(remaining[0].id);
+            return;
+          }
+          await senSupabase.from("rental_items")
+            .update({ image_url: null, updated_at: new Date().toISOString() })
+            .eq("id", image.rental_item_id);
+          elements.image.value = "";
+        }
+        renderGalleryManager();
+        showAlert(elements.modalAlert, "Photo deleted.", "success");
+      }
+
       function openModal(item = null) {
         hideAlert(elements.modalAlert);
 
         elements.form.reset();
+
+        state.pendingImages.forEach(image => URL.revokeObjectURL(image.previewUrl));
+        state.pendingImages = [];
 
         state.editingId =
           item?.id || null;
@@ -1663,6 +2014,8 @@
         elements.featured.checked =
           Boolean(item?.featured);
 
+        renderGalleryManager();
+
         elements.modal.classList.add(
           "visible"
         );
@@ -1697,6 +2050,8 @@
           "modal-open"
         );
 
+        state.pendingImages.forEach(image => URL.revokeObjectURL(image.previewUrl));
+        state.pendingImages = [];
         state.editingId = null;
       }
 
@@ -1789,6 +2144,7 @@
 
         try {
           let result;
+          let createdItemId = null;
 
           if (state.editingId) {
             result =
@@ -1798,16 +2154,31 @@
                 .eq(
                   "id",
                   state.editingId
-                );
+                )
+                .select("id")
+                .single();
           } else {
             result =
               await senSupabase
                 .from("rental_items")
-                .insert(payload);
+                .insert(payload)
+                .select("id")
+                .single();
           }
 
           if (result.error) {
             throw result.error;
+          }
+
+          if (!state.editingId) createdItemId = result.data.id;
+
+          try {
+            await uploadPendingImages(result.data.id, payload.name);
+          } catch (uploadError) {
+            if (createdItemId) {
+              await senSupabase.from("rental_items").delete().eq("id", createdItemId);
+            }
+            throw uploadError;
           }
 
           showAlert(
@@ -1907,6 +2278,14 @@
           return;
         }
 
+        const storagePaths = state.images
+          .filter(image => image.rental_item_id === itemId)
+          .map(image => storagePathFromUrl(image.image_url))
+          .filter(Boolean);
+        if (storagePaths.length) {
+          await senSupabase.storage.from("rental-images").remove(storagePaths);
+        }
+
         await loadInventory();
       }
 
@@ -1967,6 +2346,11 @@
         saveItem
       );
 
+      elements.gallery.addEventListener(
+        "change",
+        addPendingImages
+      );
+
       elements.modal.addEventListener(
         "click",
         event => {
@@ -1996,6 +2380,34 @@
             event.target.closest(
               "[data-delete-id]"
             );
+
+          const setPrimary = event.target.closest("[data-gallery-primary]");
+          const moveEarlier = event.target.closest("[data-gallery-up]");
+          const deleteImage = event.target.closest("[data-gallery-delete]");
+          const removePending = event.target.closest("[data-remove-pending]");
+
+          if (setPrimary) {
+            setPrimaryImage(setPrimary.dataset.galleryPrimary);
+            return;
+          }
+
+          if (moveEarlier) {
+            moveGalleryImage(moveEarlier.dataset.galleryUp, -1);
+            return;
+          }
+
+          if (deleteImage) {
+            deleteGalleryImage(deleteImage.dataset.galleryDelete);
+            return;
+          }
+
+          if (removePending) {
+            const index = Number(removePending.dataset.removePending);
+            const [removed] = state.pendingImages.splice(index, 1);
+            if (removed) URL.revokeObjectURL(removed.previewUrl);
+            renderGalleryManager();
+            return;
+          }
 
           if (edit) {
             const item =
@@ -2050,5 +2462,6 @@
     })();
   </script>
 
+  <script src="./assets/admin-shell.js"></script>
 </body>
 </html>

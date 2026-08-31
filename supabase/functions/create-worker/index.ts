@@ -4,6 +4,8 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 const allowedOrigins = new Set([
   "https://senmoonbounce.com",
   "https://www.senmoonbounce.com",
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
 ]);
 
 function corsHeaders(request: Request) {
@@ -63,7 +65,7 @@ Deno.serve(async (request: Request) => {
 
   const { data: owner } = await admin
     .from("admin_users")
-    .select("role, active")
+    .select("id, role, active")
     .eq("user_id", caller.id)
     .eq("active", true)
     .maybeSingle();
@@ -79,15 +81,120 @@ Deno.serve(async (request: Request) => {
     return reply(request, { error: "Invalid request." }, 400);
   }
 
+  const action = body.action === "update" ? "update" : "create";
   const firstName = optionalText(body.first_name);
   const lastName = optionalText(body.last_name);
   const email = optionalText(body.email)?.toLowerCase() ?? null;
-  const password = typeof body.temporary_password === "string"
-    ? body.temporary_password
-    : "";
+  const password = typeof body.temporary_password === "string" ? body.temporary_password : "";
+  const active = body.active !== false;
+  const available = active && body.available !== false;
 
   if (!firstName || !lastName || !email) {
     return reply(request, { error: "First name, last name and email are required." }, 400);
+  }
+
+  if (firstName.length > 100 || lastName.length > 100 || email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return reply(request, { error: "Enter valid worker contact information." }, 400);
+  }
+
+  const profileFields = {
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    phone: optionalText(body.phone),
+    license_number: optionalText(body.license_number),
+    vehicle_name: optionalText(body.vehicle_name),
+    vehicle_plate: optionalText(body.vehicle_plate),
+    notes: optionalText(body.notes),
+    active,
+    available,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (action === "update") {
+    const workerId = optionalText(body.worker_id);
+    if (!workerId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(workerId)) {
+      return reply(request, { error: "A valid worker account is required." }, 400);
+    }
+
+    const [{ data: existingWorker }, { data: existingRole }] = await Promise.all([
+      admin.from("driver_profiles").select("*").eq("id", workerId).maybeSingle(),
+      admin.from("admin_users").select("id, user_id, full_name, role, active, phone").eq("user_id", workerId).maybeSingle(),
+    ]);
+
+    if (!existingWorker || !existingRole || existingRole.role !== "DRIVER") {
+      return reply(request, { error: "Worker account was not found." }, 404);
+    }
+
+    const { data: duplicateEmail } = await admin
+      .from("driver_profiles")
+      .select("id")
+      .ilike("email", email)
+      .neq("id", workerId)
+      .maybeSingle();
+
+    if (duplicateEmail) {
+      return reply(request, { error: "Another worker already uses this email address." }, 409);
+    }
+
+    const { data: updatedWorker, error: profileError } = await admin
+      .from("driver_profiles")
+      .update(profileFields)
+      .eq("id", workerId)
+      .select("*")
+      .single();
+
+    if (profileError || !updatedWorker) {
+      return reply(request, { error: "Worker profile could not be updated." }, 500);
+    }
+
+    const adminFields = {
+      full_name: `${firstName} ${lastName}`,
+      active,
+      phone: optionalText(body.phone),
+    };
+    const { error: roleError } = await admin
+      .from("admin_users")
+      .update(adminFields)
+      .eq("user_id", workerId);
+
+    if (roleError) {
+      await admin.from("driver_profiles").update(existingWorker).eq("id", workerId);
+      return reply(request, { error: "Worker permissions could not be updated." }, 500);
+    }
+
+    const { error: authError } = await admin.auth.admin.updateUserById(workerId, {
+      email,
+      email_confirm: true,
+      user_metadata: { full_name: `${firstName} ${lastName}` },
+    });
+
+    if (authError) {
+      await admin.from("driver_profiles").update(existingWorker).eq("id", workerId);
+      await admin.from("admin_users").update({
+        full_name: existingRole.full_name,
+        active: existingRole.active,
+        phone: existingRole.phone,
+      }).eq("user_id", workerId);
+      const duplicate = /already|registered|exists/i.test(authError.message ?? "");
+      return reply(request, {
+        error: duplicate
+          ? "Another login already uses this email address."
+          : "Worker login could not be updated.",
+      }, duplicate ? 409 : 500);
+    }
+
+    await admin.from("activity_logs").insert({
+      admin_user_id: owner.id,
+      action_type: active ? "update_worker" : "deactivate_worker",
+      entity_type: "driver_profiles",
+      entity_id: workerId,
+      description: `${active ? "Updated" : "Deactivated"} worker ${firstName} ${lastName}`,
+      metadata: { operation: "UPDATE", table: "driver_profiles" },
+    });
+
+    return reply(request, { success: true, worker: updatedWorker });
   }
 
   if (password.length < 8) {
@@ -101,11 +208,7 @@ Deno.serve(async (request: Request) => {
     .maybeSingle();
 
   if (existingWorker) {
-    return reply(request, {
-      success: true,
-      already_exists: true,
-      worker: existingWorker,
-    });
+    return reply(request, { error: "A worker already uses this email address." }, 409);
   }
 
   const { data: created, error: createError } =
@@ -128,16 +231,7 @@ Deno.serve(async (request: Request) => {
   const workerId = created.user.id;
   const profile = {
     id: workerId,
-    first_name: firstName,
-    last_name: lastName,
-    email,
-    phone: optionalText(body.phone),
-    license_number: optionalText(body.license_number),
-    vehicle_name: optionalText(body.vehicle_name),
-    vehicle_plate: optionalText(body.vehicle_plate),
-    notes: optionalText(body.notes),
-    active: body.active !== false,
-    available: body.available !== false,
+    ...profileFields,
   };
 
   const { error: profileError } = await admin
@@ -151,7 +245,7 @@ Deno.serve(async (request: Request) => {
       user_id: workerId,
       full_name: `${firstName} ${lastName}`,
       role: "DRIVER",
-      active: body.active !== false,
+      active,
       phone: optionalText(body.phone),
     });
 
@@ -161,6 +255,15 @@ Deno.serve(async (request: Request) => {
     await admin.auth.admin.deleteUser(workerId);
     return reply(request, { error: "Worker profile could not be created." }, 500);
   }
+
+  await admin.from("activity_logs").insert({
+    admin_user_id: owner.id,
+    action_type: "create_worker",
+    entity_type: "driver_profiles",
+    entity_id: workerId,
+    description: `Created worker ${firstName} ${lastName}`,
+    metadata: { operation: "INSERT", table: "driver_profiles" },
+  });
 
   return reply(request, {
     success: true,

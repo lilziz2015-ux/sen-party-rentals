@@ -64,6 +64,7 @@
     @media(max-width:560px){.kpi-grid{grid-template-columns:1fr}.calendar-title{width:100%;text-align:left}.view-button[data-view="month"],.view-button[data-view="week"]{display:none}#month-view,#week-view{display:none!important}#agenda-view{display:block!important}.agenda-card{grid-template-columns:72px 1fr}.agenda-card>.event{grid-column:1/-1}.details,.field-grid{grid-template-columns:1fr}.detail.full,.field.full{grid-column:auto}.modal-backdrop{align-items:flex-end;padding:0}.modal{width:100%;max-height:93vh;border-radius:22px 22px 0 0}}
     @media print{.topbar,.kpi-grid,.side-stack,.panel-head,.modal-backdrop{display:none!important}.page{width:100%;padding:0}.layout{display:block}.panel{border:0;box-shadow:none}.month-grid{min-width:0}.day-cell{min-height:120px}.event{font-size:.6rem}}
   </style>
+  <link rel="stylesheet" href="./assets/admin-shell.css">
 </head>
 <body>
   <header class="topbar">
@@ -197,7 +198,7 @@
     </section>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
   <script>
   (() => {
     "use strict";
@@ -512,5 +513,6 @@
     (async()=>{try{if(await requireAdmin())await loadData();}catch(error){$("loading").hidden=true;showAlert($("page-alert"),errorMessage(error));}})();
   })();
   </script>
+  <script src="./assets/admin-shell.js"></script>
 </body>
 </html>

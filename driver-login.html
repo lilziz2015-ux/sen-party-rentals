@@ -71,6 +71,10 @@
       font: inherit;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     .login-card {
       width: min(460px, 100%);
       overflow: hidden;
@@ -226,6 +230,21 @@
       text-decoration: none;
     }
 
+    .login-link-button {
+      padding: 0;
+      border: 0;
+      color: var(--red-dark);
+      background: transparent;
+      font-size: inherit;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .login-links a:hover,
+    .login-link-button:hover {
+      text-decoration: underline;
+    }
+
     .help-box {
       margin-top: 24px;
       padding: 14px;
@@ -254,9 +273,9 @@
         <i class="fa-solid fa-truck-fast"></i>
       </div>
 
-      <h1>Driver Portal</h1>
+      <h1 id="driver-login-title">Worker Portal</h1>
 
-      <p>
+      <p id="driver-login-intro">
         Sign in to view your assigned deliveries and route.
       </p>
     </section>
@@ -327,13 +346,35 @@
 
       </form>
 
+      <form id="driver-recovery-form" hidden>
+        <div class="field">
+          <label for="driver-new-password">New Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input id="driver-new-password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="driver-confirm-password">Confirm New Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-shield-halved"></i>
+            <input id="driver-confirm-password" type="password" minlength="8" autocomplete="new-password" placeholder="Enter the password again" required>
+          </div>
+        </div>
+        <button type="submit" class="login-button" id="driver-recovery-button">
+          <i class="fa-solid fa-key"></i>
+          Set New Password
+        </button>
+      </form>
+
       <div class="login-links">
         <a href="./index.html">Return to website</a>
+        <button type="button" class="login-link-button" id="driver-forgot-password">Forgot password?</button>
         <a href="tel:+15717199575">Need help?</a>
       </div>
 
       <div class="help-box">
-        Driver access is provided by Sen Party Rentals.
+        Worker access is provided by Sen Party Rentals.
         For login assistance, call or text
         <a href="tel:+15717199575">(571) 719-9575</a>.
       </div>
@@ -342,7 +383,7 @@
 
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
 
   <script>
     (() => {
@@ -376,6 +417,9 @@
       const state = {
         signingIn: false
       };
+
+      const recoveryRequested =
+        new URLSearchParams(location.search).get("mode") === "recovery";
 
       const $ = id =>
         document.getElementById(id);
@@ -439,6 +483,14 @@
           value
             ? "fa-solid fa-spinner fa-spin"
             : "fa-solid fa-right-to-bracket";
+      }
+
+      function showRecoveryMode() {
+        $("driver-login-form").hidden = true;
+        $("driver-recovery-form").hidden = false;
+        $("driver-forgot-password").hidden = true;
+        $("driver-login-title").textContent = "Set New Password";
+        $("driver-login-intro").textContent = "Choose a new secure password for your worker account.";
       }
 
       async function verifyDriver(userId) {
@@ -576,7 +628,69 @@
           }
         );
 
+      $("driver-forgot-password").addEventListener("click", async () => {
+        hideAlert();
+        const email = $("driver-email").value.trim().toLowerCase();
+        if (!email) {
+          showAlert("Enter your email address first, then choose Forgot password.");
+          $("driver-email").focus();
+          return;
+        }
+
+        $("driver-forgot-password").disabled = true;
+        try {
+          const { error } = await db.auth.resetPasswordForEmail(email, {
+            redirectTo: "https://www.senmoonbounce.com/driver-login.html?mode=recovery"
+          });
+          if (error) throw error;
+          showAlert("If that worker email exists, a secure password reset link has been sent.", "success");
+        } catch (error) {
+          showAlert(errorMessage(error));
+        } finally {
+          $("driver-forgot-password").disabled = false;
+        }
+      });
+
+      $("driver-recovery-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        hideAlert();
+        const password = $("driver-new-password").value;
+        if (password.length < 8) {
+          showAlert("Use a password with at least 8 characters.");
+          return;
+        }
+        if (password !== $("driver-confirm-password").value) {
+          showAlert("The two passwords do not match.");
+          return;
+        }
+
+        const button = $("driver-recovery-button");
+        button.disabled = true;
+        button.textContent = "Updating Password...";
+        try {
+          const { error } = await db.auth.updateUser({ password });
+          if (error) throw error;
+          await db.auth.signOut();
+          showAlert("Password updated. You can now sign in with your new password.", "success");
+          window.setTimeout(() => location.replace("./driver-login.html"), 900);
+        } catch (error) {
+          showAlert(errorMessage(error));
+        } finally {
+          button.disabled = false;
+          button.textContent = "Set New Password";
+        }
+      });
+
+      db.auth.onAuthStateChange(event => {
+        if (event === "PASSWORD_RECOVERY") showRecoveryMode();
+      });
+
       (async () => {
+        if (recoveryRequested) {
+          showRecoveryMode();
+          return;
+        }
+
         const {
           data
         } = await db.auth.getSession();

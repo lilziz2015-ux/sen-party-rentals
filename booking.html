@@ -1434,7 +1434,7 @@
 
   <div id="footer"></div>
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
 
 <script>
   const SEN_SUPABASE_URL =
@@ -2547,6 +2547,54 @@
         return "Submitted";
       }
 
+      function extractBookingId(result) {
+        if (!result) return "";
+
+        if (Array.isArray(result) && result.length) {
+          return extractBookingId(result[0]);
+        }
+
+        if (typeof result === "object") {
+          return String(
+            result.booking_id ||
+            result.bookingId ||
+            result.id ||
+            ""
+          );
+        }
+
+        return "";
+      }
+
+      async function sendBookingNotifications(bookingResult) {
+        const bookingId = extractBookingId(bookingResult);
+
+        if (!bookingId) {
+          console.error(
+            "Booking notification was skipped because the booking ID was not returned."
+          );
+          return;
+        }
+
+        const { data, error } = await window.senSupabase.functions.invoke(
+          "send-booking-email",
+          {
+            body: {
+              booking_id: bookingId
+            }
+          }
+        );
+
+        if (error) throw error;
+
+        if (data?.owner_email_sent !== true) {
+          throw new Error(
+            data?.owner_email_error ||
+            "The owner booking email was not sent."
+          );
+        }
+      }
+
       function setSubmitting(submitting) {
         state.submitting = submitting;
         elements.submitButton.disabled = submitting;
@@ -2597,6 +2645,15 @@
           );
 
           if (error) throw error;
+
+          try {
+            await sendBookingNotifications(data);
+          } catch (notificationError) {
+            console.error(
+              "Booking saved, but its notification could not be sent:",
+              notificationError
+            );
+          }
 
           elements.confirmationNumber.textContent =
             extractBookingNumber(data);

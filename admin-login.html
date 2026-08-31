@@ -345,6 +345,25 @@
       opacity: 0.65;
     }
 
+    .login-form-links {
+      display: flex;
+      justify-content: flex-end;
+      margin: -5px 0 14px;
+    }
+
+    .login-link-button {
+      padding: 4px 0;
+      border: 0;
+      color: var(--login-red-dark);
+      background: transparent;
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .login-link-button:hover {
+      text-decoration: underline;
+    }
+
     .login-help {
       margin-top: 20px;
       padding: 14px;
@@ -458,11 +477,11 @@
 
       <div class="login-card">
 
-        <h2>
+        <h2 id="login-title">
           Admin Sign In
         </h2>
 
-        <p class="login-card-intro">
+        <p class="login-card-intro" id="login-intro">
           Enter the email address and password connected to your
           Supabase admin account.
         </p>
@@ -540,6 +559,12 @@
 
           </div>
 
+          <div class="login-form-links">
+            <button type="button" class="login-link-button" id="forgot-password">
+              Forgot password?
+            </button>
+          </div>
+
           <button
             type="submit"
             class="login-submit"
@@ -556,6 +581,27 @@
             ></i>
           </button>
 
+        </form>
+
+        <form id="recovery-form" hidden>
+          <div class="login-field">
+            <label for="recovery-password">New Password</label>
+            <div class="login-input-wrap">
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <input id="recovery-password" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters" required>
+            </div>
+          </div>
+          <div class="login-field">
+            <label for="recovery-confirm">Confirm New Password</label>
+            <div class="login-input-wrap">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <input id="recovery-confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Enter the new password again" required>
+            </div>
+          </div>
+          <button type="submit" class="login-submit" id="recovery-submit">
+            <i class="fa-solid fa-key" aria-hidden="true"></i>
+            Set New Password
+          </button>
         </form>
 
         <div class="login-help">
@@ -584,7 +630,7 @@
   </main>
 
   <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
 
   <script>
@@ -658,6 +704,17 @@
           "password-toggle"
         );
 
+      const recoveryRequested =
+        new URLSearchParams(location.search).get("mode") === "recovery";
+
+      const recoveryForm = document.getElementById("recovery-form");
+      const recoveryPassword = document.getElementById("recovery-password");
+      const recoveryConfirm = document.getElementById("recovery-confirm");
+      const recoverySubmit = document.getElementById("recovery-submit");
+      const forgotPassword = document.getElementById("forgot-password");
+      const loginTitle = document.getElementById("login-title");
+      const loginIntro = document.getElementById("login-intro");
+
       function escapeHtml(value) {
         return String(value ?? "")
           .replaceAll("&", "&amp;")
@@ -710,6 +767,13 @@
             : "fa-solid fa-right-to-bracket";
       }
 
+      function showRecoveryMode() {
+        form.hidden = true;
+        recoveryForm.hidden = false;
+        loginTitle.textContent = "Set New Password";
+        loginIntro.textContent = "Choose a new secure password for your admin account.";
+      }
+
       async function verifyAdmin(userId) {
         const {
           data,
@@ -743,6 +807,10 @@
       }
 
       async function redirectExistingSession() {
+        if (recoveryRequested) {
+          return;
+        }
+
         const {
           data,
           error
@@ -801,6 +869,62 @@
           );
         }
       );
+
+      forgotPassword.addEventListener("click", async () => {
+        hideAlert();
+        const email = emailField.value.trim().toLowerCase();
+        if (!email) {
+          showAlert("Enter your email address first, then choose Forgot password.");
+          emailField.focus();
+          return;
+        }
+
+        forgotPassword.disabled = true;
+        try {
+          const { error } = await senSupabase.auth.resetPasswordForEmail(email, {
+            redirectTo: "https://www.senmoonbounce.com/admin-login.html?mode=recovery"
+          });
+          if (error) throw error;
+          showAlert("If that admin email exists, a secure password reset link has been sent.", "success");
+        } catch (error) {
+          showAlert(error instanceof Error ? error.message : "Password reset could not be started.");
+        } finally {
+          forgotPassword.disabled = false;
+        }
+      });
+
+      recoveryForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        hideAlert();
+        const password = recoveryPassword.value;
+        if (password.length < 8) {
+          showAlert("Use a password with at least 8 characters.");
+          return;
+        }
+        if (password !== recoveryConfirm.value) {
+          showAlert("The two passwords do not match.");
+          return;
+        }
+
+        recoverySubmit.disabled = true;
+        recoverySubmit.textContent = "Updating Password...";
+        try {
+          const { error } = await senSupabase.auth.updateUser({ password });
+          if (error) throw error;
+          await senSupabase.auth.signOut();
+          showAlert("Password updated. You can now sign in with your new password.", "success");
+          window.setTimeout(() => location.replace("./admin-login.html"), 900);
+        } catch (error) {
+          showAlert(error instanceof Error ? error.message : "Password could not be updated. Open the newest reset link and try again.");
+        } finally {
+          recoverySubmit.disabled = false;
+          recoverySubmit.textContent = "Set New Password";
+        }
+      });
+
+      senSupabase.auth.onAuthStateChange(event => {
+        if (event === "PASSWORD_RECOVERY") showRecoveryMode();
+      });
 
       form.addEventListener(
         "submit",
@@ -896,6 +1020,7 @@
         }
       );
 
+      if (recoveryRequested) showRecoveryMode();
       redirectExistingSession();
     })();
   </script>

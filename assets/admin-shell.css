@@ -1,0 +1,213 @@
+:root {
+  --admin-shell-red: #d90429;
+  --admin-shell-red-dark: #970018;
+  --admin-shell-orange: #ff6a00;
+}
+
+.admin-shell-menu-button {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--admin-shell-red-dark), var(--admin-shell-red) 62%, var(--admin-shell-orange));
+  box-shadow: 0 10px 24px rgba(151, 0, 24, 0.2);
+}
+
+.admin-shell-menu-button:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.admin-shell-menu-button:focus-visible,
+.admin-shell-close:focus-visible,
+.admin-shell-nav a:focus-visible,
+.admin-shell-signout:focus-visible {
+  outline: 3px solid rgba(255, 106, 0, 0.55);
+  outline-offset: 3px;
+}
+
+.admin-shell-overlay {
+  position: fixed;
+  z-index: 2490;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(3px);
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.admin-shell-overlay.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.admin-shell-drawer {
+  position: fixed;
+  z-index: 2500;
+  inset: 0 auto 0 0;
+  width: min(310px, 88vw);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  color: #fff;
+  background:
+    radial-gradient(circle at 85% 8%, rgba(217, 4, 41, 0.28), transparent 28%),
+    linear-gradient(180deg, #070709, #17181c 62%, #300008);
+  box-shadow: 24px 0 70px rgba(0, 0, 0, 0.38);
+  transform: translateX(-105%);
+  transition: transform 220ms ease;
+}
+
+.admin-shell-drawer.is-open {
+  transform: translateX(0);
+}
+
+.admin-shell-head {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.admin-shell-mark {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--admin-shell-red-dark), var(--admin-shell-red) 58%, var(--admin-shell-orange));
+  box-shadow: 0 12px 26px rgba(217, 4, 41, 0.3);
+}
+
+.admin-shell-brand {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-shell-brand strong,
+.admin-shell-brand small {
+  display: block;
+}
+
+.admin-shell-brand strong {
+  font-size: 0.96rem;
+}
+
+.admin-shell-brand small {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.7rem;
+}
+
+.admin-shell-close {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 11px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.admin-shell-nav {
+  display: grid;
+  gap: 6px;
+  padding: 18px 14px;
+}
+
+.admin-shell-nav a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.admin-shell-nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-shell-nav a.is-active {
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  background: linear-gradient(135deg, rgba(151, 0, 24, 0.9), rgba(217, 4, 41, 0.82));
+  box-shadow: 0 10px 26px rgba(217, 4, 41, 0.18);
+}
+
+.admin-shell-nav i {
+  width: 20px;
+  text-align: center;
+}
+
+.admin-shell-footer {
+  margin-top: auto;
+  padding: 16px 14px calc(16px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.admin-shell-website,
+.admin-shell-signout {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-radius: 11px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.admin-shell-website {
+  margin-bottom: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.admin-shell-signout {
+  border: 0;
+  color: #fff;
+  background: linear-gradient(135deg, var(--admin-shell-red-dark), var(--admin-shell-red));
+}
+
+html.admin-shell-menu-open,
+body.admin-shell-menu-open {
+  overflow: hidden;
+}
+
+@media (max-width: 620px) {
+  .admin-shell-drawer {
+    width: min(330px, 92vw);
+  }
+
+  .admin-shell-head {
+    padding-top: calc(18px + env(safe-area-inset-top));
+  }
+}
+
+@media print {
+  .admin-shell-menu-button,
+  .admin-shell-overlay,
+  .admin-shell-drawer {
+    display: none !important;
+  }
+}

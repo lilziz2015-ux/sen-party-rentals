@@ -645,6 +645,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="./assets/admin-shell.css">
 </head>
 
 <body>
@@ -660,8 +661,8 @@
       </a>
 
       <div>
-        <h1>Drivers</h1>
-        <p>Manage drivers, vehicles and availability.</p>
+        <h1>Workers</h1>
+        <p>Manage worker logins, vehicles and availability.</p>
       </div>
     </div>
 
@@ -750,8 +751,8 @@
     <section class="panel">
       <div class="panel-head">
         <div>
-          <h2>Driver Directory</h2>
-          <p>View and update your delivery team.</p>
+          <h2>Worker Directory</h2>
+          <p>View and update your delivery team and login access.</p>
         </div>
 
         <div class="filter-row">
@@ -887,6 +888,7 @@
               <input
                 id="driver-email"
                 type="email"
+                required
               >
             </div>
 
@@ -973,7 +975,7 @@
   </div>
 
   <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
 
   <script>
@@ -1005,7 +1007,8 @@
         search: "",
         filter: "ALL",
         loading: false,
-        saving: false
+        saving: false,
+        actioning: false
       };
 
       const $ =
@@ -1240,6 +1243,26 @@
                 Edit
               </button>
 
+              ${driver.email ? `
+                <button
+                  type="button"
+                  class="row-button"
+                  data-reset-driver="${escapeHtml(driver.id)}"
+                >
+                  <i class="fa-solid fa-key"></i>
+                  Reset Password
+                </button>
+              ` : ""}
+
+              <button
+                type="button"
+                class="row-button"
+                data-toggle-driver="${escapeHtml(driver.id)}"
+              >
+                <i class="fa-solid ${driver.active ? "fa-user-slash" : "fa-user-check"}"></i>
+                ${driver.active ? "Deactivate" : "Activate"}
+              </button>
+
             </div>
 
           </article>
@@ -1419,8 +1442,8 @@
         document.body.classList.add("modal-open");
       }
 
-      function closeDriverModal() {
-        if (state.saving) {
+      function closeDriverModal(force = false) {
+        if (state.saving && !force) {
           return;
         }
 
@@ -1431,6 +1454,95 @@
         );
 
         document.body.classList.remove("modal-open");
+      }
+
+      async function invokeWorker(body) {
+        const result = await db.functions.invoke(
+          "create-worker",
+          { body }
+        );
+
+        if (result.error) {
+          let message = result.error.message;
+          try {
+            const responseBody = await result.error.context?.json();
+            if (responseBody?.error) message = responseBody.error;
+          } catch {
+            // Keep the safe fallback message from the client library.
+          }
+          throw new Error(message);
+        }
+
+        if (result.data?.error) {
+          throw new Error(result.data.error);
+        }
+
+        return result.data;
+      }
+
+      function workerPayload(driver, overrides = {}) {
+        return {
+          action: "update",
+          worker_id: driver.id,
+          first_name: driver.first_name,
+          last_name: driver.last_name,
+          phone: driver.phone,
+          email: driver.email,
+          license_number: driver.license_number,
+          vehicle_name: driver.vehicle_name,
+          vehicle_plate: driver.vehicle_plate,
+          active: driver.active,
+          available: driver.available,
+          notes: driver.notes,
+          ...overrides
+        };
+      }
+
+      async function sendWorkerReset(driver) {
+        if (!driver?.email || state.actioning) return;
+        state.actioning = true;
+        hideAlert($("page-alert"));
+        try {
+          const { error } = await db.auth.resetPasswordForEmail(
+            driver.email,
+            { redirectTo: "https://www.senmoonbounce.com/driver-login.html?mode=recovery" }
+          );
+          if (error) throw error;
+          showAlert(
+            $("page-alert"),
+            `Password reset instructions were sent to ${driver.email}.`,
+            "success"
+          );
+        } catch (error) {
+          showAlert($("page-alert"), errorMessage(error));
+        } finally {
+          state.actioning = false;
+        }
+      }
+
+      async function toggleWorker(driver) {
+        if (!driver || state.actioning) return;
+        const nextActive = !driver.active;
+        if (!nextActive && !window.confirm(`Deactivate ${driverName(driver)}? They will no longer be able to sign in.`)) return;
+
+        state.actioning = true;
+        hideAlert($("page-alert"));
+        try {
+          await invokeWorker(workerPayload(driver, {
+            active: nextActive,
+            available: nextActive ? driver.available : false
+          }));
+          await loadDrivers();
+          showAlert(
+            $("page-alert"),
+            `${driverName(driver)} is now ${nextActive ? "active" : "inactive"}.`,
+            "success"
+          );
+        } catch (error) {
+          showAlert($("page-alert"), errorMessage(error));
+        } finally {
+          state.actioning = false;
+        }
       }
 
       async function saveDriver(event) {
@@ -1525,41 +1637,27 @@
           "Saving Driver...";
 
         try {
-          let error;
-
           if (!id) {
-            const result =
-              await db.functions.invoke(
-                "create-worker",
-                {
-                  body: {
-                    ...driverData,
-                    temporary_password: temporaryPassword
-                  }
-                }
-              );
-
-            error = result.error;
-
-            if (!error && result.data?.error) {
-              error = new Error(result.data.error);
-            }
+            await invokeWorker({
+              action: "create",
+              ...driverData,
+              temporary_password: temporaryPassword
+            });
           } else {
-            const result =
-              await db
-                .from("driver_profiles")
-                .update(driverData)
-                .eq("id", id);
-
-            error = result.error;
+            await invokeWorker({
+              action: "update",
+              worker_id: id,
+              ...driverData
+            });
           }
 
-          if (error) {
-            throw error;
-          }
-
-          closeDriverModal();
+          closeDriverModal(true);
           await loadDrivers();
+          showAlert(
+            $("page-alert"),
+            id ? "Worker account updated." : "Worker login created.",
+            "success"
+          );
 
         } catch (error) {
           showAlert(
@@ -1625,6 +1723,16 @@
               "[data-edit-driver]"
             );
 
+          const resetButton =
+            event.target.closest(
+              "[data-reset-driver]"
+            );
+
+          const toggleButton =
+            event.target.closest(
+              "[data-toggle-driver]"
+            );
+
           if (filterButton) {
             state.filter =
               filterButton.dataset
@@ -1658,6 +1766,22 @@
             if (driver) {
               openDriverModal(driver);
             }
+            return;
+          }
+
+          if (resetButton) {
+            const driver = state.drivers.find(
+              item => item.id === resetButton.dataset.resetDriver
+            );
+            if (driver) sendWorkerReset(driver);
+            return;
+          }
+
+          if (toggleButton) {
+            const driver = state.drivers.find(
+              item => item.id === toggleButton.dataset.toggleDriver
+            );
+            if (driver) toggleWorker(driver);
           }
         }
       );
@@ -1703,5 +1827,6 @@
       })();
     })();
   </script>
+  <script src="./assets/admin-shell.js"></script>
 </body>
 </html>
