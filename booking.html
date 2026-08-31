@@ -332,6 +332,53 @@
       line-height: 1.45;
     }
 
+    .booking-photo-picker {
+      padding: 18px;
+      border: 2px dashed #d8dde5;
+      border-radius: 16px;
+      background: #fafafa;
+    }
+
+    .booking-photo-picker input[type="file"] {
+      min-height: 0;
+      padding: 10px;
+      border: 0;
+      background: #fff;
+    }
+
+    .booking-photo-previews {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .booking-photo-preview {
+      overflow: hidden;
+      position: relative;
+      min-height: 105px;
+      border: 1px solid #e1e4e9;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .booking-photo-preview img {
+      display: block;
+      width: 100%;
+      height: 105px;
+      object-fit: cover;
+    }
+
+    .booking-photo-preview span {
+      display: block;
+      overflow: hidden;
+      padding: 7px 9px;
+      font-size: .7rem;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .booking-radio-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0,1fr));
@@ -1275,6 +1322,17 @@
                   <label for="special-instructions">Special Instructions</label>
                   <textarea id="special-instructions" name="special_instructions" placeholder="Tell us about access, setup timing, park rules, gate access or special requests."></textarea>
                 </div>
+
+                <div class="booking-field full">
+                  <label for="quote-photos">Setup Photos <span style="color:var(--booking-muted);font-weight:700">(Optional)</span></label>
+                  <div class="booking-photo-picker">
+                    <input id="quote-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+                    <p class="booking-help">
+                      Add up to 6 photos of the setup area, gate, stairs, or items that need to fit. Photos help us prepare a more accurate quote. JPG, PNG, or WebP; 8 MB maximum per photo.
+                    </p>
+                    <div class="booking-photo-previews" id="quote-photo-previews" hidden></div>
+                  </div>
+                </div>
               </div>
 
               <div class="booking-actions">
@@ -1402,7 +1460,7 @@
 
         <h2>Booking Request Received</h2>
 
-        <p>
+        <p id="confirmation-detail">
           Thank you for choosing Sen Party Rentals. We received your request and will
           contact you to confirm availability, delivery pricing, setup requirements and the final total.
         </p>
@@ -1496,6 +1554,8 @@
         search: "",
         availability: new Map(),
         submitting: false,
+        quotePhotos: [],
+        quotePhotoUrls: [],
         pendingDraftSelection: [],
         pendingSlug:
           bookingParameters.get("add") ||
@@ -1538,7 +1598,10 @@
         submitText: document.getElementById("submit-text"),
         submitIcon: document.getElementById("submit-icon"),
         confirmation: document.getElementById("confirmation"),
-        confirmationNumber: document.getElementById("confirmation-number")
+        confirmationNumber: document.getElementById("confirmation-number"),
+        confirmationDetail: document.getElementById("confirmation-detail"),
+        quotePhotoInput: document.getElementById("quote-photos"),
+        quotePhotoPreviews: document.getElementById("quote-photo-previews")
       };
 
       function escapeHtml(value) {
@@ -1548,6 +1611,56 @@
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
           .replaceAll("'", "&#039;");
+      }
+
+      function clearQuotePhotoUrls() {
+        state.quotePhotoUrls.forEach(url => URL.revokeObjectURL(url));
+        state.quotePhotoUrls = [];
+      }
+
+      function renderQuotePhotoPreviews() {
+        clearQuotePhotoUrls();
+        elements.quotePhotoPreviews.hidden = state.quotePhotos.length === 0;
+        elements.quotePhotoPreviews.innerHTML = state.quotePhotos
+          .map(file => {
+            const url = URL.createObjectURL(file);
+            state.quotePhotoUrls.push(url);
+            return `
+              <div class="booking-photo-preview">
+                <img src="${url}" alt="Selected setup photo preview">
+                <span title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function selectQuotePhotos() {
+        const allowed = new Set(["image/jpeg", "image/png", "image/webp"]);
+        const selected = Array.from(elements.quotePhotoInput.files || []);
+        const valid = [];
+        let problem = "";
+
+        for (const file of selected.slice(0, 6)) {
+          if (!allowed.has(file.type)) {
+            problem = `${file.name} is not a JPG, PNG, or WebP image.`;
+            continue;
+          }
+          if (file.size < 1 || file.size > 8 * 1024 * 1024) {
+            problem = `${file.name} must be smaller than 8 MB.`;
+            continue;
+          }
+          valid.push(file);
+        }
+
+        if (selected.length > 6) {
+          problem = "You can add up to 6 photos.";
+        }
+
+        state.quotePhotos = valid;
+        renderQuotePhotoPreviews();
+        if (problem) showAlert(problem);
+        else hideAlert();
       }
 
       function normalizeSlug(value) {
@@ -2465,7 +2578,13 @@
           ["Delivery Address", fullDeliveryAddress() || "Not entered"],
           ["Setup", setupDetails || "Not entered"],
           ["Power", formValue("power_source") || "Not provided"],
-          ["Water", formValue("water_access") || "Not provided"]
+          ["Water", formValue("water_access") || "Not provided"],
+          [
+            "Setup Photos",
+            state.quotePhotos.length
+              ? `${state.quotePhotos.length} photo${state.quotePhotos.length === 1 ? "" : "s"} selected`
+              : "None (optional)"
+          ]
         ];
 
         elements.reviewEvent.innerHTML = reviewDetails
@@ -2566,6 +2685,109 @@
         return "";
       }
 
+      async function edgeFunctionErrorMessage(error, fallback) {
+        const response = error?.context;
+        if (response && typeof response.clone === "function") {
+          try {
+            const payload = await response.clone().json();
+            if (payload?.error || payload?.message) {
+              return String(payload.error || payload.message);
+            }
+          } catch (_) {
+            // Use the standard message below when the response is not JSON.
+          }
+        }
+        return String(error?.message || fallback);
+      }
+
+      async function uploadBookingQuotePhotos(bookingResult) {
+        const bookingId = extractBookingId(bookingResult);
+        const files = state.quotePhotos;
+        if (!files.length) return { requested: 0, uploaded: 0, failed: 0 };
+        if (!bookingId) {
+          throw new Error("The booking was saved, but its photo upload could not be connected.");
+        }
+
+        elements.submitText.textContent = "Uploading Photos...";
+        elements.submitIcon.className = "fa-solid fa-spinner fa-spin";
+
+        const fileDetails = files.map(file => ({
+          name: file.name,
+          type: file.type,
+          size: file.size
+        }));
+        const { data: prepared, error: prepareError } =
+          await window.senSupabase.functions.invoke("upload-booking-photos", {
+            body: {
+              action: "prepare",
+              booking_id: bookingId,
+              files: fileDetails
+            }
+          });
+        if (prepareError) {
+          throw new Error(
+            await edgeFunctionErrorMessage(prepareError, "Photos could not be prepared for upload.")
+          );
+        }
+
+        const uploads = Array.isArray(prepared?.uploads) ? prepared.uploads : [];
+        if (uploads.length !== files.length) {
+          throw new Error("The photo service did not prepare every selected photo.");
+        }
+
+        const results = await Promise.all(
+          uploads.map(async (upload, index) => {
+            const file = files[index];
+            const { error } = await window.senSupabase.storage
+              .from("booking-quote-photos")
+              .uploadToSignedUrl(upload.path, upload.token, file, {
+                contentType: file.type,
+                cacheControl: "3600"
+              });
+            return error
+              ? { ok: false, error }
+              : {
+                  ok: true,
+                  path: upload.path,
+                  name: file.name,
+                  type: file.type,
+                  size: file.size
+                };
+          })
+        );
+
+        const completed = results.filter(result => result.ok);
+        if (!completed.length) {
+          throw new Error("None of the selected photos could be uploaded.");
+        }
+
+        const { data: finalized, error: finalizeError } =
+          await window.senSupabase.functions.invoke("upload-booking-photos", {
+            body: {
+              action: "finalize",
+              booking_id: bookingId,
+              files: completed.map(({ path, name, type, size }) => ({
+                path,
+                name,
+                type,
+                size
+              }))
+            }
+          });
+        if (finalizeError) {
+          throw new Error(
+            await edgeFunctionErrorMessage(finalizeError, "Uploaded photos could not be saved to the booking.")
+          );
+        }
+
+        const uploaded = Number(finalized?.uploaded || completed.length);
+        return {
+          requested: files.length,
+          uploaded,
+          failed: Math.max(0, files.length - uploaded)
+        };
+      }
+
       async function sendBookingNotifications(bookingResult) {
         const bookingId = extractBookingId(bookingResult);
 
@@ -2646,6 +2868,17 @@
 
           if (error) throw error;
 
+          let photoSummary = { requested: 0, uploaded: 0, failed: 0 };
+          let photoWarning = "";
+          try {
+            photoSummary = await uploadBookingQuotePhotos(data);
+          } catch (photoError) {
+            photoWarning = String(
+              photoError?.message || "Selected photos could not be uploaded."
+            );
+            console.error("Booking photo upload error:", photoError);
+          }
+
           try {
             await sendBookingNotifications(data);
           } catch (notificationError) {
@@ -2657,6 +2890,20 @@
 
           elements.confirmationNumber.textContent =
             extractBookingNumber(data);
+
+          if (photoSummary.uploaded > 0 && photoSummary.failed === 0) {
+            elements.confirmationDetail.textContent =
+              `We received your booking request and ${photoSummary.uploaded} setup photo${photoSummary.uploaded === 1 ? "" : "s"}. We will review them to prepare a more accurate quote.`;
+          } else if (photoSummary.uploaded > 0) {
+            elements.confirmationDetail.textContent =
+              `We received your booking request and ${photoSummary.uploaded} setup photo${photoSummary.uploaded === 1 ? "" : "s"}. Some photos did not upload; you may text the rest to (571) 719-9575.`;
+          } else if (photoWarning) {
+            elements.confirmationDetail.textContent =
+              `Your booking request was saved. The selected photos did not upload (${photoWarning}); please text them to (571) 719-9575.`;
+          } else {
+            elements.confirmationDetail.textContent =
+              "Thank you for choosing Sen Party Rentals. We received your request and will contact you to confirm availability, delivery pricing, setup requirements and the final total.";
+          }
 
           elements.hero.hidden = true;
           elements.formSection.hidden = true;
@@ -2698,6 +2945,7 @@
         const formData = {};
 
         new FormData(form).forEach((value, key) => {
+          if (value instanceof File) return;
           formData[key] = String(value);
         });
 
@@ -2745,6 +2993,8 @@
           Object.entries(formData).forEach(([name, value]) => {
             const field = form.elements.namedItem(name);
             if (!field) return;
+
+            if (field.type === "file") return;
 
             if (field instanceof RadioNodeList) {
               const option = Array.from(field).find(
@@ -3019,10 +3269,16 @@
         saveDraftDebounced();
       });
 
-      form.addEventListener("change", saveDraft);
+      elements.quotePhotoInput.addEventListener("change", selectQuotePhotos);
+
+      form.addEventListener("change", event => {
+        if (event.target === elements.quotePhotoInput) return;
+        saveDraft();
+      });
       form.addEventListener("submit", submitBooking);
 
       window.addEventListener("beforeunload", () => {
+        clearQuotePhotoUrls();
         if (!document.body.classList.contains("booking-submitted")) {
           saveDraft();
         }
