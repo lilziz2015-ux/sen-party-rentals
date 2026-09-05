@@ -1382,9 +1382,10 @@
                   I confirm that the information is correct. I understand this is a booking request,
                   not a confirmed reservation. I agree that Sen Party Rentals may contact me by
                   phone, text message or email. View the
-                  <a href="./terms-and-conditions.html" target="_blank" rel="noopener">rental agreement</a>
+                  <a href="./terms-and-conditions.html" target="_blank" rel="noopener">rental terms and policies</a>
                   and
                   <a href="./privacy-policy.html" target="_blank" rel="noopener">privacy policy</a>.
+                  A personalized rental agreement will be created after I submit this request.
                 </label>
               </div>
 
@@ -1476,6 +1477,11 @@
         </p>
 
         <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:24px">
+          <a href="#" id="agreement-link" class="booking-button booking-button-primary" hidden>
+            <i class="fa-solid fa-file-signature" aria-hidden="true"></i>
+            Review &amp; Sign Agreement
+          </a>
+
           <a href="./index.html" class="booking-button booking-button-secondary">
             <i class="fa-solid fa-house" aria-hidden="true"></i>
             Return to Home
@@ -1600,6 +1606,7 @@
         confirmation: document.getElementById("confirmation"),
         confirmationNumber: document.getElementById("confirmation-number"),
         confirmationDetail: document.getElementById("confirmation-detail"),
+        agreementLink: document.getElementById("agreement-link"),
         quotePhotoInput: document.getElementById("quote-photos"),
         quotePhotoPreviews: document.getElementById("quote-photo-previews")
       };
@@ -2817,6 +2824,42 @@
         }
       }
 
+      async function createRentalAgreement(bookingResult) {
+        const bookingId = extractBookingId(bookingResult);
+
+        if (!bookingId) {
+          throw new Error("The booking was saved, but its agreement could not be connected.");
+        }
+
+        elements.submitText.textContent = "Creating Agreement...";
+        elements.submitIcon.className = "fa-solid fa-spinner fa-spin";
+
+        const { data, error } = await window.senSupabase.functions.invoke(
+          "rental-agreement",
+          {
+            body: {
+              action: "create",
+              booking_id: bookingId,
+              customer_email: formValue("email"),
+              customer_phone: formValue("phone")
+            }
+          }
+        );
+
+        if (error) {
+          throw new Error(
+            await edgeFunctionErrorMessage(error, "The personalized agreement could not be created.")
+          );
+        }
+
+        const agreementUrl = String(data?.agreement_url || "").trim();
+        if (!agreementUrl) {
+          throw new Error(data?.error || "The personalized agreement link was not returned.");
+        }
+
+        return agreementUrl;
+      }
+
       function setSubmitting(submitting) {
         state.submitting = submitting;
         elements.submitButton.disabled = submitting;
@@ -2879,6 +2922,16 @@
             console.error("Booking photo upload error:", photoError);
           }
 
+          let agreementUrl = "";
+          try {
+            agreementUrl = await createRentalAgreement(data);
+          } catch (agreementError) {
+            console.error(
+              "Booking saved, but its agreement could not be created:",
+              agreementError
+            );
+          }
+
           try {
             await sendBookingNotifications(data);
           } catch (notificationError) {
@@ -2891,19 +2944,30 @@
           elements.confirmationNumber.textContent =
             extractBookingNumber(data);
 
+          let confirmationMessage = "";
           if (photoSummary.uploaded > 0 && photoSummary.failed === 0) {
-            elements.confirmationDetail.textContent =
+            confirmationMessage =
               `We received your booking request and ${photoSummary.uploaded} setup photo${photoSummary.uploaded === 1 ? "" : "s"}. We will review them to prepare a more accurate quote.`;
           } else if (photoSummary.uploaded > 0) {
-            elements.confirmationDetail.textContent =
+            confirmationMessage =
               `We received your booking request and ${photoSummary.uploaded} setup photo${photoSummary.uploaded === 1 ? "" : "s"}. Some photos did not upload; you may text the rest to (571) 719-9575.`;
           } else if (photoWarning) {
-            elements.confirmationDetail.textContent =
+            confirmationMessage =
               `Your booking request was saved. The selected photos did not upload (${photoWarning}); please text them to (571) 719-9575.`;
           } else {
-            elements.confirmationDetail.textContent =
+            confirmationMessage =
               "Thank you for choosing Sen Party Rentals. We received your request and will contact you to confirm availability, delivery pricing, setup requirements and the final total.";
           }
+
+          if (agreementUrl) {
+            confirmationMessage += " Your personalized rental agreement is ready to review and sign below.";
+            elements.agreementLink.href = agreementUrl;
+            elements.agreementLink.hidden = false;
+          } else {
+            confirmationMessage += " We will provide your personalized rental agreement after reviewing the request.";
+            elements.agreementLink.hidden = true;
+          }
+          elements.confirmationDetail.textContent = confirmationMessage;
 
           elements.hero.hidden = true;
           elements.formSection.hidden = true;
