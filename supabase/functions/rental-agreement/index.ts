@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 
-const AGREEMENT_VERSION = "2026-09-05";
+const AGREEMENT_VERSION = "2026-09-05-delivery-v1";
 const AGREEMENT_TITLE = "Rental Agreement and Safety Waiver";
 const BOOKING_CREATE_WINDOW_MS = 30 * 60 * 1000;
 const SITE_ORIGIN = "https://www.senmoonbounce.com";
@@ -38,7 +38,8 @@ const TERMS = [
   {
     title: "2. Pricing and payment",
     paragraphs: [
-      "The amount shown when this agreement is created is an estimate based on the selected rentals. Delivery, setup, hard-surface, permit, tax, distance, or other disclosed charges may be added after review. Sen Party Rentals will disclose the final total before service, and a material change requires the customer's approval.",
+      "The amount shown when this agreement is created is an estimate based on the selected rentals. Delivery is estimated from the event ZIP code as one-way mileage from Manassas: the first 15 miles are free and each additional mile is $2. Sen Party Rentals confirms the final mileage and pricing before approving the reservation.",
+      "Setup, hard-surface, permit, tax, distance corrections, or other disclosed charges may be added after review. Sen Party Rentals will disclose the final total before service, and a material change requires the customer's approval.",
       "Payment amounts, due dates, deposit requirements, and accepted methods are those stated in the confirmed quote or invoice. Unpaid amounts remain the customer's responsibility unless Sen Party Rentals agrees otherwise in writing.",
     ],
   },
@@ -279,7 +280,11 @@ Deno.serve(async (request: Request) => {
         park_permit: safeText(booking.park_permit),
         special_instructions: safeText(booking.special_instructions, "None"),
         subtotal: Number(booking.subtotal || 0),
+        delivery_distance_miles: booking.delivery_distance_miles == null
+          ? null
+          : Number(booking.delivery_distance_miles),
         delivery_fee: Number(booking.delivery_fee || 0),
+        delivery_fee_method: safeText(booking.delivery_fee_method, "ZIP estimate pending"),
         setup_fee: Number(booking.setup_fee || 0),
         hard_surface_fee: Number(booking.hard_surface_fee || 0),
         discount_amount: Number(booking.discount_amount || 0),

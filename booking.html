@@ -332,6 +332,42 @@
       line-height: 1.45;
     }
 
+    .booking-delivery-estimate {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 15px 16px;
+      border: 1px solid #d8dde5;
+      border-radius: 14px;
+      color: var(--booking-muted);
+      background: #f8fafc;
+      line-height: 1.5;
+    }
+
+    .booking-delivery-estimate i {
+      margin-top: 2px;
+      color: var(--booking-red);
+      font-size: 1.15rem;
+    }
+
+    .booking-delivery-estimate strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--booking-text);
+    }
+
+    .booking-delivery-estimate.success {
+      border-color: #bbf7d0;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .booking-delivery-estimate.error {
+      border-color: #fed7aa;
+      color: #9a3412;
+      background: #fff7ed;
+    }
+
     .booking-photo-picker {
       padding: 18px;
       border: 2px dashed #d8dde5;
@@ -1018,7 +1054,7 @@
 
         <p>
           Enter your event details, choose available rentals, add setup information,
-          review your estimated subtotal, and send your booking request for confirmation.
+          review your estimated total, and send your booking request for confirmation.
         </p>
 
         <div class="booking-trust">
@@ -1164,6 +1200,16 @@
                 <div class="booking-field">
                   <label for="zip">ZIP Code <span class="booking-required">*</span></label>
                   <input id="zip" name="event_zip" type="text" autocomplete="postal-code" inputmode="numeric" maxlength="10" required>
+                </div>
+
+                <div class="booking-field full">
+                  <div class="booking-delivery-estimate" id="delivery-estimate" role="status" aria-live="polite">
+                    <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+                    <div>
+                      <strong>Delivery estimate</strong>
+                      Enter the event ZIP code. The first 15 one-way miles from Manassas are free, then delivery is $2 per mile.
+                    </div>
+                  </div>
                 </div>
 
                 <div class="booking-field">
@@ -1366,11 +1412,12 @@
 
                 <div class="booking-review-card">
                   <h3>Pricing Information</h3>
-                  <p style="margin:0;color:var(--booking-muted);line-height:1.65">
-                    The displayed subtotal uses official rental prices. Delivery,
-                    setup, taxes, park fees, difficult-access fees and required
-                    anchoring may be added after your request is reviewed.
-                    Your reservation is not confirmed until Sen Party Rentals contacts you.
+                  <div class="booking-review-details" id="review-pricing"></div>
+                  <p style="margin:14px 0 0;color:var(--booking-muted);font-size:.82rem;line-height:1.65">
+                    Delivery mileage is an estimate based on the event ZIP code. Setup,
+                    taxes, park fees, difficult-access fees and required anchoring may
+                    be added after review. Your reservation is not confirmed until
+                    Sen Party Rentals contacts you.
                   </p>
                 </div>
               </div>
@@ -1425,19 +1472,19 @@
                 </div>
 
                 <div class="booking-summary-row">
-                  <span>Delivery and setup</span>
-                  <strong>To be quoted</strong>
+                  <span>Estimated delivery</span>
+                  <strong id="delivery-fee">Enter ZIP</strong>
                 </div>
 
                 <div class="booking-summary-row total">
-                  <span>Estimated subtotal</span>
+                  <span>Estimated total</span>
                   <strong id="total">$0.00</strong>
                 </div>
               </div>
 
               <div class="booking-summary-note">
-                Availability, delivery cost, setup fees and final pricing will be confirmed
-                after your request is reviewed.
+                The first 15 estimated one-way miles are free, then delivery is $2 per mile.
+                Mileage, access fees and final pricing are confirmed after review.
               </div>
             </div>
 
@@ -1560,6 +1607,10 @@
         search: "",
         availability: new Map(),
         submitting: false,
+        deliveryQuote: null,
+        deliveryQuoteZip: "",
+        deliveryQuoteState: "",
+        deliveryQuoteLoading: false,
         quotePhotos: [],
         quotePhotoUrls: [],
         pendingDraftSelection: [],
@@ -1599,6 +1650,9 @@
         summaryContent: document.getElementById("summary-content"),
         summaryList: document.getElementById("summary-list"),
         subtotal: document.getElementById("subtotal"),
+        deliveryFee: document.getElementById("delivery-fee"),
+        deliveryEstimate: document.getElementById("delivery-estimate"),
+        reviewPricing: document.getElementById("review-pricing"),
         total: document.getElementById("total"),
         submitButton: document.getElementById("submit-button"),
         submitText: document.getElementById("submit-text"),
@@ -2259,6 +2313,130 @@
         );
       }
 
+      function deliveryZip() {
+        return String(formValue("event_zip") || "")
+          .trim()
+          .match(/^(\d{5})/)?.[1] || "";
+      }
+
+      function deliveryState() {
+        return String(formValue("event_state") || "").trim().toUpperCase();
+      }
+
+      function deliveryQuoteIsCurrent() {
+        return Boolean(
+          state.deliveryQuote &&
+          state.deliveryQuoteZip === deliveryZip() &&
+          state.deliveryQuoteState === deliveryState()
+        );
+      }
+
+      function deliveryFeeAmount() {
+        return deliveryQuoteIsCurrent()
+          ? Number(state.deliveryQuote.delivery_fee || 0)
+          : 0;
+      }
+
+      function renderDeliveryEstimate() {
+        const quote = deliveryQuoteIsCurrent() ? state.deliveryQuote : null;
+        const estimate = elements.deliveryEstimate;
+
+        if (state.deliveryQuoteLoading) {
+          estimate.className = "booking-delivery-estimate";
+          estimate.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            <div><strong>Calculating delivery</strong>Checking the event ZIP code...</div>
+          `;
+          return;
+        }
+
+        if (quote) {
+          const distance = Number(quote.distance_miles || 0);
+          const fee = Number(quote.delivery_fee || 0);
+          estimate.className = "booking-delivery-estimate success";
+          estimate.innerHTML = `
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <div>
+              <strong>${distance} estimated one-way mile${distance === 1 ? "" : "s"} · ${money.format(fee)} delivery</strong>
+              The first 15 miles are free. Sen Party Rentals confirms final mileage and pricing before the reservation is approved.
+            </div>
+          `;
+          return;
+        }
+
+        estimate.className = "booking-delivery-estimate";
+        estimate.innerHTML = `
+          <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+          <div>
+            <strong>Delivery estimate</strong>
+            Enter the event ZIP code. The first 15 one-way miles from Manassas are free, then delivery is $2 per mile.
+          </div>
+        `;
+      }
+
+      function clearDeliveryQuote() {
+        state.deliveryQuote = null;
+        state.deliveryQuoteZip = "";
+        state.deliveryQuoteState = "";
+        renderDeliveryEstimate();
+        updateSummary();
+      }
+
+      async function requestDeliveryQuote({ showErrors = false } = {}) {
+        const zip = deliveryZip();
+        const selectedState = deliveryState();
+        if (!/^\d{5}$/.test(zip) || !selectedState || !window.senSupabase) {
+          clearDeliveryQuote();
+          return null;
+        }
+        if (deliveryQuoteIsCurrent()) return state.deliveryQuote;
+        if (state.deliveryQuoteLoading) return null;
+
+        state.deliveryQuoteLoading = true;
+        renderDeliveryEstimate();
+        try {
+          const { data, error } = await window.senSupabase.functions.invoke(
+            "delivery-quote",
+            { body: { action: "quote", zip, state: selectedState } }
+          );
+          if (error) {
+            throw new Error(
+              await edgeFunctionErrorMessage(error, "Delivery could not be estimated right now.")
+            );
+          }
+          if (!data?.quote) throw new Error("The delivery estimate was not returned.");
+          state.deliveryQuote = data.quote;
+          state.deliveryQuoteZip = zip;
+          state.deliveryQuoteState = selectedState;
+          return state.deliveryQuote;
+        } catch (error) {
+          state.deliveryQuote = null;
+          state.deliveryQuoteZip = "";
+          state.deliveryQuoteState = "";
+          elements.deliveryEstimate.className = "booking-delivery-estimate error";
+          elements.deliveryEstimate.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+            <div><strong>Delivery will be confirmed</strong>${escapeHtml(error?.message || "The estimate is temporarily unavailable.")}</div>
+          `;
+          if (showErrors) {
+            showAlert(`${error?.message || "Delivery could not be estimated."} You can still submit the request.`);
+          }
+          return null;
+        } finally {
+          state.deliveryQuoteLoading = false;
+          if (state.deliveryQuote) renderDeliveryEstimate();
+          updateSummary();
+          if (state.step === 4) renderReviewPricing();
+          if (
+            (zip !== deliveryZip() || selectedState !== deliveryState()) &&
+            /^\d{5}$/.test(deliveryZip()) &&
+            deliveryState()
+          ) {
+            void requestDeliveryQuote();
+          }
+        }
+      }
+
       function updateSelectionMessage() {
         const rentalCount = state.selected.size;
 
@@ -2284,6 +2462,7 @@
       function updateSummary() {
         const items = selectedItems();
         const subtotal = calculateSubtotal();
+        const deliveryFee = deliveryFeeAmount();
 
         elements.summaryEmpty.hidden = items.length > 0;
         elements.summaryContent.hidden = items.length === 0;
@@ -2304,7 +2483,10 @@
           .join("");
 
         elements.subtotal.textContent = money.format(subtotal);
-        elements.total.textContent = money.format(subtotal);
+        elements.deliveryFee.textContent = deliveryQuoteIsCurrent()
+          ? money.format(deliveryFee)
+          : "To be confirmed";
+        elements.total.textContent = money.format(subtotal + deliveryFee);
 
         updateSelectionMessage();
       }
@@ -2557,6 +2739,32 @@
         }).format(date);
       }
 
+      function renderReviewPricing() {
+        const subtotal = calculateSubtotal();
+        const quote = deliveryQuoteIsCurrent() ? state.deliveryQuote : null;
+        const deliveryFee = quote ? Number(quote.delivery_fee || 0) : 0;
+        const distance = quote ? Number(quote.distance_miles || 0) : null;
+        const pricing = [
+          ["Rental subtotal", money.format(subtotal)],
+          [
+            "Delivery estimate",
+            quote
+              ? `${money.format(deliveryFee)} (${distance} one-way mile${distance === 1 ? "" : "s"})`
+              : "To be confirmed"
+          ],
+          ["Estimated total", money.format(subtotal + deliveryFee)]
+        ];
+
+        elements.reviewPricing.innerHTML = pricing
+          .map(([label, value]) => `
+            <div class="booking-review-detail">
+              <span>${escapeHtml(label)}</span>
+              <strong>${escapeHtml(value)}</strong>
+            </div>
+          `)
+          .join("");
+      }
+
       function renderReview() {
         const customerName = [
           formValue("first_name"),
@@ -2622,6 +2830,7 @@
               .join("")
           : "<p>No rentals selected.</p>";
 
+        renderReviewPricing();
         updateSummary();
       }
 
@@ -2824,6 +3033,42 @@
         }
       }
 
+      async function applyDeliveryQuote(bookingResult) {
+        const bookingId = extractBookingId(bookingResult);
+        if (!bookingId) {
+          throw new Error("The booking was saved, but its delivery estimate could not be connected.");
+        }
+
+        elements.submitText.textContent = "Calculating Delivery...";
+        elements.submitIcon.className = "fa-solid fa-spinner fa-spin";
+
+        const { data, error } = await window.senSupabase.functions.invoke(
+          "delivery-quote",
+          {
+            body: {
+              action: "apply",
+              booking_id: bookingId,
+              customer_email: formValue("email"),
+              customer_phone: formValue("phone")
+            }
+          }
+        );
+
+        if (error) {
+          throw new Error(
+            await edgeFunctionErrorMessage(error, "The delivery estimate could not be saved.")
+          );
+        }
+        if (!data?.quote) throw new Error("The saved delivery estimate was not returned.");
+
+        state.deliveryQuote = data.quote;
+        state.deliveryQuoteZip = deliveryZip();
+        state.deliveryQuoteState = deliveryState();
+        renderDeliveryEstimate();
+        updateSummary();
+        return data.quote;
+      }
+
       async function createRentalAgreement(bookingResult) {
         const bookingId = extractBookingId(bookingResult);
 
@@ -2911,6 +3156,17 @@
 
           if (error) throw error;
 
+          let appliedDeliveryQuote = null;
+          let deliveryWarning = "";
+          try {
+            appliedDeliveryQuote = await applyDeliveryQuote(data);
+          } catch (deliveryError) {
+            deliveryWarning = String(
+              deliveryError?.message || "Delivery could not be estimated automatically."
+            );
+            console.error("Booking delivery estimate error:", deliveryError);
+          }
+
           let photoSummary = { requested: 0, uploaded: 0, failed: 0 };
           let photoWarning = "";
           try {
@@ -2966,6 +3222,11 @@
           } else {
             confirmationMessage += " We will provide your personalized rental agreement after reviewing the request.";
             elements.agreementLink.hidden = true;
+          }
+          if (appliedDeliveryQuote) {
+            confirmationMessage += ` Estimated delivery is ${money.format(Number(appliedDeliveryQuote.delivery_fee || 0))} for approximately ${Number(appliedDeliveryQuote.distance_miles || 0)} one-way miles; final mileage is confirmed during review.`;
+          } else if (deliveryWarning) {
+            confirmationMessage += " Delivery pricing will be confirmed manually.";
           }
           elements.confirmationDetail.textContent = confirmationMessage;
 
@@ -3241,6 +3502,9 @@
       }
 
       const saveDraftDebounced = debounce(saveDraft, 250);
+      const requestDeliveryQuoteDebounced = debounce(() => {
+        void requestDeliveryQuote();
+      }, 550);
 
       document.addEventListener("click", event => {
         const nextButton = event.target.closest("[data-next]");
@@ -3252,10 +3516,14 @@
         const minusButton = event.target.closest("[data-minus]");
 
         if (nextButton) {
+          const currentStep = state.step;
           const targetStep = Number(nextButton.dataset.next);
 
           if (validateStep(state.step)) {
             setStep(targetStep);
+            if (currentStep === 1) {
+              void requestDeliveryQuote();
+            }
           }
 
           return;
@@ -3320,6 +3588,13 @@
       form.addEventListener("input", event => {
         event.target.classList?.remove("invalid");
 
+        if (event.target.matches('[name="event_zip"], [name="event_state"]')) {
+          if (!deliveryQuoteIsCurrent()) clearDeliveryQuote();
+          if (/^\d{5}$/.test(deliveryZip()) && deliveryState()) {
+            requestDeliveryQuoteDebounced();
+          }
+        }
+
         if (event.target.matches("[data-quantity]")) {
           updateQuantity(
             event.target.dataset.quantity,
@@ -3337,6 +3612,10 @@
 
       form.addEventListener("change", event => {
         if (event.target === elements.quotePhotoInput) return;
+        if (event.target.matches('[name="event_zip"], [name="event_state"]')) {
+          if (!deliveryQuoteIsCurrent()) clearDeliveryQuote();
+          void requestDeliveryQuote();
+        }
         saveDraft();
       });
       form.addEventListener("submit", submitBooking);
@@ -3365,6 +3644,10 @@
 
         if (elements.date.value) {
           await refreshAvailability();
+        }
+
+        if (/^\d{5}$/.test(deliveryZip()) && deliveryState()) {
+          void requestDeliveryQuote();
         }
 
         updateSummary();
