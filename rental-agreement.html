@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rental Agreement | Sen Party Rentals</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#d90429">
+  <link rel="icon" href="./logo.jpeg" type="image/jpeg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{--red:#d90429;--red-dark:#970018;--orange:#ff6a00;--black:#0b0b0d;--text:#202329;--muted:#68707d;--line:#e3e6eb;--bg:#f4f5f7;--white:#fff;--green:#15803d;--shadow:0 18px 50px rgba(17,24,39,.1);--radius:19px;--gradient:linear-gradient(135deg,#970018,#d90429 58%,#ff6a00)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}[hidden]{display:none!important}a{color:var(--red-dark)}:focus-visible{outline:3px solid rgba(255,106,0,.55);outline-offset:3px}
+    .contract-header{color:#fff;background:radial-gradient(circle at 88% 12%,rgba(255,106,0,.3),transparent 28%),linear-gradient(135deg,#070709,#17181c 62%,#58000f)}.header-inner{width:min(1040px,calc(100% - 32px));margin:auto;padding:32px 0}.brand{display:flex;align-items:center;gap:13px;color:#fff;text-decoration:none}.brand img{width:54px;height:54px;border:2px solid rgba(255,255,255,.3);border-radius:15px;object-fit:cover}.brand strong,.brand span{display:block}.brand strong{font-size:1.05rem}.brand span{margin-top:3px;color:rgba(255,255,255,.68);font-size:.75rem}.hero-copy{padding:48px 0 55px}.eyebrow{display:block;margin-bottom:10px;color:#ffbdc8;font-size:.76rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.hero-copy h1{max-width:800px;margin:0;font-size:clamp(2.45rem,7vw,4.8rem);line-height:.98;letter-spacing:-.045em}.hero-copy p{max-width:760px;margin:18px 0 0;color:rgba(255,255,255,.78);font-size:1.02rem;line-height:1.7}
+    .page{width:min(1040px,calc(100% - 32px));margin:-24px auto 0;padding:0 0 80px}.panel{overflow:hidden;margin-bottom:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--white);box-shadow:var(--shadow)}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:21px 24px;border-bottom:1px solid var(--line)}.panel-head h2{margin:0;font-size:1.12rem}.panel-head p{margin:6px 0 0;color:var(--muted);font-size:.82rem;line-height:1.5}.panel-body{padding:24px}.status{display:inline-flex;min-height:32px;align-items:center;gap:7px;padding:0 12px;border-radius:999px;font-size:.72rem;font-weight:900;text-transform:uppercase}.status.pending{color:#8a5b00;background:#fff4d6}.status.signed{color:#166534;background:#dcfce7}.summary-grid,.business-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.detail.full{grid-column:1/-1}.detail span{display:block;margin-bottom:5px;color:var(--muted);font-size:.7rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.detail strong{display:block;line-height:1.55;overflow-wrap:anywhere}.notice{display:flex;gap:13px;margin-bottom:22px;padding:16px;border:1px solid #fed7aa;border-radius:14px;color:#7c2d12;background:#fff7ed;line-height:1.55}.notice i{margin-top:3px;color:var(--orange)}
+    .items-wrap{overflow-x:auto}.items{width:100%;border-collapse:collapse}.items th,.items td{padding:14px 17px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.items th{color:var(--muted);background:#fafafa;font-size:.72rem;text-transform:uppercase}.items th:last-child,.items td:last-child{text-align:right}.totals{display:grid;gap:10px;margin-left:auto;padding:20px 24px;max-width:420px}.total-row{display:flex;justify-content:space-between;gap:18px;color:var(--muted)}.total-row strong{color:var(--text)}.total-row.grand{padding-top:13px;border-top:2px solid var(--line);font-size:1.05rem;font-weight:900}.total-row.grand strong{color:var(--red);font-size:1.2rem}
+    .terms{display:grid;gap:18px}.term{padding-bottom:18px;border-bottom:1px solid var(--line)}.term:last-child{padding-bottom:0;border:0}.term h3{margin:0 0 9px;font-size:1rem}.term p{margin:8px 0;color:#3f4650;line-height:1.72}.esign-disclosure{margin-bottom:20px;padding:18px;border:1px solid #bfdbfe;border-radius:14px;background:#eff6ff}.esign-disclosure h3{margin:0 0 9px;color:#1e3a8a;font-size:.98rem}.esign-disclosure p{margin:7px 0;color:#334155;font-size:.85rem;line-height:1.65}.sign-form{display:grid;gap:16px}.field label{display:block;margin-bottom:8px;font-weight:900}.field input[type=text]{width:100%;min-height:51px;padding:0 14px;border:1px solid #cfd5de;border-radius:12px;outline:none}.field input[type=text]:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(217,4,41,.08)}.check{display:grid;grid-template-columns:22px minmax(0,1fr);gap:11px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:13px}.check input{width:19px;height:19px;margin:1px 0 0;accent-color:var(--red)}.check label{font-size:.86rem;line-height:1.58}.sign-button,.print-button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 20px;border:0;border-radius:13px;color:#fff;background:var(--gradient);box-shadow:0 12px 25px rgba(217,4,41,.2);font-weight:900}.sign-button:disabled{cursor:not-allowed;opacity:.62}.print-button{background:var(--black);box-shadow:none}.signature-receipt{padding:22px;border:1px solid #bbf7d0;border-radius:15px;background:#f0fdf4}.signature-receipt h3{margin:0 0 15px;color:#166534}.receipt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.receipt-hash{grid-column:1/-1}.receipt-hash strong{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;word-break:break-all}.receipt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .loading,.error{margin-top:28px;padding:75px 24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);text-align:center}.loading i,.error i{display:block;margin-bottom:15px;color:var(--red);font-size:2.3rem}.loading p,.error p{max-width:570px;margin:10px auto;color:var(--muted);line-height:1.6}.error h2{margin:0}.footer-note{text-align:center;color:var(--muted);font-size:.78rem;line-height:1.6}
+    @media(max-width:660px){.header-inner,.page{width:min(100% - 22px,1040px)}.hero-copy{padding:38px 0 48px}.panel-head{align-items:flex-start;flex-direction:column}.panel-body{padding:19px}.summary-grid,.business-grid,.receipt-grid{grid-template-columns:1fr}.detail.full,.receipt-hash{grid-column:auto}.items th,.items td{padding:12px}.totals{max-width:none;padding:18px 19px}.sign-button,.print-button{width:100%}}
+    @media print{body{background:#fff}.contract-header{color:#000;background:#fff}.header-inner{width:100%;padding:12px 0}.brand{color:#000}.brand span{color:#555}.hero-copy{padding:25px 0}.hero-copy p,.eyebrow{color:#333}.page{width:100%;margin:0;padding:0}.panel{break-inside:avoid;margin-bottom:14px;box-shadow:none}.panel-head,.panel-body{padding:14px}.sign-form,.esign-disclosure,.notice,.receipt-actions,.footer-note{display:none!important}.term{break-inside:avoid}.term p{font-size:11pt}.items th,.items td{padding:8px;font-size:10pt}}
+  </style>
+</head>
+<body>
+  <header class="contract-header">
+    <div class="header-inner">
+      <a class="brand" href="./index.html"><img src="./logo.jpeg" alt="Sen Party Rentals logo"><span><strong>Sen Party Rentals</strong><span>Manassas, Virginia</span></span></a>
+      <div class="hero-copy"><span class="eyebrow">Secure customer agreement</span><h1>Rental Agreement</h1><p>Review the personalized booking details and safety terms below. Your signature is linked to this exact copy.</p></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="loading" id="loading"><i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i><strong>Loading your agreement...</strong><p>Please keep this private link open while we securely retrieve the booking.</p></div>
+    <div class="error" id="error" hidden><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><h2>Agreement unavailable</h2><p id="error-message">This agreement link could not be opened.</p><a href="tel:+15717199575">Call or text (571) 719-9575</a></div>
+
+    <div id="agreement" hidden>
+      <section class="panel">
+        <div class="panel-head"><div><h2 id="agreement-title">Rental Agreement and Safety Waiver</h2><p>Agreement version <span id="agreement-version"></span></p></div><span class="status pending" id="agreement-status"><i class="fa-solid fa-clock"></i>Awaiting signature</span></div>
+        <div class="panel-body">
+          <div class="notice"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><div><strong>Booking request and price notice</strong><br>The displayed price is the current estimate. Availability, delivery costs, setup requirements, and the final total are confirmed separately by Sen Party Rentals.</div></div>
+          <div class="summary-grid" id="booking-summary"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Customer and Business</h2><p>The parties connected to this agreement.</p></div></div>
+        <div class="panel-body"><div class="business-grid" id="party-summary"></div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Rental Items and Estimate</h2><p>Equipment selected when this agreement was created.</p></div></div>
+        <div class="items-wrap"><table class="items"><thead><tr><th>Rental</th><th>Quantity</th><th>Unit Price</th><th>Line Total</th></tr></thead><tbody id="items-body"></tbody></table></div>
+        <div class="totals" id="totals"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><div><h2>Agreement Terms</h2><p>Please read every section before signing.</p></div></div>
+        <div class="panel-body"><div class="terms" id="terms"></div></div>
+      </section>
+
+      <section class="panel" id="signature-panel">
+        <div class="panel-head"><div><h2>Electronic Signature</h2><p>Your typed legal name becomes your signature for this booking.</p></div></div>
+        <div class="panel-body">
+          <div class="esign-disclosure"><h3>Electronic records disclosure</h3><p>This consent applies only to this rental transaction. You need an internet-connected device, a modern web browser, and the ability to view HTML; printing or PDF software is optional for retaining a copy. You may request a paper copy at no charge or withdraw electronic consent before signing by calling or texting (571) 719-9575 or emailing senmoonbounce@gmail.com. After signing, use the Print / Save Copy button below.</p><p>For signature security and attribution, the system records the signing time, this agreement's tamper-evident fingerprint, and privacy-limited device and network information.</p></div>
+          <form class="sign-form" id="sign-form">
+            <div class="field"><label for="signer-name">Full legal name</label><input id="signer-name" type="text" autocomplete="name" maxlength="120" required></div>
+            <div class="check"><input id="electronic-consent" type="checkbox" required><label for="electronic-consent">I agree to use electronic records and an electronic signature for this rental transaction. I have reviewed the access, paper-copy, and withdrawal information above.</label></div>
+            <div class="check"><input id="terms-accepted" type="checkbox" required><label for="terms-accepted">I have read this entire personalized agreement, confirm the customer and booking information is accurate, and agree to the rental and safety terms.</label></div>
+            <button class="sign-button" id="sign-button" type="submit"><span id="sign-button-text">Sign Rental Agreement</span><i id="sign-button-icon" class="fa-solid fa-signature" aria-hidden="true"></i></button>
+          </form>
+          <div class="signature-receipt" id="signature-receipt" hidden><h3><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Agreement signed</h3><div class="receipt-grid"><div class="detail"><span>Signed by</span><strong id="receipt-name"></strong></div><div class="detail"><span>Signed on</span><strong id="receipt-date"></strong></div><div class="detail receipt-hash"><span>Agreement fingerprint</span><strong id="receipt-hash"></strong></div></div><div class="receipt-actions"><button class="print-button" id="print-button" type="button"><i class="fa-solid fa-print" aria-hidden="true"></i>Print / Save Copy</button></div></div>
+        </div>
+      </section>
+
+      <p class="footer-note">Questions or corrections? Contact Sen Party Rentals before signing: <a href="tel:+15717199575">(571) 719-9575</a> · <a href="mailto:senmoonbounce@gmail.com">senmoonbounce@gmail.com</a><br><a href="./safety-rules.html" target="_blank" rel="noopener">Safety Rules</a> · <a href="./cancellation-weather.html" target="_blank" rel="noopener">Cancellation &amp; Weather</a> · <a href="./terms-and-conditions.html" target="_blank" rel="noopener">Website Terms</a></p>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+  <script>
+  (()=>{"use strict";
+    const SUPABASE_URL="https://tuttkwpnicgfcyeptrkv.supabase.co";
+    const PUBLISHABLE_KEY="sb_publishable_-I_Yvq8T9nR0rYyS2Gaa8g_oykh__B1";
+    const client=window.supabase?.createClient(SUPABASE_URL,PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+    const token=new URLSearchParams(location.search).get("token")||"";
+    const $=id=>document.getElementById(id);
+    const esc=value=>String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    const money=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"});
+    let current=null;
+
+    async function functionError(error,fallback){const response=error?.context;if(response&&typeof response.clone==="function"){try{const payload=await response.clone().json();if(payload?.error||payload?.message)return String(payload.error||payload.message)}catch(_){}}return String(error?.message||fallback)}
+    function detail(label,value,full=false){return `<div class="detail ${full?"full":""}"><span>${esc(label)}</span><strong>${esc(value||"Not provided")}</strong></div>`}
+    function formatDate(value){if(!value)return"Not provided";const raw=String(value).slice(0,10),date=new Date(`${raw}T12:00:00`);return Number.isNaN(date.getTime())?String(value):new Intl.DateTimeFormat("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"}).format(date)}
+    function formatTime(value){if(!value||value==="Not provided")return"Not provided";const [h,m]=String(value).split(":").map(Number);if(!Number.isFinite(h)||!Number.isFinite(m))return String(value);const date=new Date();date.setHours(h,m,0,0);return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit"}).format(date)}
+    function formatDateTime(value){if(!value)return"Not provided";const date=new Date(value);return Number.isNaN(date.getTime())?String(value):new Intl.DateTimeFormat("en-US",{month:"long",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"}).format(date)}
+
+    function render(data){current=data;const b=data.booking||{},c=data.customer||{},business=data.business||{},items=Array.isArray(data.items)?data.items:[],terms=Array.isArray(data.terms)?data.terms:[];$("agreement-title").textContent=data.agreement_title||"Rental Agreement and Safety Waiver";$("agreement-version").textContent=data.agreement_version||"";document.title=`${b.booking_number||"Rental Agreement"} | Sen Party Rentals`;
+      const address=[b.event_address,b.event_address_2,b.event_city,b.event_state,b.event_zip].filter(value=>value&&value!=="Not provided").join(", ");
+      $("booking-summary").innerHTML=[detail("Booking Number",b.booking_number),detail("Event Type",b.event_type),detail("Event Date",formatDate(b.event_date)),detail("Event Time",`${formatTime(b.start_time)} – ${formatTime(b.end_time)}`),detail("Setup",[b.setup_location,b.surface_type].filter(value=>value&&value!=="Not provided").join(" / ")),detail("Delivery Address",address,true),detail("Special Instructions",b.special_instructions,true)].join("");
+      $("party-summary").innerHTML=[detail("Customer",c.name),detail("Customer Phone",c.phone),detail("Customer Email",c.email),detail("Organization / Venue",c.organization),detail("Rental Business",business.name),detail("Business Representative",business.representative),detail("Business Location",business.location),detail("Business Contact",`${business.phone||""} · ${business.email||""}`),detail("Business Website",business.website,true)].join("");
+      $("items-body").innerHTML=items.length?items.map(item=>`<tr><td><strong>${esc(item.name||"Rental item")}</strong></td><td>${esc(item.quantity||1)}</td><td>${money.format(Number(item.unit_price||0))}</td><td><strong>${money.format(Number(item.line_total||0))}</strong></td></tr>`).join(""):`<tr><td colspan="4">No rental items were recorded.</td></tr>`;
+      const rows=[["Rental subtotal",b.subtotal],["Delivery fee",b.delivery_fee],["Setup fee",b.setup_fee],["Hard-surface fee",b.hard_surface_fee],["Discount",-Number(b.discount_amount||0)],["Tax",b.tax_amount]];$("totals").innerHTML=rows.map(([label,value])=>`<div class="total-row"><span>${esc(label)}</span><strong>${money.format(Number(value||0))}</strong></div>`).join("")+`<div class="total-row grand"><span>Displayed estimate</span><strong>${money.format(Number(b.displayed_total||0))}</strong></div>`;
+      $("terms").innerHTML=terms.map(section=>`<article class="term"><h3>${esc(section.title||"")}</h3>${(Array.isArray(section.paragraphs)?section.paragraphs:[]).map(p=>`<p>${esc(p)}</p>`).join("")}</article>`).join("");
+      $("signer-name").value=c.name&&c.name!=="Not provided"?c.name:"";renderStatus(data);$("loading").hidden=true;$("error").hidden=true;$("agreement").hidden=false;
+    }
+    function renderStatus(data){const signed=data.status==="SIGNED";const badge=$("agreement-status");badge.className=`status ${signed?"signed":"pending"}`;badge.innerHTML=signed?'<i class="fa-solid fa-circle-check"></i>Signed':'<i class="fa-solid fa-clock"></i>Awaiting signature';$("sign-form").hidden=signed;$("signature-receipt").hidden=!signed;if(signed){$("receipt-name").textContent=data.signer_name||"Customer";$("receipt-date").textContent=formatDateTime(data.signed_at);$("receipt-hash").textContent=data.signature_hash||"Recorded"}}
+    function showError(message){$("loading").hidden=true;$("agreement").hidden=true;$("error").hidden=false;$("error-message").textContent=message}
+    async function load(){if(!client)return showError("The secure agreement service did not load. Please refresh the page.");if(!token)return showError("This agreement link is incomplete. Please use the full link supplied with your booking.");const {data,error}=await client.functions.invoke("rental-agreement",{body:{action:"get",token}});if(error)return showError(await functionError(error,"This agreement could not be loaded."));if(!data?.agreement)return showError(data?.error||"This agreement could not be loaded.");render(data.agreement)}
+    async function sign(event){event.preventDefault();if(!current||current.status==="SIGNED")return;const button=$("sign-button"),text=$("sign-button-text"),icon=$("sign-button-icon");if(!event.currentTarget.reportValidity())return;button.disabled=true;text.textContent="Signing Securely...";icon.className="fa-solid fa-spinner fa-spin";try{const {data,error}=await client.functions.invoke("rental-agreement",{body:{action:"sign",token,signer_name:$("signer-name").value,electronic_consent:$("electronic-consent").checked,terms_accepted:$("terms-accepted").checked}});if(error)throw new Error(await functionError(error,"The agreement could not be signed."));if(!data?.agreement)throw new Error(data?.error||"The agreement could not be signed.");render(data.agreement);$("signature-panel").scrollIntoView({behavior:"smooth",block:"start"})}catch(error){alert(error.message||"The agreement could not be signed.")}finally{button.disabled=false;text.textContent="Sign Rental Agreement";icon.className="fa-solid fa-signature"}}
+    $("sign-form").addEventListener("submit",sign);$("print-button").addEventListener("click",()=>window.print());load();
+  })();
+  </script>
+</body>
+</html>
