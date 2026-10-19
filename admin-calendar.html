@@ -198,6 +198,7 @@
     </section>
   </div>
 
+  <script src="./assets/admin-common.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
   <script>
   (() => {
@@ -464,9 +465,9 @@
     }
     async function requireAdmin(){
       const sessionResult=await db.auth.getSession();if(sessionResult.error)throw sessionResult.error;
-      const session=sessionResult.data.session;if(!session){location.replace("./admin-login.html");return false;}
+      const session=sessionResult.data.session;if(!session){location.replace(window.SenAdmin.loginUrl());return false;}
       const adminResult=await db.from("admin_users").select("*").eq("user_id",session.user.id).eq("active",true).maybeSingle();
-      if(adminResult.error||!adminResult.data){await db.auth.signOut();location.replace("./admin-login.html");return false;}
+      if(adminResult.error||!adminResult.data){await db.auth.signOut();location.replace(window.SenAdmin.loginUrl());return false;}
       state.admin=adminResult.data;return true;
     }
     async function optionalQuery(table){

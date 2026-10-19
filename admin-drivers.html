@@ -974,6 +974,7 @@
     </section>
   </div>
 
+  <script src="./assets/admin-common.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -1303,7 +1304,7 @@
 
         if (!session) {
           location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return false;
@@ -1324,7 +1325,7 @@
           await db.auth.signOut();
 
           location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return false;

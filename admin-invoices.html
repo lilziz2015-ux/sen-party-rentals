@@ -804,6 +804,7 @@
 
   </main>
 
+  <script src="./assets/admin-common.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -1151,42 +1152,9 @@
         );
       }
 
-      function completedPaymentAmount(
-        bookingId
-      ) {
-        const acceptedStatuses = [
-          "COMPLETED",
-          "PAID",
-          "SUCCESS",
-          "SUCCEEDED"
-        ];
-
-        return paymentsForBooking(
-          bookingId
-        ).reduce(
-          (total, payment) => {
-            const status =
-              String(
-                payment.status || ""
-              ).toUpperCase();
-
-            if (
-              !acceptedStatuses.includes(
-                status
-              )
-            ) {
-              return total;
-            }
-
-            return (
-              total +
-              Number(
-                payment.amount || 0
-              )
-            );
-          },
-          0
-        );
+      function completedPaymentAmount(bookingId) {
+        const booking = state.bookings.find(item => item.id === bookingId);
+        return window.SenAdmin.amountPaid(booking, state.payments);
       }
 
       function statusClass(value) {
@@ -1504,7 +1472,7 @@
 
         if (!session) {
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return false;
@@ -1536,7 +1504,7 @@
             .signOut();
 
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return false;
@@ -1591,6 +1559,7 @@
                   event_zip,
                   subtotal,
                   final_total,
+                  amount_paid,
                   balance_due,
                   created_at
                 `)

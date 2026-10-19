@@ -1236,6 +1236,7 @@
 
   </div>
 
+  <script src="./assets/admin-common.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -1573,42 +1574,9 @@
         );
       }
 
-      function completedAmountForBooking(
-        bookingId
-      ) {
-        return paymentsForBooking(
-          bookingId
-        ).reduce(
-          (total, payment) => {
-            const status =
-              String(
-                payment.status || ""
-              ).toUpperCase();
-
-            const completedStatuses = [
-              "COMPLETED",
-              "PAID",
-              "SUCCEEDED",
-              "SUCCESS"
-            ];
-
-            if (
-              !completedStatuses.includes(
-                status
-              )
-            ) {
-              return total;
-            }
-
-            return (
-              total +
-              Number(
-                payment.amount || 0
-              )
-            );
-          },
-          0
-        );
+      function completedAmountForBooking(bookingId) {
+        const booking = state.bookings.find(item => item.id === bookingId);
+        return window.SenAdmin.amountPaid(booking, state.payments);
       }
 
       function bookingFinalTotal(
@@ -1709,38 +1677,7 @@
       }
 
       function renderStats() {
-        const completedStatuses = [
-          "COMPLETED",
-          "PAID",
-          "SUCCEEDED",
-          "SUCCESS"
-        ];
-
-        const totalCollected =
-          state.payments.reduce(
-            (total, payment) => {
-              const status =
-                String(
-                  payment.status || ""
-                ).toUpperCase();
-
-              if (
-                !completedStatuses.includes(
-                  status
-                )
-              ) {
-                return total;
-              }
-
-              return (
-                total +
-                Number(
-                  payment.amount || 0
-                )
-              );
-            },
-            0
-          );
+        const totalCollected = window.SenAdmin.totalCollected(state.bookings, state.payments);
 
         const outstanding =
           state.bookings.reduce(
@@ -2236,7 +2173,7 @@
 
         if (!session) {
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return null;
@@ -2268,7 +2205,7 @@
             .signOut();
 
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return null;
@@ -2329,6 +2266,7 @@
                   payment_status,
                   subtotal,
                   final_total,
+                  amount_paid,
                   balance_due,
                   created_at
                 `)

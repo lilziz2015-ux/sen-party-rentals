@@ -1,7 +1,7 @@
 /* =========================================================
    SEN PARTY RENTALS — SERVICE WORKER
    File: /service-worker.js
-   Version: 55
+   Version: 56
 ========================================================= */
 
 "use strict";
@@ -12,7 +12,7 @@
 ========================================================= */
 
 const SW_VERSION =
-  "55";
+  "56";
 
 const CACHE_PREFIX =
   "sen-party-rentals";
@@ -134,6 +134,15 @@ function isNavigationRequest(
 }
 
 
+function isPrivatePage(request) {
+  const url = new URL(request.url);
+  return url.origin === self.location.origin && (
+    /\/(?:admin|driver)(?:-[a-z]+)?\.html$/i.test(url.pathname) ||
+    /\/rental-agreement\.html$/i.test(url.pathname) ||
+    ["token", "access_token", "refresh_token", "code"].some(key => url.searchParams.has(key))
+  );
+}
+
 function shouldUseNetworkOnly(
   request
 ) {
@@ -143,6 +152,7 @@ function shouldUseNetworkOnly(
         request.url
       );
 
+    if (isPrivatePage(request)) return true;
 
     if (
       NETWORK_ONLY_HOSTS.has(
@@ -608,6 +618,13 @@ self.addEventListener(
 
     const request =
       event.request;
+
+    // Admin, driver and signed agreement URLs must not fall back to cached
+    // documents (or the public homepage) when the network is unavailable.
+    if (request.method === "GET" && isPrivatePage(request)) {
+      event.respondWith(fetch(request, { cache: "no-store" }));
+      return;
+    }
 
 
     /*
