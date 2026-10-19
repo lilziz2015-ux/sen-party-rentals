@@ -636,6 +636,7 @@
 
   </div>
 
+  <script src="./assets/admin-common.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -1103,7 +1104,7 @@
 
         if (!session) {
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return null;
@@ -1135,7 +1136,7 @@
             .signOut();
 
           window.location.replace(
-            "./admin-login.html"
+            window.SenAdmin.loginUrl()
           );
 
           return null;

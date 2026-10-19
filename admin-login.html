@@ -629,6 +629,7 @@
 
   </main>
 
+  <script src="./assets/admin-common.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -832,7 +833,7 @@
           );
 
           window.location.replace(
-            "./admin.html"
+            window.SenAdmin.destination(new URLSearchParams(location.search).get("next"))
           );
         } catch {
           await senSupabase
@@ -991,7 +992,7 @@
             window.setTimeout(
               () => {
                 window.location.replace(
-                  "./admin.html"
+                  window.SenAdmin.destination(new URLSearchParams(location.search).get("next"))
                 );
               },
               500
