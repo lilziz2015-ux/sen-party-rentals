@@ -108,11 +108,6 @@
 
   <link
     rel="stylesheet"
-    href="./assets/style.css?v=54"
-  >
-
-  <link
-    rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   >
 
@@ -386,7 +381,8 @@
     "paymentAccepted": [
       "Cash",
       "Check",
-      "Zelle"
+      "Zelle",
+      "Credit Card"
     ],
     "currenciesAccepted": "USD"
   }
@@ -441,7 +437,7 @@
         "name": "What payment methods are accepted?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sen Party Rentals accepts Zelle, cash and check. Current payment requirements are confirmed with each reservation."
+          "text": "No deposit is required; pay after setup. Sen Party Rentals accepts Zelle, cash, check and cards. A processing fee applies only to card payments and is disclosed before payment. There is no processing fee for cash or check."
         }
       }
     ]
@@ -583,9 +579,11 @@
     .home-faq-item { overflow: hidden; margin-bottom: 13px; border: 1px solid var(--home-border); border-radius: 15px; background: var(--home-white); box-shadow: 0 6px 18px rgba(22, 18, 18, 0.04); }
     .home-faq-question { display: flex; width: 100%; min-height: 68px; align-items: center; justify-content: space-between; gap: 20px; padding: 0 21px; border: 0; color: var(--home-text); background: var(--home-white); cursor: pointer; font-weight: 900; text-align: left; }
     .home-faq-question i { flex: 0 0 auto; color: var(--home-red); transition: transform 0.2s ease; }
-    .home-faq-answer { display: none; padding: 0 21px 21px; color: var(--home-muted); line-height: 1.68; }
-    .home-faq-item.open .home-faq-answer { display: block; }
-    .home-faq-item.open .home-faq-question i { transform: rotate(45deg); }
+    .home-faq-question { list-style: none; }
+    .home-faq-question::-webkit-details-marker { display: none; }
+    .home-faq-question:focus-visible { outline: 3px solid var(--home-red); outline-offset: -4px; }
+    .home-faq-answer { padding: 0 21px 21px; color: var(--home-muted); line-height: 1.68; }
+    .home-faq-item[open] .home-faq-question i { transform: rotate(45deg); }
     .home-area-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
     .home-area-list a, .home-area-list span { padding: 12px 16px; border: 1px solid var(--home-border); border-radius: 999px; color: #454950; background: var(--home-white); font-size: 0.84rem; font-weight: 800; box-shadow: 0 5px 15px rgba(22, 18, 18, 0.04); transition: transform .2s ease, border-color .2s ease, color .2s ease, background-color .2s ease; }
     .home-area-list a:hover { transform: translateY(-2px); border-color: rgba(217,4,41,.32); color: var(--home-red); background: var(--home-light-red); }
@@ -613,7 +611,308 @@
     </div>
   </noscript>
 
-  <div id="header"></div>
+  <div id="header">
+<!-- =========================================================
+     SEN PARTY RENTALS — SHARED HEADER
+     File: header.html
+
+     IMPORTANT:
+     This is an HTML fragment loaded inside:
+     <div id="header"></div>
+
+     Do not add:
+     <!DOCTYPE html>
+     <html>
+     <head>
+     <body>
+     <link>
+     <script>
+========================================================= -->
+
+<header class="site-header" id="site-header">
+
+  <!-- TOP INFORMATION BAR -->
+
+  <div class="header-topbar">
+
+    <div class="container header-topbar-inner">
+
+      <a
+        href="tel:+15717199575"
+        class="header-topbar-link"
+        aria-label="Call Sen Party Rentals at 571-719-9575"
+      >
+        <i
+          class="fa-solid fa-phone"
+          aria-hidden="true"
+        ></i>
+
+        <span>(571) 719-9575</span>
+      </a>
+
+      <span class="header-topbar-item">
+
+        <i
+          class="fa-solid fa-location-dot"
+          aria-hidden="true"
+        ></i>
+
+        <span>Manassas, Virginia</span>
+
+      </span>
+
+      <span class="header-topbar-item">
+
+        <i
+          class="fa-solid fa-truck-fast"
+          aria-hidden="true"
+        ></i>
+
+        <span>Serving Northern Virginia and the DMV</span>
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN HEADER -->
+
+  <div class="header-main">
+
+    <div class="container header-main-inner">
+
+      <!-- BRAND -->
+
+      <a
+        href="./index.html"
+        class="header-brand"
+        aria-label="Go to the Sen Party Rentals homepage"
+      >
+
+        <span class="header-logo-wrap">
+
+          <img
+            src="./logo.jpeg"
+            alt="Sen Party Rentals logo"
+            class="header-logo"
+            width="58"
+            height="58"
+            loading="eager"
+          >
+
+        </span>
+
+        <span class="header-brand-text">
+
+          <strong>
+            Sen Party Rentals
+          </strong>
+
+          <small>
+            Bounce Houses • Water Slides • Event Rentals
+          </small>
+
+        </span>
+
+      </a>
+
+      <!-- MOBILE CONTROLS -->
+
+      <div class="header-mobile-controls">
+
+        <a
+          href="tel:+15717199575"
+          class="header-mobile-call"
+          aria-label="Call Sen Party Rentals"
+        >
+          <i
+            class="fa-solid fa-phone"
+            aria-hidden="true"
+          ></i>
+        </a>
+
+        <button
+          type="button"
+          class="header-menu-toggle"
+          id="nav-toggle"
+          aria-label="Open navigation menu"
+          aria-controls="main-nav"
+          aria-expanded="false"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+
+      </div>
+
+      <!-- MAIN NAVIGATION -->
+
+      <nav
+        class="header-nav"
+        id="main-nav"
+        aria-label="Main navigation"
+      >
+
+        <a
+          href="./index.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Home
+        </a>
+
+        <!-- RENTALS DROPDOWN -->
+
+        <div class="header-dropdown">
+
+          <button
+            type="button"
+            class="header-dropdown-toggle"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="rentals-dropdown-menu"
+          >
+            <span>Rentals</span>
+
+            <i
+              class="fa-solid fa-chevron-down"
+              aria-hidden="true"
+            ></i>
+          </button>
+
+          <div
+            class="header-dropdown-menu"
+            id="rentals-dropdown-menu"
+          >
+
+            <a href="./inventory.html">
+              All Rentals
+            </a>
+
+            <a href="./bounce-houses.html">
+              Bounce Houses
+            </a>
+
+            <a href="./water-slides.html">
+              Water Slides
+            </a>
+
+            <a href="./obstacle-courses.html">
+              Obstacle Courses
+            </a>
+
+            <a href="./dunk-tanks.html">
+              Dunk Tanks
+            </a>
+
+            <a href="./tables-chairs.html">
+              Tables and Chairs
+            </a>
+
+            <a href="./concessions.html">
+              Concession Machines
+            </a>
+
+            <a href="./generators.html">
+              Generators
+            </a>
+
+            <a href="./sand-bags-rental.html">
+              Sand Bags
+            </a>
+
+          </div>
+
+        </div>
+
+        <a
+          href="./event-packages.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Packages
+        </a>
+
+        <a
+          href="./gallery.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Gallery
+        </a>
+
+        <a
+          href="./reviews.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Reviews
+        </a>
+
+        <a
+          href="./service-areas.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Service Areas
+        </a>
+
+        <a
+          href="./about.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          About
+        </a>
+
+        <a
+          href="./contact.html"
+          class="header-nav-link"
+          data-nav-link
+        >
+          Contact
+        </a>
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="header-actions">
+
+          <a
+            href="tel:+15717199575"
+            class="header-call-button"
+          >
+            <i
+              class="fa-solid fa-phone"
+              aria-hidden="true"
+            ></i>
+
+            <span>Call Now</span>
+          </a>
+
+          <a
+            href="./booking.html"
+            class="header-book-button"
+          >
+            <i
+              class="fa-solid fa-calendar-check"
+              aria-hidden="true"
+            ></i>
+
+            <span>Book Now</span>
+          </a>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+  </div>
+
+</header>
+  </div>
 
   <main class="home-main">
 
@@ -676,7 +975,7 @@
       <div class="home-container">
         <div class="home-promotion-copy">
           <div class="home-promotion-icon" aria-hidden="true"><i class="fa-solid fa-gift"></i></div>
-          <div><strong>Summer Party Special</strong><span>Ask about available package pricing for qualifying multi-item bookings.</span></div>
+          <div><strong>Build Your Party Package</strong><span>Choose your rentals together and request one quote for delivery, setup and pickup.</span></div>
         </div>
         <a href="./booking.html" class="home-button home-button-light">Request a Quote</a>
       </div>
@@ -737,11 +1036,11 @@
 
     <section class="home-section">
       <div class="home-container">
-        <div class="home-section-head"><span class="home-kicker">Customer experiences</span><h2>Trusted for local celebrations</h2><p>Dependable party rental service for events throughout Northern Virginia.</p></div>
+        <div class="home-section-head"><span class="home-kicker">Customer experiences</span><h2>Trusted for local celebrations</h2><p>Customer reviews shared with Sen Party Rentals.</p></div>
         <div class="home-grid home-grid-three">
-          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>The setup was clean and professional. Our party was easy and enjoyable.</p><strong>Happy Customer</strong></article>
-          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>Great communication, dependable delivery and the kids loved the inflatable.</p><strong>Repeat Customer</strong></article>
-          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>Delivered on time and everything was handled professionally.</p><strong>Local Customer</strong></article>
+          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>Had the best experience with Sen Moon Bounce. The slides were so fun and the dunk tank was the perfect touch to our event. 10/10 would highly recommend!!!</p><strong>Ngoneh Bah</strong></article>
+          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>This is the 2nd year in a row that we’ve used Sen Moon Bounce! They’re very quick to setup moon bounce and have great service. Will definitely continue to use them for family events and parties.</p><strong>Sophie Nguyen</strong></article>
+          <article class="home-card home-review-card"><div class="home-stars" aria-label="5 out of 5 stars">★★★★★</div><p>You can tell they really know their stuff, professional and smooth from start to finish.</p><strong>Himaa Mounir</strong></article>
         </div>
         <div class="home-center-action"><a href="https://g.page/r/CZxtj7ch0rZ8EBE/review" class="home-button home-button-outline" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-google" aria-hidden="true"></i> Leave a Google Review</a></div>
       </div>
@@ -751,12 +1050,12 @@
       <div class="home-container">
         <div class="home-section-head"><span class="home-kicker">Helpful answers</span><h2>Frequently asked questions</h2><p>Important details about delivery, setup, booking and payment.</p></div>
         <div class="home-faq">
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>What areas do you deliver to?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">We deliver throughout Manassas, Prince William County, Fairfax County, Loudoun County, Stafford, Fredericksburg, Washington, D.C. and other nearby DMV communities. Delivery availability and pricing depend on the event location.</div></article>
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>Do you provide setup and pickup?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">Yes. We handle delivery, professional setup, equipment securing and pickup after the event.</div></article>
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>How early should I reserve?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">Reserving at least two weeks early is recommended. Popular summer weekends, holiday weekends and large-event dates may require earlier booking.</div></article>
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>What payment methods do you accept?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">We accept Zelle, cash and check. Current payment requirements are confirmed with each reservation.</div></article>
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>Can inflatables be set up on concrete?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">Some equipment can be installed on concrete or asphalt using approved anchoring methods such as sandbags. Tell us the surface type when requesting your booking.</div></article>
-          <article class="home-faq-item"><button type="button" class="home-faq-question" aria-expanded="false"><span>What happens if bad weather is expected?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button><div class="home-faq-answer">Weather conditions are reviewed before delivery. Inflatables cannot safely operate during strong winds, severe storms or other unsafe conditions.</div></article>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>What areas do you deliver to?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">We deliver throughout Manassas, Prince William County, Fairfax County, Loudoun County, Stafford, Fredericksburg, Washington, D.C. and other nearby DMV communities. Delivery availability and pricing depend on the event location.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>Do you provide setup and pickup?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Yes. We handle delivery, professional setup, equipment securing and pickup after the event.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>How early should I reserve?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Reserving at least two weeks early is recommended. Popular summer weekends, holiday weekends and large-event dates may require earlier booking.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>What payment methods do you accept?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">No deposit is required; pay after setup. We accept Zelle, cash, check and cards. A processing fee applies only to card payments and is disclosed before payment. There is no processing fee for cash or check.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>Can inflatables be set up on concrete?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Some equipment can be installed on concrete or asphalt using approved anchoring methods such as sandbags. Tell us the surface type when requesting your booking.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-question"><span>What happens if bad weather is expected?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Weather conditions are reviewed before delivery. Inflatables cannot safely operate during strong winds, severe storms or other unsafe conditions.</div></details>
         </div>
       </div>
     </section>
@@ -822,7 +1121,430 @@
 
   </main>
 
-  <div id="footer"></div>
+  <div id="footer">
+<!-- =========================================================
+     SEN PARTY RENTALS — SHARED FOOTER
+     File: footer.html
+
+     Loaded inside:
+     <div id="footer"></div>
+
+     Do not add:
+     <!DOCTYPE html>
+     <html>
+     <head>
+     <body>
+     <link>
+     <script>
+========================================================= -->
+
+<footer class="site-footer" id="site-footer">
+
+  <!-- =======================================================
+       MAIN FOOTER
+  ======================================================== -->
+
+  <div class="footer-main">
+
+    <div class="container footer-grid">
+
+      <!-- ===================================================
+           BUSINESS INFORMATION
+      ==================================================== -->
+
+      <section class="footer-column footer-business">
+
+        <a
+          href="./index.html"
+          class="footer-brand"
+          aria-label="Sen Party Rentals homepage"
+        >
+
+          <span class="footer-logo-wrap">
+
+            <img
+              src="./logo.jpeg"
+              alt="Sen Party Rentals logo"
+              class="footer-logo"
+              width="68"
+              height="68"
+              loading="lazy"
+            >
+
+          </span>
+
+          <span class="footer-brand-text">
+
+            <strong>Sen Party Rentals</strong>
+
+            <small>
+              Bounce Houses • Water Slides • Event Rentals
+            </small>
+
+          </span>
+
+        </a>
+
+        <p class="footer-description">
+          Clean and dependable bounce houses, water slides,
+          obstacle courses, dunk tanks, tables, chairs,
+          generators and party equipment delivered throughout
+          Northern Virginia and the Washington metropolitan area.
+        </p>
+
+        <div class="footer-contact-list">
+
+          <a
+            href="tel:+15717199575"
+            aria-label="Call Sen Party Rentals at 571-719-9575"
+          >
+
+            <i
+              class="fa-solid fa-phone"
+              aria-hidden="true"
+            ></i>
+
+            <span>(571) 719-9575</span>
+
+          </a>
+
+          <a
+            href="mailto:senmoonbounce@gmail.com"
+            aria-label="Email Sen Party Rentals"
+          >
+
+            <i
+              class="fa-solid fa-envelope"
+              aria-hidden="true"
+            ></i>
+
+            <span>senmoonbounce@gmail.com</span>
+
+          </a>
+
+          <span>
+
+            <i
+              class="fa-solid fa-location-dot"
+              aria-hidden="true"
+            ></i>
+
+            <span>Manassas, Virginia</span>
+
+          </span>
+
+          <span>
+
+            <i
+              class="fa-solid fa-truck-fast"
+              aria-hidden="true"
+            ></i>
+
+            <span>
+              Delivery, setup and pickup available
+            </span>
+
+          </span>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           QUICK LINKS
+      ==================================================== -->
+
+      <section class="footer-column">
+
+        <h2 class="footer-heading">
+          Quick Links
+        </h2>
+
+        <nav
+          class="footer-links"
+          aria-label="Footer quick links"
+        >
+
+          <a href="./index.html">
+            Home
+          </a>
+
+          <a href="./inventory.html">
+            All Rentals
+          </a>
+
+          <a href="./booking.html">
+            Book Online
+          </a>
+
+          <a href="./event-packages.html">
+            Party Packages
+          </a>
+
+          <a href="./gallery.html">
+            Gallery
+          </a>
+
+          <a href="./reviews.html">
+            Reviews
+          </a>
+
+          <a href="./about.html">
+            About Us
+          </a>
+
+          <a href="./contact.html">
+            Contact
+          </a>
+
+        </nav>
+
+      </section>
+
+      <!-- ===================================================
+           RENTAL CATEGORIES
+      ==================================================== -->
+
+      <section class="footer-column">
+
+        <h2 class="footer-heading">
+          Rental Categories
+        </h2>
+
+        <nav
+          class="footer-links"
+          aria-label="Footer rental categories"
+        >
+
+          <a href="./bounce-houses.html">
+            Bounce Houses
+          </a>
+
+          <a href="./water-slides.html">
+            Water Slides
+          </a>
+
+          <a href="./obstacle-courses.html">
+            Obstacle Courses
+          </a>
+
+          <a href="./dunk-tanks.html">
+            Dunk Tanks
+          </a>
+
+          <a href="./tables-chairs.html">
+            Tables and Chairs
+          </a>
+
+          <a href="./concessions.html">
+            Concession Machines
+          </a>
+
+          <a href="./generators.html">
+            Generators
+          </a>
+
+          <a href="./sand-bags-rental.html">
+            Sand Bags
+          </a>
+
+        </nav>
+
+      </section>
+
+      <!-- ===================================================
+           BOOKING SECTION
+      ==================================================== -->
+
+      <section class="footer-column footer-booking-column">
+
+        <span class="footer-small-label">
+          Plan your event
+        </span>
+
+        <h2 class="footer-booking-heading">
+          Check availability today
+        </h2>
+
+        <p class="footer-booking-text">
+          Send your event date, location and rental choices.
+          We will confirm availability, delivery and pricing.
+        </p>
+
+        <div class="footer-action-buttons">
+
+          <a
+            href="./booking.html"
+            class="footer-book-button"
+          >
+
+            <i
+              class="fa-solid fa-calendar-check"
+              aria-hidden="true"
+            ></i>
+
+            <span>Request Booking</span>
+
+          </a>
+
+          <a
+            href="tel:+15717199575"
+            class="footer-call-button"
+          >
+
+            <i
+              class="fa-solid fa-phone"
+              aria-hidden="true"
+            ></i>
+
+            <span>Call Now</span>
+
+          </a>
+
+        </div>
+
+        <div class="footer-service-area">
+
+          <strong>
+            Service Area
+          </strong>
+
+          <p>
+            Manassas, Woodbridge, Fairfax, Centreville,
+            Gainesville, Haymarket, Leesburg, Sterling,
+            Alexandria, Arlington, Washington, D.C.
+            and nearby Maryland.
+          </p>
+
+        </div>
+
+        <div class="footer-payment-info">
+
+          <strong>
+            Payment Options
+          </strong>
+
+          <p>
+            Zelle, cash and check.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- =======================================================
+       FOOTER SERVICE STRIP
+  ======================================================== -->
+
+  <div class="footer-service-strip">
+
+    <div class="container footer-service-strip-inner">
+
+      <div class="footer-service-item">
+
+        <i
+          class="fa-solid fa-sparkles"
+          aria-hidden="true"
+        ></i>
+
+        <span>
+          <strong>Clean Equipment</strong>
+          Prepared before every rental
+        </span>
+
+      </div>
+
+      <div class="footer-service-item">
+
+        <i
+          class="fa-solid fa-truck-fast"
+          aria-hidden="true"
+        ></i>
+
+        <span>
+          <strong>Delivery and Setup</strong>
+          Professional installation
+        </span>
+
+      </div>
+
+      <div class="footer-service-item">
+
+        <i
+          class="fa-solid fa-headset"
+          aria-hidden="true"
+        ></i>
+
+        <span>
+          <strong>Local Support</strong>
+          Call or book online
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =======================================================
+       FOOTER BOTTOM
+  ======================================================== -->
+
+  <div class="footer-bottom">
+
+    <div class="container footer-bottom-inner">
+
+      <p class="footer-copyright">
+        &copy;
+        <span data-footer-year></span>
+        Sen Party Rentals. All rights reserved.
+      </p>
+
+      <nav
+        class="footer-legal-links"
+        aria-label="Footer legal links"
+      >
+
+        <a href="./privacy-policy.html">
+          Privacy Policy
+        </a>
+
+        <a href="./terms-and-conditions.html">
+          Rental Agreement
+        </a>
+
+        <a href="./contact.html">
+          Contact
+        </a>
+
+      </nav>
+
+      <button
+        type="button"
+        class="footer-back-to-top"
+        data-footer-back-to-top
+        aria-label="Return to the top of the page"
+      >
+
+        <i
+          class="fa-solid fa-arrow-up"
+          aria-hidden="true"
+        ></i>
+
+        <span>Back to Top</span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</footer>
+  </div>
 
   <a href="./booking.html" class="float-book" aria-label="Book a party rental">
     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
@@ -895,19 +1617,6 @@
         });
         document.addEventListener("visibilitychange", () => { document.hidden ? stopAutoplay() : startAutoplay(); });
         showSlide(0); startAutoplay();
-      }
-
-      function initializeFaq() {
-        document.querySelectorAll(".home-faq-question").forEach(question => {
-          if (question.dataset.initialized === "true") return;
-          question.dataset.initialized = "true";
-          question.addEventListener("click", () => {
-            const item = question.closest(".home-faq-item");
-            if (!item) return;
-            const isOpen = item.classList.toggle("open");
-            question.setAttribute("aria-expanded", String(isOpen));
-          });
-        });
       }
 
       function initializeImageFallbacks() {
@@ -1021,7 +1730,6 @@
       function initializeHomepage() {
         initializeImageFallbacks();
         initializeHeroSlider();
-        initializeFaq();
         loadFeaturedRentals();
       }
 
