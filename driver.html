@@ -1541,6 +1541,8 @@
               <div class="detail"><span>Balance due</span><strong>${booking ? new Intl.NumberFormat("en-US", {style:"currency",currency:"USD"}).format(window.SenAdmin.balanceDue(booking)) : "Unavailable"}</strong></div>
 
               <div class="time-grid">
+                <div class="time-box"><span>Event Starts</span><strong>${escapeHtml(formatTime(booking?.start_time || assignment.event_start_time))}</strong></div>
+                <div class="time-box"><span>Event Ends</span><strong>${escapeHtml(formatTime(booking?.end_time || assignment.event_end_time))}</strong></div>
 
                 <div class="time-box">
                   <span>Window</span>
@@ -1916,6 +1918,9 @@
                 assignment.setup_time
               )
             ),
+
+            detailHtml("Event Starts", formatTime(booking?.start_time || assignment.event_start_time)),
+            detailHtml("Event Ends", formatTime(booking?.end_time || assignment.event_end_time)),
 
             detailHtml(
               "Pickup Time",
@@ -2669,7 +2674,7 @@
       $("refresh-button")
         .addEventListener(
           "click",
-          loadAssignments
+          () => location.reload()
         );
 
       $("signout-button")
