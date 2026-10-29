@@ -3632,8 +3632,8 @@
       async function initializeBookingPage() {
         await startWebsite();
 
-        setMinimumDate();
         restoreDraft();
+        setMinimumDate();
         updateSummary();
         setStep(1, false);
 
