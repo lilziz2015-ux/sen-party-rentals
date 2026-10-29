@@ -924,6 +924,14 @@
           id="stop-details"
         ></div>
 
+        <section aria-labelledby="driver-payment-heading">
+          <h3 class="section-title" id="driver-payment-heading">Customer Payment</h3>
+          <div class="detail-grid"><div class="detail"><span>Balance Due</span><strong id="driver-balance">Loading...</strong></div><div class="detail"><span>Amount Paid</span><strong id="driver-paid">Loading...</strong></div></div>
+          <p>Payment is due after setup. Record only money you have received. Card payments are confirmed by the office.</p>
+          <label for="driver-payment-method">Payment received by</label>
+          <select id="driver-payment-method" class="date-input"><option value="CASH">Cash</option><option value="CHECK">Check</option><option value="ZELLE">Zelle — verify received</option></select>
+          <div class="assignment-actions"><button type="button" class="action-button primary" id="record-driver-payment" disabled>Mark Paid</button><button type="button" class="action-button" id="send-driver-receipt" disabled>Send Receipt</button></div>
+        </section>
         <h3 class="section-title">
           Equipment Checklist
         </h3>
@@ -1031,6 +1039,8 @@
     hidden
   >
 
+  <script src="./assets/admin-common.js"></script>
+  <script src="./assets/driver-payments.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"
   ></script>
@@ -1528,6 +1538,7 @@
             </div>
 
             <div class="assignment-body">
+              <div class="detail"><span>Balance due</span><strong>${booking ? new Intl.NumberFormat("en-US", {style:"currency",currency:"USD"}).format(window.SenAdmin.balanceDue(booking)) : "Unavailable"}</strong></div>
 
               <div class="time-grid">
 
@@ -1833,6 +1844,8 @@
             .join("");
       }
 
+      const driverPayments = window.SenDriverPayments({db, state, $, showAlert, hideAlert, renderAssignments});
+
       function openStop(
         assignmentId
       ) {
@@ -1877,6 +1890,8 @@
         $("stop-modal-subtitle").textContent =
           booking?.booking_number ||
           assignment.booking_id;
+
+        driverPayments.open();
 
         $("stop-details").innerHTML =
           [
