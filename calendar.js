@@ -43,7 +43,7 @@
       const rows=await window.SenCatalog.availability(date.value);
       if(current!==generation)return;
       availability=new Map(rows.map(row=>[String(row.rental_item_id),row]));
-      message.textContent='Live availability for '+date.value+'. Your reservation is confirmed by our team.';
+      message.textContent='Live availability for '+date.value+'. Reservations require confirmation from our team.';
     } catch(error) {
       if(current!==generation)return;
       failed=true;message.textContent=error.message;
