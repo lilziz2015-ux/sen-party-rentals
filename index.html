@@ -577,13 +577,13 @@
     .home-process .home-card { position: relative; z-index: 1; }
     .home-faq { max-width: 880px; margin-inline: auto; }
     .home-faq-item { overflow: hidden; margin-bottom: 13px; border: 1px solid var(--home-border); border-radius: 15px; background: var(--home-white); box-shadow: 0 6px 18px rgba(22, 18, 18, 0.04); }
-    .home-faq-question { display: flex; width: 100%; min-height: 68px; align-items: center; justify-content: space-between; gap: 20px; padding: 0 21px; border: 0; color: var(--home-text); background: var(--home-white); cursor: pointer; font-weight: 900; text-align: left; }
-    .home-faq-question i { flex: 0 0 auto; color: var(--home-red); transition: transform 0.2s ease; }
-    .home-faq-question { list-style: none; }
-    .home-faq-question::-webkit-details-marker { display: none; }
-    .home-faq-question:focus-visible { outline: 3px solid var(--home-red); outline-offset: -4px; }
+    .home-faq-summary { display: flex; width: 100%; min-height: 68px; align-items: center; justify-content: space-between; gap: 20px; padding: 0 21px; border: 0; color: var(--home-text); background: var(--home-white); cursor: pointer; font-weight: 900; text-align: left; }
+    .home-faq-summary i { flex: 0 0 auto; color: var(--home-red); transition: transform 0.2s ease; }
+    .home-faq-summary { list-style: none; }
+    .home-faq-summary::-webkit-details-marker { display: none; }
+    .home-faq-summary:focus-visible { outline: 3px solid var(--home-red); outline-offset: -4px; }
     .home-faq-answer { padding: 0 21px 21px; color: var(--home-muted); line-height: 1.68; }
-    .home-faq-item[open] .home-faq-question i { transform: rotate(45deg); }
+    .home-faq-item[open] .home-faq-summary i { transform: rotate(45deg); }
     .home-area-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
     .home-area-list a, .home-area-list span { padding: 12px 16px; border: 1px solid var(--home-border); border-radius: 999px; color: #454950; background: var(--home-white); font-size: 0.84rem; font-weight: 800; box-shadow: 0 5px 15px rgba(22, 18, 18, 0.04); transition: transform .2s ease, border-color .2s ease, color .2s ease, background-color .2s ease; }
     .home-area-list a:hover { transform: translateY(-2px); border-color: rgba(217,4,41,.32); color: var(--home-red); background: var(--home-light-red); }
@@ -1050,12 +1050,12 @@
       <div class="home-container">
         <div class="home-section-head"><span class="home-kicker">Helpful answers</span><h2>Frequently asked questions</h2><p>Important details about delivery, setup, booking and payment.</p></div>
         <div class="home-faq">
-          <details class="home-faq-item"><summary class="home-faq-question"><span>What areas do you deliver to?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">We deliver throughout Manassas, Prince William County, Fairfax County, Loudoun County, Stafford, Fredericksburg, Washington, D.C. and other nearby DMV communities. Delivery availability and pricing depend on the event location.</div></details>
-          <details class="home-faq-item"><summary class="home-faq-question"><span>Do you provide setup and pickup?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Yes. We handle delivery, professional setup, equipment securing and pickup after the event.</div></details>
-          <details class="home-faq-item"><summary class="home-faq-question"><span>How early should I reserve?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Reserving at least two weeks early is recommended. Popular summer weekends, holiday weekends and large-event dates may require earlier booking.</div></details>
-          <details class="home-faq-item"><summary class="home-faq-question"><span>What payment methods do you accept?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">No deposit is required; pay after setup. We accept Zelle, cash, check and cards. A processing fee applies only to card payments and is disclosed before payment. There is no processing fee for cash or check.</div></details>
-          <details class="home-faq-item"><summary class="home-faq-question"><span>Can inflatables be set up on concrete?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Some equipment can be installed on concrete or asphalt using approved anchoring methods such as sandbags. Tell us the surface type when requesting your booking.</div></details>
-          <details class="home-faq-item"><summary class="home-faq-question"><span>What happens if bad weather is expected?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Weather conditions are reviewed before delivery. Inflatables cannot safely operate during strong winds, severe storms or other unsafe conditions.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>What areas do you deliver to?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">We deliver throughout Manassas, Prince William County, Fairfax County, Loudoun County, Stafford, Fredericksburg, Washington, D.C. and other nearby DMV communities. Delivery availability and pricing depend on the event location.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>Do you provide setup and pickup?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Yes. We handle delivery, professional setup, equipment securing and pickup after the event.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>How early should I reserve?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Reserving at least two weeks early is recommended. Popular summer weekends, holiday weekends and large-event dates may require earlier booking.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>What payment methods do you accept?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">No deposit is required; pay after setup. We accept Zelle, cash, check and cards. A processing fee applies only to card payments and is disclosed before payment. There is no processing fee for cash or check.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>Can inflatables be set up on concrete?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Some equipment can be installed on concrete or asphalt using approved anchoring methods such as sandbags. Tell us the surface type when requesting your booking.</div></details>
+          <details class="home-faq-item"><summary class="home-faq-summary"><span>What happens if bad weather is expected?</span><i class="fa-solid fa-plus" aria-hidden="true"></i></summary><div class="home-faq-answer">Weather conditions are reviewed before delivery. Inflatables cannot safely operate during strong winds, severe storms or other unsafe conditions.</div></details>
         </div>
       </div>
     </section>
