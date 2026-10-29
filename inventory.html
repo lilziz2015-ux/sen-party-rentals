@@ -53,7 +53,7 @@
 
   <link
     rel="stylesheet"
-    href="./assets/header.css?v=54"
+    href="./assets/header.css?v=58"
   >
 
   <link
@@ -99,7 +99,7 @@
 
   <meta
     property="og:image"
-    content="https://www.senmoonbounce.com/childrenenjoy.PNG"
+    content="https://www.senmoonbounce.com/assets/optimized/0ccc4f1f14e437dd.webp"
   >
 
   <!-- Google Analytics -->
@@ -1315,6 +1315,7 @@
   </style>
   <link rel="manifest" href="./site.webmanifest">
   <link rel="icon" href="./logo.jpeg" type="image/jpeg">
+<script src="./assets/images.js?v=58" defer></script>
 </head>
 
 <body>
@@ -1957,7 +1958,7 @@
         width
       ) {
         const source =
-          safeImageUrl(value);
+          window.SenImages ? window.SenImages.url(safeImageUrl(value)) : safeImageUrl(value);
 
         if (!source) {
           return "";
@@ -4398,5 +4399,7 @@
     defer
   ></script>
 
+<script src="./assets/catalog.js?v=58" defer></script>
+<script src="./assets/product-pricing.js?v=58" defer></script>
 </body>
 </html>

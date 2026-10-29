@@ -20,7 +20,7 @@
   });
 
   const detailPages = new Set([
-    "modular-moonbounce-rental.html",
+    "modular-moon-bounce-rental.html",
     "castle-fun-house-bounce-house-rental.html",
     "princess-castle-bounce-house-rental.html",
     "giant-flip-flop-water-slide-rental.html",
@@ -96,11 +96,11 @@
 
   function card(item, categoryName, imageIndex = 1) {
     const name = item.name || "Party Rental";
-    const image = safeImage(item.image_url);
+    const image = window.SenCatalog ? window.SenCatalog.imageURL(item.image_url) : safeImage(item.image_url);
     const image480 = optimizedImage(image, 480);
     const image720 = optimizedImage(image, 720);
     const image1080 = optimizedImage(image, 1080);
-    const detail = safeDetail(item.product_page_url);
+    const detail = window.SenCatalog ? window.SenCatalog.detailPage(item) : safeDetail(item.product_page_url);
     const price = Number(item.price || 0);
     const priority = imageIndex === 0;
     return `

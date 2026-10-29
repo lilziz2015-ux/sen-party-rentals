@@ -36,8 +36,9 @@ href="./assets/style.css?v=54">
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <link rel="icon" href="./logo.jpeg" type="image/jpeg">
-  <link rel="stylesheet" href="./assets/header.css?v=54">
+  <link rel="stylesheet" href="./assets/header.css?v=58">
   <link rel="stylesheet" href="./assets/footer.css?v=54">
+<script src="./assets/images.js?v=58" defer></script>
 </head>
 
 <body>
@@ -183,7 +184,7 @@ Package Discounts Available
 <div>
 
 <img
-src="table.PNG"
+src="./assets/optimized/360b89c96cb4230d.webp"
 alt="Tables and Chairs Rental"
 class="rounded-img">
 
@@ -220,7 +221,7 @@ Tables & Chairs
 <article class="card rental-card">
 
 <img
-src="table.PNG"
+src="./assets/optimized/360b89c96cb4230d.webp"
 alt="White Folding Chairs">
 
 <h3>
@@ -238,7 +239,7 @@ and family parties.
 
 </p>
 
-<div class="price">
+<div class="price" data-catalog-price="chair">
 
 $2 Each
 
@@ -257,7 +258,7 @@ Reserve Chairs
 <article class="card rental-card">
 
 <img
-src="table.PNG"
+src="./assets/optimized/360b89c96cb4230d.webp"
 alt="6 Foot Folding Tables">
 
 <h3>
@@ -276,9 +277,9 @@ or guest seating.
 
 </p>
 
-<div class="price">
+<div class="price" data-catalog-price="table">
 
-$10 Each
+$12 Each
 
 </div>
 
@@ -694,7 +695,10 @@ Book Now
 
 <script>window.SEN_CATEGORY_SLUGS = ["tables-and-chairs"];</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+<script src="./assets/catalog.js?v=58" defer></script>
 <script src="./assets/category-inventory.js?v=12"></script>
+<script src="./assets/catalog.js?v=58" defer></script>
+<script src="./assets/product-pricing.js?v=58" defer></script>
 </body>
 
 </html>
