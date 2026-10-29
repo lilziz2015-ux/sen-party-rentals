@@ -38,8 +38,9 @@
 
   <link rel="manifest" href="./site.webmanifest">
   <link rel="icon" href="./logo.jpeg" type="image/jpeg">
-  <link rel="stylesheet" href="./assets/header.css?v=54">
+  <link rel="stylesheet" href="./assets/header.css?v=58">
   <link rel="stylesheet" href="./assets/footer.css?v=54">
+<script src="./assets/images.js?v=58" defer></script>
 </head>
 
 <body>
@@ -253,6 +254,7 @@
 
         </aside>
 
+        <noscript><p>Please call <a href="tel:+15717199575">571-719-9575</a> or email <a href="mailto:senmoonbounce@gmail.com">senmoonbounce@gmail.com</a>. The message form requires JavaScript.</p></noscript>
         <!-- CONTACT FORM -->
         <form
           class="form-card contact-form"
@@ -520,7 +522,7 @@
               </label>
 
               <textarea
-                id="contact-message"
+                id="contact-message" minlength="10" maxlength="5000"
                 name="contact_message"
                 rows="7"
                 placeholder="Tell us your event date, location, rental choice and any questions."
@@ -585,11 +587,12 @@
 
             </div>
 
+            <div hidden aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
             <!-- SUBMIT -->
             <div class="field full">
 
               <button
-                type="submit"
+                type="submit" disabled
                 class="btn btn-primary booking-submit"
               >
 
@@ -970,6 +973,7 @@
 
   <script src="./assets/script.js?v=54"></script>
 
+<script src="./assets/contact.js?v=58" defer></script>
 </body>
 
 </html>

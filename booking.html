@@ -13,7 +13,7 @@
   <link rel="icon" href="./logo.jpeg" type="image/jpeg">
 
   <link rel="stylesheet" href="./assets/style.css?v=54">
-  <link rel="stylesheet" href="./assets/header.css?v=54">
+  <link rel="stylesheet" href="./assets/header.css?v=58">
   <link rel="stylesheet" href="./assets/footer.css?v=54">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -1036,6 +1036,7 @@
       }
     }
   </style>
+<script src="./assets/images.js?v=58" defer></script>
 </head>
 
 <body>
@@ -1258,8 +1259,7 @@
               <span class="booking-eyebrow">Step 2 of 4</span>
               <h2>Choose Your Rentals</h2>
               <p class="booking-panel-intro">
-                Live inventory and official pricing are loaded directly from your
-                Sen Party Rentals Supabase project. Availability updates after you select a date.
+                Choose from our current rentals and prices. Availability updates for your event date.
               </p>
 
               <div id="inventory-loading" class="booking-inventory-status">
@@ -2002,7 +2002,7 @@
         );
 
         return {
-          status: ownedQuantity > 0 ? "AVAILABLE" : "UNAVAILABLE",
+          status: ownedQuantity > 0 ? "CHECK WITH US" : "UNAVAILABLE",
           available: ownedQuantity,
           owned: ownedQuantity,
           reserved: 0
@@ -2097,7 +2097,7 @@
                     item.image_url
                       ? `
                         <img
-                          src="${escapeHtml(item.image_url)}"
+                          src="${escapeHtml(window.SenImages ? window.SenImages.url(item.image_url) : item.image_url)}"
                           alt="${escapeHtml(item.name)}"
                           loading="lazy"
                           decoding="async"
@@ -3487,6 +3487,8 @@
           .split("T")[0];
 
         elements.date.min = localDate;
+        const requestedDate = bookingParameters.get("date");
+        if (/^\d{4}-\d{2}-\d{2}$/.test(requestedDate || "") && requestedDate >= localDate) elements.date.value = requestedDate;
       }
 
       function debounce(callback, delay = 300) {
