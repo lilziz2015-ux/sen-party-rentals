@@ -9,8 +9,9 @@
   submit.disabled=false;
 
   function localDateToday(){
-    const now=new Date();
-    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const part=type=>parts.find(item=>item.type===type)?.value||'';
+    return `${part('year')}-${part('month')}-${part('day')}`;
   }
   if(dateField)dateField.min=localDateToday();
 
