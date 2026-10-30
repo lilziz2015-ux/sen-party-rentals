@@ -3633,6 +3633,17 @@
         await startWebsite();
 
         restoreDraft();
+        const promotionToday = new Intl.DateTimeFormat('en-CA', {timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+        if (bookingParameters.get('promo') === 'THANKS10' && promotionToday <= '2026-11-26') {
+          const promotionNote = 'THANKS10 — Thanksgiving offer: 10% off rental charges. Requested by November 26, 2026. Delivery and card processing fees excluded. Confirm discount in final quote.';
+          const notes = document.getElementById('special-instructions');
+          if (!notes.value.includes(promotionNote)) notes.value = [notes.value, promotionNote].filter(Boolean).join('\n');
+          const notice = document.createElement('p');
+          notice.setAttribute('role', 'status');
+          notice.style.cssText = 'padding:18px;border:1px solid #b86824;border-radius:12px;background:#fff4e5;color:#562609;line-height:1.6';
+          notice.textContent = 'THANKS10 added: 10% off rental charges. Estimates below are before this discount; we will include it in your confirmed quote. Delivery and card processing fees excluded.';
+          form.prepend(notice);
+        }
         setMinimumDate();
         updateSummary();
         setStep(1, false);

@@ -535,6 +535,18 @@
     .home-hero-badge { position: absolute; z-index: 6; right: 18px; bottom: 54px; max-width: 270px; padding: 17px 18px; border: 0; border-radius: 16px; color: #fff; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; pointer-events: none; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95); }
     .home-hero-badge strong { display: block; margin-bottom: 5px; font-size: 0.9rem; }
     .home-hero-badge span { color: rgba(255, 255, 255, 0.92); font-size: 0.8rem; line-height: 1.48; }
+
+    .thanksgiving-panel { color:#fff; background:radial-gradient(ellipse at top right,#943518,transparent 65%),#39100e; border-bottom:1px solid #b44b31; }
+    .thanksgiving-panel[hidden] { display:none; }
+    .thanksgiving-inner { display:flex; align-items:center; gap:30px; padding-block:30px; }
+    .thanksgiving-saving { display:flex; align-items:center; gap:2px; flex-shrink:0; color:#ffc98c; font-size:84px; font-weight:900; line-height:1; letter-spacing:-5px; }
+    .thanksgiving-saving>span { font-size:36px; letter-spacing:0; }.thanksgiving-saving small { display:block; font-size:16px; letter-spacing:3px; }
+    .thanksgiving-copy { flex:1; }.thanksgiving-eyebrow { color:#ffc98c; font-size:12px; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
+    .thanksgiving-copy h2 { margin:7px 0; font-size:clamp(22px,2.2vw,30px); line-height:1.2; letter-spacing:-.6px; }.thanksgiving-copy p { margin:0 0 6px; line-height:1.5; }.thanksgiving-copy>small { display:block; color:#ead3ca; font-size:12px; line-height:1.5; }
+    .thanksgiving-inner>.home-button { flex-shrink:0; color:#35110c; background:#ffdbb3; border-color:#ffdbb3; }
+    @media(max-width:820px) { .thanksgiving-inner { flex-wrap:wrap; gap:18px; }.thanksgiving-saving { font-size:64px; }.thanksgiving-copy { flex-basis:calc(100% - 140px); }.thanksgiving-inner>.home-button { width:100%; } }
+    @media(max-width:420px) { .thanksgiving-copy { flex-basis:100%; }.thanksgiving-saving { font-size:52px; } }
+
     .home-promotion { color: var(--home-white); background: var(--home-gradient); }
     .home-promotion .home-container { display: flex; min-height: 100px; align-items: center; justify-content: space-between; gap: 26px; padding-block: 18px; }
     .home-promotion-copy { display: flex; align-items: center; gap: 14px; }
@@ -917,6 +929,18 @@
 
   <main class="home-main">
 
+    <section class="thanksgiving-panel" id="thanksgiving-offer" aria-labelledby="thanksgiving-title">
+      <div class="home-container thanksgiving-inner">
+        <div class="thanksgiving-saving" aria-label="10 percent off">10<span>%<small>OFF</small></span></div>
+        <div class="thanksgiving-copy"><span class="thanksgiving-eyebrow">A little thanks. A lot of fun.</span><h2 id="thanksgiving-title">Celebrate together. Save this Thanksgiving.</h2><p>Get <strong>10% off rental charges</strong> with code <strong>THANKS10</strong>. Request your booking by November 26, 2026.</p><small>Delivery and card processing fees excluded. Mention THANKS10; your discount is confirmed in your quote.</small></div>
+        <a href="./booking.html?promo=THANKS10" class="home-button home-button-light">Claim 10% Off <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+    <script>
+      if (new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()) > '2026-11-26') document.getElementById('thanksgiving-offer').hidden = true;
+    </script>
+
+
     <section class="home-hero">
       <div class="home-container home-hero-grid">
 
@@ -972,15 +996,7 @@
       </div>
     </section>
 
-    <section class="home-promotion" aria-label="Current rental promotion">
-      <div class="home-container">
-        <div class="home-promotion-copy">
-          <div class="home-promotion-icon" aria-hidden="true"><i class="fa-solid fa-gift"></i></div>
-          <div><strong>Build Your Party Package</strong><span>Choose your rentals together and request one quote for delivery, setup and pickup.</span></div>
-        </div>
-        <a href="./booking.html" class="home-button home-button-light">Request a Quote</a>
-      </div>
-    </section>
+
 
     <section class="home-section">
       <div class="home-container">
