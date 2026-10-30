@@ -25,7 +25,7 @@ function fixture({date='',message='Please check availability for my event.'}={})
 }
 test('browser contact form sets today as the earliest date and rejects an older date',async()=>{
  const f=fixture({date:'1970-05-31'});
- assert.match(f.dateField.min,/^\\d{4}-\\d{2}-\\d{2}$/);
+ assert.match(f.dateField.min,/^\d{4}-\d{2}-\d{2}$/);
  await f.submitForm();
  assert.match(f.dateField.validationMessage,/today or a future/);
  assert.equal(f.fetchCount,0);
