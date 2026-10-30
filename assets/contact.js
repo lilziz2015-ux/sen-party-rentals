@@ -16,7 +16,7 @@
 
   function validateFields(){
     if(dateField)dateField.setCustomValidity(dateField.value && dateField.value<dateField.min?'Please choose today or a future event date.':'');
-    if(messageField)messageField.setCustomValidity(/\\p{L}/u.test(messageField.value.trim())?'':'Please include a few words so we can help with your inquiry.');
+    if(messageField)messageField.setCustomValidity(/\p{L}/u.test(messageField.value.trim())?'':'Please include a few words so we can help with your inquiry.');
   }
   if(dateField)dateField.addEventListener('input',validateFields);
   if(messageField)messageField.addEventListener('input',validateFields);
