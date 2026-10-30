@@ -19,7 +19,7 @@ function businessDateToday():string {
 }
 
 function isValidEventDate(value:string):boolean {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const parsed = new Date(`${value}T00:00:00.000Z`);
   return Number.isFinite(parsed.getTime())
     && parsed.toISOString().slice(0,10) === value
@@ -44,7 +44,7 @@ Deno.serve(async (request:Request) => {
     if (body.website) return reply({success:true});
     const name=clean(body.name,120), email=clean(body.email,254).toLowerCase(), phone=clean(body.phone,40), message=clean(body.message,5000);
     const rawEventDate=body.event_date == null ? "" : typeof body.event_date === "string" ? body.event_date.trim() : "__invalid__";
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.request_id || "") || !name || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || /[\\r\\n]/.test(email) || message.length<10 || !/\\p{L}/u.test(message)) return reply({error:"Please enter your name, a valid email and a message of at least 10 characters that includes words."},400);
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.request_id || "") || !name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || /[\r\n]/.test(email) || message.length<10 || !/\p{L}/u.test(message)) return reply({error:"Please enter your name, a valid email and a message of at least 10 characters that includes words."},400);
     if (rawEventDate && !isValidEventDate(rawEventDate)) return reply({error:"Please choose today or a future event date."},400);
     const details={subject:clean(body.subject,120),event_date:rawEventDate,city:clean(body.city,100),rental:clean(body.rental,120),preferred_contact:clean(body.preferred_contact,20)};
     const ip=request.headers.get("x-real-ip") || (request.headers.get("x-forwarded-for") || "unknown").split(",").pop()!.trim();
@@ -54,7 +54,7 @@ Deno.serve(async (request:Request) => {
     if (data?.status === "SENT") return reply({success:true,reference:data.id});
     const apiKey=Deno.env.get("RESEND_API_KEY"),from=Deno.env.get("FROM_EMAIL");
     if (!apiKey || !from) throw new Error("Email service unavailable");
-    const result=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:`Bearer ${apiKey}`,"Content-Type":"application/json","Idempotency-Key":`contact-${data.id}`},body:JSON.stringify({from,to:["senmoonbounce@gmail.com"],reply_to:email,subject:`Website inquiry: ${details.subject || "Party rental"}`,text:`Name: ${name}\\nEmail: ${email}\\nPhone: ${phone}\\nPreferred contact: ${details.preferred_contact}\\nEvent date: ${details.event_date}\\nCity: ${details.city}\\nRental: ${details.rental}\\n\\n${message}\\n\\nInquiry: ${data.id}`})});
+    const result=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:`Bearer ${apiKey}`,"Content-Type":"application/json","Idempotency-Key":`contact-${data.id}`},body:JSON.stringify({from,to:["senmoonbounce@gmail.com"],reply_to:email,subject:`Website inquiry: ${details.subject || "Party rental"}`,text:`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nPreferred contact: ${details.preferred_contact}\nEvent date: ${details.event_date}\nCity: ${details.city}\nRental: ${details.rental}\n\n${message}\n\nInquiry: ${data.id}`})});
     if (!result.ok) {
       await db.from("contact_inquiries").update({status:"FAILED"}).eq("id",data.id);
       throw new Error("Email provider unavailable");
